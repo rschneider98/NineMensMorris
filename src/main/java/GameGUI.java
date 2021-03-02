@@ -63,7 +63,7 @@ public class GameGUI{
 	}
 	private void makeFrame() {
 		
-		gameWindow.setSize(600,600);
+		gameWindow.setSize(800,600);
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setResizable(false);
 		
