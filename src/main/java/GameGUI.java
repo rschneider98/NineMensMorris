@@ -18,12 +18,12 @@ public class GameGUI{
 	
 	private JFrame gameWindow=new JFrame("Cowboy Checkers");
 	
-	private JPanel gameMenu=new JPanel();
+	private JPanel gameMenu=new JPanel(); //Menu and board are our only two panels so far
 	private JPanel gameBoard=new JPanel();
 	
 	private JPanel [][] gridPoints=new JPanel[7][7];
 	
-	public GameGUI(){
+	public GameGUI(){ //creates the gui frame and containers
 		
 		makeFrame();
 		makeMenu();
@@ -63,9 +63,9 @@ public class GameGUI{
 	}
 	private void makeFrame() {
 		
-		gameWindow.setSize(800,600);
+		gameWindow.setSize(800,600); //We can decide on size later. Will write code so that it does not matter
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gameWindow.setResizable(false);
+		gameWindow.setResizable(false); //We need to revisit this and see what we prefer
 		
 		refreshGUI();
 		
@@ -82,15 +82,18 @@ public class GameGUI{
 		
 		
 			addBoardBackground();
+			makeClickablePoints();
+			
+			
 			gameBoard.setVisible(true);
 			
-			gameWindow.getContentPane().add(gameBoard,BorderLayout.EAST); //Adds gameboard to center of the frame
+			gameWindow.getContentPane().add(gameBoard,BorderLayout.EAST); //Adds gameboard to EAST side of the frame
 			
 			refreshGUI();
 		
 		
 	}
-	private void addBoardBackground() {
+	private void addBoardBackground() { //adds the background image of the board
 		
 		BufferedImage image;
 		try {
@@ -109,6 +112,9 @@ public class GameGUI{
 			e.printStackTrace();
 		}
 		
+		
+	}
+	private void makeClickablePoints() { 
 		
 	}
 	
