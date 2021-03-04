@@ -23,6 +23,8 @@ public class GameGUI{
 	
 	private JPanel [][] gridPoints=new JPanel[7][7];
 	
+	private int boardSize=450;
+	
 	public GameGUI(){ //creates the gui frame and containers
 		
 		makeFrame();
@@ -100,7 +102,7 @@ public class GameGUI{
 			
 			image = ImageIO.read(new File("img\\BlankBoard.png"));
 			
-			Image scaledImage=image.getScaledInstance(450, 450, Image.SCALE_DEFAULT); //Resizes the image so it isn't MASSIVE
+			Image scaledImage=image.getScaledInstance(boardSize, boardSize, Image.SCALE_DEFAULT); //Resizes the image so it isn't MASSIVE
 			
 			JLabel bgLabel=new JLabel(new ImageIcon(scaledImage));
 			gameBoard.add(bgLabel);
