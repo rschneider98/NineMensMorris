@@ -3,8 +3,6 @@ package main.java;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Board {
 	private String playerOneName;

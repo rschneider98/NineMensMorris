@@ -11,7 +11,7 @@ This project is a group project for CS449 to introduce software design processes
 # Nine Men's Morris Rules
 There is a seven-by-seven board with lines on it as below. The intersections of the lines mark the locations where a player's pieces can be placed. See: 
 
-![A Nine Men's Morris Board is a seven-by-seven grid with only a handful of valid locations. These are the three-by-three squares for each size with the square connected at the middles of the sides.](Img/BlankBoard.png)
+![A Nine Men's Morris Board is a seven-by-seven grid with only a handful of valid locations. These are the three-by-three squares for each size with the square connected at the middles of the sides.](img/BlankBoard.png)
 
 - There are two players to this game.
 - Both start with nine pieces, called ``men."
