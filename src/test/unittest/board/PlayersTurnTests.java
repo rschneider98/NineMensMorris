@@ -1,9 +1,9 @@
-package test.unittest;
+package test.unittest.board;
 
 import junit.framework.TestCase;
-import main.java.*;
+import main.game.*;
 
-public class BoardIsPlayerTurnTests extends TestCase {
+public class PlayersTurnTests extends TestCase {
 	private Board myBoard;
 	
 	protected void setUp() throws Exception {
@@ -14,7 +14,7 @@ public class BoardIsPlayerTurnTests extends TestCase {
 	public void testInitialState() {
 		// want to have "move" game state and is player 1's turn
 		assertTrue(myBoard.IsPlayersTurn(0));
-		assertTrue(myBoard.GetGameState() == main.java.GameStates.move);
+		assertTrue(myBoard.GetGameState() == GameStates.move);
 	}
 
 	public void testOneMoveState() {
@@ -26,7 +26,20 @@ public class BoardIsPlayerTurnTests extends TestCase {
 		}
 		// want to have "move" game state and is player 2's turn
 		assertTrue(myBoard.IsPlayersTurn(1));
-		assertTrue(myBoard.GetGameState() == main.java.GameStates.move);
+		assertTrue(myBoard.GetGameState() == GameStates.move);
+	}
+
+	public void testOneRoundState() {
+		// make a move
+		try {
+			myBoard.MakeMove(0, 0);
+			myBoard.MakeMove(1, 1);
+		} catch (Exception e) {
+			fail();
+		}
+		// want to have "move" game state and is player 1's turn
+		assertTrue(myBoard.IsPlayersTurn(0));
+		assertTrue(myBoard.GetGameState() == GameStates.move);
 	}
 	
 	public void testRemoveState() {
@@ -42,6 +55,6 @@ public class BoardIsPlayerTurnTests extends TestCase {
 		}
 		// want to have "remove" game state and is player 1's turn
 		assertTrue(myBoard.IsPlayersTurn(0));
-		assertTrue(myBoard.GetGameState() == main.java.GameStates.remove);
+		assertTrue(myBoard.GetGameState() == GameStates.remove);
 	}
 }

@@ -1,6 +1,6 @@
-package main.java;
+package main.game;
 
 public enum GameStates {
 	move,
 	remove
-};
+}

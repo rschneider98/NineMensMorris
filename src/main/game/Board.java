@@ -1,9 +1,10 @@
-package main.java;
+package main.game;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
-import main.java.GameStates;
+
+import main.game.GameStates;
 
 public class Board {
 	// board is stored as array of length 24
