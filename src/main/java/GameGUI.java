@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -21,7 +22,7 @@ public class GameGUI{
 	private JPanel gameMenu=new JPanel(); //Menu and board are our only two panels so far
 	private JPanel gameBoard=new JPanel();
 	
-	private JPanel [][] gridPoints=new JPanel[7][7];
+	private ArrayList<GridPoint> gridPoints = new ArrayList<GridPoint>(); 
 	
 	private int boardSize=450;
 	
