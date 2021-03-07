@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -34,6 +35,8 @@ public class GameGUI{
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
 	public static final int OFFSET=PLACE_SIZE/2;
+	
+	private boolean whiteTurn=true;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -88,7 +91,7 @@ public class GameGUI{
 		
 		gameWindow.setSize(800,600); //We can decide on size later. Will write code so that it does not matter
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gameWindow.setResizable(true); //We need to revisit this and see what we prefer
+		gameWindow.setResizable(false); //We need to revisit this and see what we prefer
 		
 		
 		
@@ -119,8 +122,8 @@ public class GameGUI{
 	
 	private void makeClickablePoints() { 
 		
-		final int BORDER=(int)(BOARD_SIZE/13.6); 
-		final int STEP=(int)(BOARD_SIZE/6.98);
+		final int BORDER=(int)(BOARD_SIZE/13.6); //distance from border
+		final int STEP=(int)(BOARD_SIZE/6.98);	//distance between each point on 7x7 grid
 		
 		/*^ These are the ratios between the distance between dots and the board size*/
 		
@@ -156,7 +159,9 @@ public class GameGUI{
 		gridPoints[2]=new GridPoint(3,BORDER+6*STEP,BORDER);
 		
 		
-			
+		
+		
+		/*Remember that since we started counted at 1, the array index is 1 less than id*/	
 		
 						
 		
@@ -172,31 +177,57 @@ public class GameGUI{
 		public GamePanel() {
 			addBoardBackground();
 			addClickable();
+			
 		}
-		private void addClickable() {
+		private void addClickable() { //Adds mouse listener
 			addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					
-					System.out.println("X: "+e.getX()+" Y: "+e.getY());
+					System.out.println("X: "+e.getX()+" Y: "+e.getY()); //checks to see location of click
 					GridPoint clickedPoint=getClickedPoint(e.getX(),e.getY());
 					if(clickedPoint != null) {
-						System.out.println("You have clicked point number "+clickedPoint.getID());
+						//System.out.println("You have clicked point number "+clickedPoint.getID());
+						
+						makeMove(clickedPoint);
 					}
 				}
 			});
 		}
+		private void makeMove(GridPoint clickedPoint) {
+			
+			if(!clickedPoint.isEmpty()) {
+				System.out.println("Point number "+clickedPoint.getID()+" is currently occupied");
+				
+			}else {
+				if(whiteTurn) {
+					clickedPoint.acceptPiece("White");
+					
+					
+				}else {
+					clickedPoint.acceptPiece("Black");
+					
+				}
+				
+				System.out.println("A "+clickedPoint.getCurrentPiece()+" piece was moved "+
+				" point number "+clickedPoint.getID());
+				
+				whiteTurn=!whiteTurn;
+			}
+		}
 		private GridPoint getClickedPoint(int clickX, int clickY) {
+			/*Checks to see which grid point was clicked. Returns NULL if no valid grid point is clicked*/
 			
 			for(int x=0;x<gridPoints.length;x++) {
 				
 				GridPoint currPoint=gridPoints[x];
 				
 				if(Math.abs(currPoint.retX()-clickX)<=OFFSET && Math.abs(currPoint.retY()-clickY)<=OFFSET) {
+					/*OFFSET is used to allow some room for error on the click*/
 					return currPoint;
 				}
 			}
 			
-			return null;
+			return null; //If they did not click on the square
 		}
 		private void setBackgroundImage(Image boardImage) {
 			this.boardImage=boardImage;
@@ -208,12 +239,13 @@ public class GameGUI{
 				
 				try {
 					
-					Image image= ImageIO.read(new File("img\\BlankBoard.png"));
+					Image image= ImageIO.read(new File("img\\BlankBoard.png")); //reads in image
 					
 					Image scaledImage=image.getScaledInstance(BOARD_SIZE, BOARD_SIZE, Image.SCALE_DEFAULT); //Resizes the image so it isn't MASSIVE
 					setBackgroundImage(scaledImage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					System.out.println("Invalid background selected");
 					e.printStackTrace();
 				}
 				
@@ -223,11 +255,11 @@ public class GameGUI{
 		
 		@Override
 		protected void paintComponent(Graphics g) { //Draws the background image of the board
-			super.paintComponent(g);
+			super.paintComponent(g); 
 			
-			g.drawImage(boardImage,0,0,null);
-			
+			g.drawImage(boardImage,0,0,null); //Draws image at location 0,0
 			setGridPoints();
+			
 			
 			
 		}
@@ -240,7 +272,11 @@ public class GameGUI{
 				
 				gameBoard.add(currPoint);
 				
+				
+				
 				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET);
+				
+				
 				
 				
 			}
