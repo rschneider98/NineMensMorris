@@ -158,7 +158,7 @@ public class GameGUI{
 		
 	}
 	
-	class GamePanel extends JPanel{
+	private class GamePanel extends JPanel{
 		
 		
 		private static final long serialVersionUID = 1L;
@@ -196,7 +196,8 @@ public class GameGUI{
 			super.paintComponent(g);
 			
 			g.drawImage(boardImage,0,0,null);
-			drawDots(g);		
+			//drawDots(g);
+			setGridPoints();
 			
 			
 		}
@@ -210,6 +211,20 @@ public class GameGUI{
 				
 				
 			}
+		}
+		private void setGridPoints() {
+			
+			for(int x=0;x<gridPoints.length;x++) {
+				
+				GridPoint currPoint = gridPoints[x];
+				
+				gameBoard.add(currPoint);
+				
+				currPoint.setLocation(currPoint.retX(),currPoint.retY());
+				System.out.println("X: "+currPoint.getX()+" Y: "+currPoint.getY());
+				
+			}
+			
 		}
 	}
 	
