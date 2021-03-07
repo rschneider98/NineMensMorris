@@ -31,8 +31,9 @@ public class GameGUI{
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labled locations to place pieces
 	
-	private static final int BOARD_SIZE=450;
-	private static final int PLACE_SIZE=20;
+	public static final int BOARD_SIZE=450;
+	public static final int PLACE_SIZE=20;
+	public static final int OFFSET=PLACE_SIZE/2;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -190,7 +191,7 @@ public class GameGUI{
 				
 				GridPoint currPoint=gridPoints[x];
 				
-				if(Math.abs(currPoint.retX()-clickX)<=10 && Math.abs(currPoint.retY()-clickY)<=10) {
+				if(Math.abs(currPoint.retX()-clickX)<=OFFSET && Math.abs(currPoint.retY()-clickY)<=OFFSET) {
 					return currPoint;
 				}
 			}
@@ -239,7 +240,7 @@ public class GameGUI{
 				
 				gameBoard.add(currPoint);
 				
-				currPoint.setLocation(currPoint.retX()-10,currPoint.retY()-10);
+				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET);
 				
 				
 			}
