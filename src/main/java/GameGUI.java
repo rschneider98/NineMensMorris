@@ -196,22 +196,12 @@ public class GameGUI{
 			super.paintComponent(g);
 			
 			g.drawImage(boardImage,0,0,null);
-			//drawDots(g);
+			
 			setGridPoints();
 			
 			
 		}
-		private void drawDots(Graphics g) {
-			
-			for(int x=0;x<gridPoints.length;x++) {
-				
-				GridPoint currPoint = gridPoints[x];
-				
-				g.drawRect(currPoint.x-10, currPoint.y-10,20,20);
-				
-				
-			}
-		}
+		
 		private void setGridPoints() {
 			
 			for(int x=0;x<gridPoints.length;x++) {
@@ -220,8 +210,8 @@ public class GameGUI{
 				
 				gameBoard.add(currPoint);
 				
-				currPoint.setLocation(currPoint.retX(),currPoint.retY());
-				System.out.println("X: "+currPoint.getX()+" Y: "+currPoint.getY());
+				currPoint.setLocation(currPoint.retX()-10,currPoint.retY()-10);
+				
 				
 			}
 			
