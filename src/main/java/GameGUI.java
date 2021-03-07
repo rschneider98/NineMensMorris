@@ -29,7 +29,7 @@ public class GameGUI{
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labled locations to place pieces
 	
-	
+	private static final int BOARD_SIZE=450;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -100,7 +100,7 @@ public class GameGUI{
 	private void makeNewBoard() {
 		
 		
-		//	makeClickablePoints();
+		makeClickablePoints();
 			
 		gameBoard=new GamePanel();	
 		gameBoard.setPreferredSize(new Dimension(450,450));	
@@ -115,16 +115,102 @@ public class GameGUI{
 	
 	private void makeClickablePoints() { 
 		
-		GridPoint myPoint=new GridPoint(1);
+		final int BORDER=(int)(BOARD_SIZE/13.6); 
+		final int STEP=(int)(BOARD_SIZE/6.98);
 		
-		if(myPoint.isEmpty()) {
-			myPoint.acceptPiece("White");
+		/*^ These are the ratios between the distance between dots and the board size*/
+		
+		gridPoints[23]=new GridPoint(24,BORDER,BOARD_SIZE-BORDER);
+		gridPoints[22]=new GridPoint(23,BORDER+3*STEP,BOARD_SIZE-BORDER);
+		gridPoints[21]=new GridPoint(22,BORDER+6*STEP,BOARD_SIZE-BORDER);
+		
+		gridPoints[20]=new GridPoint(21,BORDER+STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[19]=new GridPoint(20,BORDER+3*STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[18]=new GridPoint(19,BORDER+5*STEP,BOARD_SIZE-(BORDER+STEP));
+		
+		gridPoints[17]=new GridPoint(18,BORDER+2*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[16]=new GridPoint(17,BORDER+3*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[15]=new GridPoint(16,BORDER+4*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		
+		gridPoints[14]=new GridPoint(15,BORDER,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[13]=new GridPoint(14,BORDER+STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[12]=new GridPoint(13,BORDER+2*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[11]=new GridPoint(12,BORDER+4*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[10]=new GridPoint(11,BORDER+5*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[9]=new GridPoint(10,BORDER+6*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		
+		gridPoints[8]=new GridPoint(9,BORDER+2*STEP,BORDER+2*STEP);
+		gridPoints[7]=new GridPoint(8,BORDER+3*STEP,BORDER+2*STEP);
+		gridPoints[6]=new GridPoint(7,BORDER+4*STEP,BORDER+2*STEP);
+		
+		gridPoints[5]=new GridPoint(6,BORDER+STEP,BORDER+STEP);
+		gridPoints[4]=new GridPoint(5,BORDER+3*STEP,BORDER+STEP);
+		gridPoints[3]=new GridPoint(4,BORDER+5*STEP,BORDER+STEP);
+		
+		gridPoints[2]=new GridPoint(3,BORDER,BORDER);
+		gridPoints[1]=new GridPoint(2,BORDER+3*STEP,BORDER);
+		gridPoints[0]=new GridPoint(1,BORDER+6*STEP,BORDER);
+		
+		
+			
+		
+						
+		
+	}
+	
+	class GamePanel extends JPanel{
+		
+		
+		private static final long serialVersionUID = 1L;
+		private Image boardImage;
+		
+		
+		public GamePanel() {
+			addBoardBackground();
+		}
+		private void setBackgroundImage(Image boardImage) {
+			this.boardImage=boardImage;
+			
+			
+		}
+		private void addBoardBackground() { //adds the background image of the board
+			
+				
+				try {
+					
+					Image image= ImageIO.read(new File("img\\BlankBoard.png"));
+					
+					Image scaledImage=image.getScaledInstance(BOARD_SIZE, BOARD_SIZE, Image.SCALE_DEFAULT); //Resizes the image so it isn't MASSIVE
+					setBackgroundImage(scaledImage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
 		}
 		
-		gameBoard.add(myPoint);
-		
-		myPoint.setVisible(true);
-		
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			
+			g.drawImage(boardImage,0,0,null);
+			drawDots(g);		
+			
+			
+		}
+		private void drawDots(Graphics g) {
+			
+			for(int x=0;x<gridPoints.length;x++) {
+				
+				GridPoint currPoint = gridPoints[x];
+				
+				g.drawRect(currPoint.x-10, currPoint.y-10,20,20);
+				
+				
+			}
+		}
 	}
 	
 }
