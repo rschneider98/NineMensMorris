@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class GameGUI{
 	
@@ -24,18 +25,18 @@ public class GameGUI{
 	
 	private JPanel gameMenu; //Menu and board are our only two panels so far
 	private GamePanel gameBoard;
+	private JTextField statusText;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labled locations to place pieces
 	
-	//private static final int BOARD_SIZE=450;
 	
-	//private BufferedImage boardImage=new BufferedImage();
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
 		makeFrame();
 		makeMenu();
 		makeNewBoard();
+		makeStatusField();
 		gameWindow.pack();
 		gameWindow.setVisible(true);
 	}
@@ -74,6 +75,11 @@ public class GameGUI{
 		
 		
 	}
+	private void makeStatusField() {
+		statusText=new JTextField("This is where status and stuff will go");
+		
+		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
+	}
 	private void makeFrame() {
 		
 		gameWindow.setSize(800,600); //We can decide on size later. Will write code so that it does not matter
@@ -100,7 +106,7 @@ public class GameGUI{
 		gameBoard.setPreferredSize(new Dimension(450,450));	
 		
 		
-		gameWindow.getContentPane().add(gameBoard,BorderLayout.EAST); //Adds gameboard to EAST side of the frame
+		gameWindow.getContentPane().add(gameBoard,BorderLayout.CENTER); //Adds gameboard to EAST side of the frame
 		
 		//refreshGUI();
 		
