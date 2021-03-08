@@ -196,7 +196,7 @@ public class GameGUI{
 		private void makeMove(GridPoint clickedPoint) {
 			
 			if(!clickedPoint.isEmpty()) {
-				System.out.println("Point number "+clickedPoint.getID()+" is currently occupied");
+				System.out.println("Point number "+clickedPoint.getID()+" is currently occupied by a "+clickedPoint.getCurrentPiece()+" piece");
 				
 			}else {
 				if(whiteTurn) {
