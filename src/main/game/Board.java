@@ -173,6 +173,7 @@ public class Board {
 			return false;
 		}
 		// want to find a piece of the opponent that is not in a mill
+		// TO-DO: make sure mill was formed in last turn
 		if (gameState == GameStates.remove) {
 			int i = 0;
 			while (i < 24) {
@@ -296,6 +297,7 @@ public class Board {
 			return false;
 		}
 		// check if the location is a part of a mill
+		// TODO mill was just formed
 		if (IsMill(location)) {
 			return false;
 		}

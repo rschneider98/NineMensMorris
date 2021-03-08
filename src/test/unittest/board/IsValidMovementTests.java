@@ -194,4 +194,49 @@ public class IsValidMovementTests extends TestCase {
 		}
 		assertFalse(myBoard.IsValidMovement(0, 10, 9));
 	}
+	
+	
+	public void testInvalidFlying() {
+		try {
+			myBoard.MakeMove(0, 0);
+			myBoard.MakeMove(1, 1);
+			
+			myBoard.MakeMove(0, 2);
+			myBoard.MakeMove(1, 23);
+			
+			myBoard.MakeMove(0, 3);
+			myBoard.MakeMove(1, 5);
+			
+			myBoard.MakeMove(0, 4);
+			myBoard.MakeMove(1, 1);
+			
+			myBoard.MakeMove(0, 21);
+			myBoard.MakeMove(1, 22);
+			
+			myBoard.MakeMove(0, 11);
+			myBoard.MakeMove(1, 6);
+			
+			myBoard.MakeMove(0, 7);
+			myBoard.MakeMove(1, 8);
+			
+			myBoard.MakeMove(0, 13);
+			myBoard.MakeMove(1, 14);
+			
+			myBoard.MakeMove(0, 18);
+			myBoard.MakeMove(1, 15);
+		} catch (Exception e) {
+			fail();
+		}
+		assertFalse(myBoard.IsValidMovement(0, 20, 0));
+	}
+	
+	
+	public void testInvalidLoc() {
+		assertFalse(myBoard.IsValidMovement(0, 24));
+	}
+	
+	
+	public void testInvalidLocNotNull() {
+		assertFalse(myBoard.IsValidMovement(0, 21, 25));
+	}
 }
