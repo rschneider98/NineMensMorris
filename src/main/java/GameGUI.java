@@ -30,7 +30,7 @@ public class GameGUI{
 	private GamePanel gameBoard;
 	private JTextField statusText;
 	
-	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labled locations to place pieces
+	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
@@ -195,6 +195,8 @@ public class GameGUI{
 		}
 		private void makeMove(GridPoint clickedPoint) {
 			
+			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
+			
 			if(!clickedPoint.isEmpty()) {
 				System.out.println("Point number "+clickedPoint.getID()+" is currently occupied by a "+clickedPoint.getCurrentPiece()+" piece");
 				
@@ -213,6 +215,8 @@ public class GameGUI{
 				
 				whiteTurn=!whiteTurn;
 			}
+			
+			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
 		}
 		private GridPoint getClickedPoint(int clickX, int clickY) {
 			/*Checks to see which grid point was clicked. Returns NULL if no valid grid point is clicked*/
