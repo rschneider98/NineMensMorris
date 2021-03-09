@@ -15,6 +15,8 @@ public class Board {
 	// map for adjacency list of locations
 	private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
 	private GameStates gameState;
+	private Integer secondLastMove = null;
+	private Integer lastMove = null;
 	
 	// pieces for players
 	private Integer[] unplacedPieces = new Integer[] {9, 9};
@@ -59,12 +61,16 @@ public class Board {
 		// places a piece at a location and decrements unplaced count
 		unplacedPieces[playerNum]--;
 		boardLoc[location] = playerNum;
+		secondLastMove = lastMove;
+		lastMove = location;
 	}
 	
 	private void MovePiece(Integer playerNum, Integer locationTo, Integer locationFrom) {
 		// moves a pieces from one location to another
 		boardLoc[locationTo] = playerNum;
 		boardLoc[locationFrom] = 0;
+		secondLastMove = lastMove;
+		lastMove = locationTo;
 	}
 	
 	private void RemovePiece(Integer location) {
@@ -89,6 +95,11 @@ public class Board {
 		return (boardLoc[location] == 0);
 	}
 	
+	public Integer GetPlayersTurn() {
+		// gets players turn
+		return playerTurn;
+	}
+	
 	public boolean IsPlayersPiece(Integer playerNum, Integer location) {
 		// checks if the location's piece is the player's
 		return (boardLoc[location] == (playerNum + 1));
@@ -109,11 +120,12 @@ public class Board {
 		return (livePieces[0] <= 3 || livePieces[1] <= 3);
 	}
 	
-	public boolean IsMill(Integer location) {
+	public boolean IsMill(Integer playerNum, Integer location) {
 		// checks if the location is part of a mill
 		Integer numAdj = 0;
+		Integer[] adjLoc = new Integer[] {null, null, null};
 		// get the value of the location
-		Integer playerNum = boardLoc[location];
+		Integer possPlayerNum = boardLoc[location];
 		// trivial case - is empty
 		if (playerNum == 0) {
 			return false;
@@ -126,7 +138,7 @@ public class Board {
 		// for each adjacent location see if is the same piece
 		// then increment the counter and add this to the second round 
 		for (int i = 0; i < possibleMen1.length; i++) {
-			if (boardLoc[possibleMen1[i]] == playerNum) {
+			if (boardLoc[possibleMen1[i]] == possPlayerNum) {
 				numAdj++;
 				possibleMen2.add(possibleMen1[i]);
 			}
@@ -138,7 +150,7 @@ public class Board {
 			Integer adjLoc = possibleMen2.remove(0);
 			Integer[] possibleMen = adj.get(adjLoc);
 			for (int i = 0; i < possibleMen.length; i++) {
-				if (boardLoc[possibleMen[i]] == playerNum) {
+				if (boardLoc[possibleMen[i]] == possPlayerNum) {
 					numAdj++;
 				}
 			}

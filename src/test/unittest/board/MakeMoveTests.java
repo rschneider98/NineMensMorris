@@ -10,4 +10,19 @@ public class MakeMoveTests extends TestCase {
 		super.setUp();
 		myBoard = new Board();
 	}
+	
+	
+	public void testValidMove() {
+		try {
+			myBoard.MakeMove(0, 0);
+			myBoard.MakeMove(1, 1);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	
+	public void testInvalidMove() throws Exception {
+		myBoard.MakeMove(0, 24);
+	}
 }

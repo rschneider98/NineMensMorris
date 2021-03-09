@@ -13,7 +13,6 @@ public class IsValidRemovalTests extends TestCase {
 	
 	
 	public void testValidRemoval() {
-		// form a mill for player 1 
 		try {
 			myBoard.MakeMove(0, 0);
 			myBoard.MakeMove(1, 9);
@@ -28,7 +27,6 @@ public class IsValidRemovalTests extends TestCase {
 	
 	
 	public void testInvalidTurn() {
-		// form a mill for player 1 
 		try {
 			myBoard.MakeMove(0, 0);
 			myBoard.MakeMove(1, 9);
@@ -43,7 +41,6 @@ public class IsValidRemovalTests extends TestCase {
 	
 	
 	public void testEmptyLocation() {
-		// form a mill for player 1 
 		try {
 			myBoard.MakeMove(0, 0);
 			myBoard.MakeMove(1, 9);
@@ -58,7 +55,6 @@ public class IsValidRemovalTests extends TestCase {
 	
 	
 	public void testOwnPiece() {
-		// form a mill for player 1 
 		try {
 			myBoard.MakeMove(0, 0);
 			myBoard.MakeMove(1, 9);
