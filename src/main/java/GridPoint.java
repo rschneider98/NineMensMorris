@@ -62,7 +62,6 @@ public class GridPoint extends JPanel{
 		
 		
 		
-		//repaint();
 		
 	}
 	public void drawPiece(Graphics g) {
@@ -71,28 +70,13 @@ public class GridPoint extends JPanel{
 		
 			g.setColor(pieceColor);
 			
-			//System.out.println(pieceColor);
 			
 			g.fillOval((x-PIECE_SIZE),(y-PIECE_SIZE),2*PIECE_SIZE,2*PIECE_SIZE);
 			
 		}
 	
 }
-//	@Override
-//	protected void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		//g.setColor(Color.BLACK);
-//		//g.drawRect(x-GameGUI.OFFSET, y-GameGUI.OFFSET,GameGUI.PLACE_SIZE,GameGUI.PLACE_SIZE);
-//		
-//		if(!empty) {
-//			
-//			g.setColor(pieceColor);
-//			
-//			System.out.println(pieceColor);
-//			g.fillOval(x,y,20,20);
-//			
-//		}
-//	}
+
 	
 	
 }

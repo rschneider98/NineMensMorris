@@ -98,11 +98,7 @@ public class GameGUI{
 		
 		
 	}
-	private void refreshGUI() {
-		
-		gameWindow.setVisible(true);
-	}
-	private void clearBoard() {
+	private void clearBoard() { //Unused method but will later be used to clear the board and start new game
 		
 		gameBoard.removeAll();
 	}
@@ -273,11 +269,11 @@ public class GameGUI{
 		
 			
 			
-			for(int x=0;x<gridPoints.length;x++) {
+			for(int x=0;x<gridPoints.length;x++) { //Draws the current occupying piece for each of the grid points
 				gridPoints[x].drawPiece(g);
 			}
 			
-			if(firstSetup) {
+			if(firstSetup) {	
 				setGridPoints();
 				firstSetup=false;
 			}
@@ -299,7 +295,7 @@ public class GameGUI{
 				this.add(currPoint);
 				
 				
-				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET);
+				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET); //Makes sure the gridpoints cover the space entirely
 				
 				
 				
