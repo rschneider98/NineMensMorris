@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class GameGUI{
@@ -28,7 +29,7 @@ public class GameGUI{
 	
 	private JPanel gameMenu; //Menu and board are our only two panels so far
 	private GamePanel gameBoard;
-	private JTextField statusText;
+	private JTextArea statusText;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	
@@ -83,13 +84,14 @@ public class GameGUI{
 		
 	}
 	private void makeStatusField() {
-		statusText=new JTextField("This is where status and stuff will go");
+		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
+		statusText.setWrapStyleWord(true);
 		
 		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
 	}
 	private void makeFrame() {
 		
-		gameWindow.setSize(800,600); //We can decide on size later. Will write code so that it does not matter
+		gameWindow.setSize(1100,600); //We can decide on size later. Will write code so that it does not matter
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setResizable(false); //We need to revisit this and see what we prefer
 		
@@ -172,24 +174,30 @@ public class GameGUI{
 		
 		private static final long serialVersionUID = 1L;
 		private Image boardImage;
+		private boolean firstSetup=true;
 		
 		
 		public GamePanel() {
+			
+			
 			addBoardBackground();
 			addClickable();
+			
 			
 		}
 		private void addClickable() { //Adds mouse listener
 			addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					
-					System.out.println("X: "+e.getX()+" Y: "+e.getY()); //checks to see location of click
+					
 					GridPoint clickedPoint=getClickedPoint(e.getX(),e.getY());
 					if(clickedPoint != null) {
 						//System.out.println("You have clicked point number "+clickedPoint.getID());
 						
 						makeMove(clickedPoint); //TODO: will switch to 
 					}
+					
+					repaint();
 				}
 			});
 		}
@@ -198,7 +206,7 @@ public class GameGUI{
 			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
 			
 			if(!clickedPoint.isEmpty()) {
-				System.out.println("Point number "+clickedPoint.getID()+" is currently occupied by a "+clickedPoint.getCurrentPiece()+" piece");
+				statusText.append("Point number "+clickedPoint.getID()+" already has a "+clickedPoint.getCurrentPiece()+" piece\n");
 				
 			}else {
 				if(whiteTurn) {
@@ -210,8 +218,8 @@ public class GameGUI{
 					
 				}
 				
-				System.out.println("A "+clickedPoint.getCurrentPiece()+" piece was moved "+
-				" point number "+clickedPoint.getID());
+				statusText.append("A "+clickedPoint.getCurrentPiece()+" piece was moved "+
+				" to point number"+clickedPoint.getID()+"\n");
 				
 				whiteTurn=!whiteTurn;
 			}
@@ -262,20 +270,33 @@ public class GameGUI{
 			super.paintComponent(g); 
 			
 			g.drawImage(boardImage,0,0,null); //Draws image at location 0,0
-			setGridPoints();
+		
 			
+			
+			for(int x=0;x<gridPoints.length;x++) {
+				gridPoints[x].drawPiece(g);
+			}
+			
+			if(firstSetup) {
+				setGridPoints();
+				firstSetup=false;
+			}
 			
 			
 		}
 		
 		private void setGridPoints() { //Places the gridpoints on the board
 			
+			
+			
 			for(int x=0;x<gridPoints.length;x++) {
+				
+				
 				
 				GridPoint currPoint = gridPoints[x];
 				
-				gameBoard.add(currPoint);
 				
+				this.add(currPoint);
 				
 				
 				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET);
