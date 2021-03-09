@@ -127,36 +127,36 @@ public class GameGUI{
 		
 		/*^ These are the ratios between the distance between dots and the board size*/
 		
-		gridPoints[21]=new GridPoint(22,BORDER,BOARD_SIZE-BORDER);
-		gridPoints[22]=new GridPoint(23,BORDER+3*STEP,BOARD_SIZE-BORDER);
-		gridPoints[23]=new GridPoint(24,BORDER+6*STEP,BOARD_SIZE-BORDER);
+		gridPoints[21]=new GridPoint(21,BORDER,BOARD_SIZE-BORDER);
+		gridPoints[22]=new GridPoint(22,BORDER+3*STEP,BOARD_SIZE-BORDER);
+		gridPoints[23]=new GridPoint(23,BORDER+6*STEP,BOARD_SIZE-BORDER);
 		
-		gridPoints[18]=new GridPoint(19,BORDER+STEP,BOARD_SIZE-(BORDER+STEP));
-		gridPoints[19]=new GridPoint(20,BORDER+3*STEP,BOARD_SIZE-(BORDER+STEP));
-		gridPoints[20]=new GridPoint(21,BORDER+5*STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[18]=new GridPoint(18,BORDER+STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[19]=new GridPoint(19,BORDER+3*STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[20]=new GridPoint(20,BORDER+5*STEP,BOARD_SIZE-(BORDER+STEP));
 		
-		gridPoints[15]=new GridPoint(16,BORDER+2*STEP,BOARD_SIZE-(BORDER+2*STEP));
-		gridPoints[16]=new GridPoint(17,BORDER+3*STEP,BOARD_SIZE-(BORDER+2*STEP));
-		gridPoints[17]=new GridPoint(18,BORDER+4*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[15]=new GridPoint(15,BORDER+2*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[16]=new GridPoint(16,BORDER+3*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[17]=new GridPoint(17,BORDER+4*STEP,BOARD_SIZE-(BORDER+2*STEP));
 		
-		gridPoints[9]=new GridPoint(10,BORDER,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[10]=new GridPoint(11,BORDER+STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[11]=new GridPoint(12,BORDER+2*STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[12]=new GridPoint(13,BORDER+4*STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[13]=new GridPoint(14,BORDER+5*STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[14]=new GridPoint(15,BORDER+6*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[9]=new GridPoint(9,BORDER,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[10]=new GridPoint(10,BORDER+STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[11]=new GridPoint(11,BORDER+2*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[12]=new GridPoint(12,BORDER+4*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[13]=new GridPoint(13,BORDER+5*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[14]=new GridPoint(14,BORDER+6*STEP,BOARD_SIZE-(BORDER+3*STEP));
 		
-		gridPoints[6]=new GridPoint(7,BORDER+2*STEP,BORDER+2*STEP);
-		gridPoints[7]=new GridPoint(8,BORDER+3*STEP,BORDER+2*STEP);
-		gridPoints[8]=new GridPoint(9,BORDER+4*STEP,BORDER+2*STEP);
+		gridPoints[6]=new GridPoint(6,BORDER+2*STEP,BORDER+2*STEP);
+		gridPoints[7]=new GridPoint(7,BORDER+3*STEP,BORDER+2*STEP);
+		gridPoints[8]=new GridPoint(8,BORDER+4*STEP,BORDER+2*STEP);
 		
-		gridPoints[3]=new GridPoint(4,BORDER+STEP,BORDER+STEP);
-		gridPoints[4]=new GridPoint(5,BORDER+3*STEP,BORDER+STEP);
-		gridPoints[5]=new GridPoint(6,BORDER+5*STEP,BORDER+STEP);
+		gridPoints[3]=new GridPoint(3,BORDER+STEP,BORDER+STEP);
+		gridPoints[4]=new GridPoint(4,BORDER+3*STEP,BORDER+STEP);
+		gridPoints[5]=new GridPoint(5,BORDER+5*STEP,BORDER+STEP);
 		
-		gridPoints[0]=new GridPoint(1,BORDER,BORDER);
-		gridPoints[1]=new GridPoint(2,BORDER+3*STEP,BORDER);
-		gridPoints[2]=new GridPoint(3,BORDER+6*STEP,BORDER);
+		gridPoints[0]=new GridPoint(0,BORDER,BORDER);
+		gridPoints[1]=new GridPoint(1,BORDER+3*STEP,BORDER);
+		gridPoints[2]=new GridPoint(2,BORDER+6*STEP,BORDER);
 		
 		
 		
@@ -188,7 +188,7 @@ public class GameGUI{
 					if(clickedPoint != null) {
 						//System.out.println("You have clicked point number "+clickedPoint.getID());
 						
-						makeMove(clickedPoint);
+						makeMove(clickedPoint); //TODO: will switch to 
 					}
 				}
 			});
