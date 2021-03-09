@@ -15,8 +15,6 @@ public class Board {
 	// map for adjacency list of locations
 	private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
 	private GameStates gameState;
-	private Integer secondLastMove = null;
-	private Integer lastMove = null;
 	
 	// pieces for players
 	private Integer[] unplacedPieces = new Integer[] {9, 9};
@@ -56,22 +54,21 @@ public class Board {
 		gameState = GameStates.move;
 	}
 	
+	
 	// setters and getters for dealing with the board
 	private void PlacePiece(Integer playerNum, Integer location) {
 		// places a piece at a location and decrements unplaced count
 		unplacedPieces[playerNum]--;
 		boardLoc[location] = playerNum;
-		secondLastMove = lastMove;
-		lastMove = location;
 	}
+	
 	
 	private void MovePiece(Integer playerNum, Integer locationTo, Integer locationFrom) {
 		// moves a pieces from one location to another
 		boardLoc[locationTo] = playerNum;
 		boardLoc[locationFrom] = 0;
-		secondLastMove = lastMove;
-		lastMove = locationTo;
 	}
+	
 	
 	private void RemovePiece(Integer location) {
 		// removes a piece at location
@@ -80,52 +77,63 @@ public class Board {
 		boardLoc[location] = 0;		
 	}
 	
+	
 	public boolean IsPlayersTurn(Integer playerNum) {
 		// checks if it is a player's turn
 		return (playerTurn == playerNum);
 	}
+	
 	
 	public boolean IsValidLoc(Integer location) {
 		// checks if the location is valid for our data structure
 		return !(location < 0 || location > 23);
 	}
 	
+	
 	public boolean IsEmpty(Integer location) {
 		// checks if location is empty
 		return (boardLoc[location] == 0);
 	}
+	
 	
 	public Integer GetPlayersTurn() {
 		// gets players turn
 		return playerTurn;
 	}
 	
+	
 	public boolean IsPlayersPiece(Integer playerNum, Integer location) {
 		// checks if the location's piece is the player's
 		return (boardLoc[location] == (playerNum + 1));
 	}
+	
 	
 	public boolean HasUnplacedPieces(Integer playerNum) {
 		// checks if a player has unplaced pieces
 		return (unplacedPieces[playerNum] > 0);
 	}
 	
+	
 	public boolean AreAdjacent(Integer loc1, Integer loc2) {
 		// checks if the location are adjacent
 		return (Arrays.asList(adj.get(loc1)).contains(loc2));
 	}
 	
-	public boolean CanFly() {
-		// checks players can fly pieces
-		return (livePieces[0] <= 3 || livePieces[1] <= 3);
+	
+	public boolean CanFly(Integer playerNum) {
+		/* Checks if a player can fly, this means the player has 3 or less pieces */
+		return livePieces[playerNum] <= 3;
 	}
 	
-	public boolean IsMill(Integer playerNum, Integer location) {
-		// checks if the location is part of a mill
+	
+	public boolean IsMill(Integer location) {
+		/* checks if the location is part of a mill
+		 * A mill is formed if a player has three pieces in a straight line
+		 * either vertical or horizontal */
+		
 		Integer numAdj = 0;
-		Integer[] adjLoc = new Integer[] {null, null, null};
 		// get the value of the location
-		Integer possPlayerNum = boardLoc[location];
+		Integer playerNum = boardLoc[location];
 		// trivial case - is empty
 		if (playerNum == 0) {
 			return false;
@@ -138,7 +146,7 @@ public class Board {
 		// for each adjacent location see if is the same piece
 		// then increment the counter and add this to the second round 
 		for (int i = 0; i < possibleMen1.length; i++) {
-			if (boardLoc[possibleMen1[i]] == possPlayerNum) {
+			if (boardLoc[possibleMen1[i]] == playerNum) {
 				numAdj++;
 				possibleMen2.add(possibleMen1[i]);
 			}
@@ -150,7 +158,7 @@ public class Board {
 			Integer adjLoc = possibleMen2.remove(0);
 			Integer[] possibleMen = adj.get(adjLoc);
 			for (int i = 0; i < possibleMen.length; i++) {
-				if (boardLoc[possibleMen[i]] == possPlayerNum) {
+				if (boardLoc[possibleMen[i]] == playerNum) {
 					numAdj++;
 				}
 			}
@@ -158,15 +166,16 @@ public class Board {
 		return (numAdj >= 3);		
 	}
 	
+	
 	public boolean HasLegalMoves(Integer playerNum) {
 		// checks if a player has a possible move
 		// if looking for movement
 		if (gameState == GameStates.move) {
-			// if they can fly, there is a garenteed move
-			if (CanFly()) {
+			// if they can fly, there is a guaranteed move
+			if (CanFly(playerNum)) {
 				return true;
 			}
-			// otherwise start with loc 0 
+			// otherwise start with location 0 
 			// see if the player is in that position
 			// and there are open adjacent spot
 			int i = 0;
@@ -185,7 +194,6 @@ public class Board {
 			return false;
 		}
 		// want to find a piece of the opponent that is not in a mill
-		// TO-DO: make sure mill was formed in last turn
 		if (gameState == GameStates.remove) {
 			int i = 0;
 			while (i < 24) {
@@ -276,7 +284,7 @@ public class Board {
 		}		
 		// check if the two locations are adjacent or if flying is valid
 		// !Adj && !CanFly <==> !(Adj || CanFly)
-		if (!(AreAdjacent(locationTo, locationFrom) || CanFly())) {
+		if (!(AreAdjacent(locationTo, locationFrom) || CanFly(playerNum))) {
 			return false;
 		}
 		// check game state
@@ -309,7 +317,6 @@ public class Board {
 			return false;
 		}
 		// check if the location is a part of a mill
-		// TODO mill was just formed
 		if (IsMill(location)) {
 			return false;
 		}

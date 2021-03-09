@@ -22,7 +22,12 @@ public class MakeMoveTests extends TestCase {
 	}
 	
 	
-	public void testInvalidMove() throws Exception {
-		myBoard.MakeMove(0, 24);
+	public void testInvalidMove() {
+		try {
+			myBoard.MakeMove(0, 24);
+			fail();
+		} catch (Exception e) {
+			assertTrue(true);
+		}
 	}
 }
