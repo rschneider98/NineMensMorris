@@ -63,10 +63,10 @@ public class GameGUI{
 		
 		
 	
-		JButton button1=new JButton("button1");
-		JButton button2=new JButton("button2");
-		JButton button3=new JButton("button3");
-		JButton button4=new JButton("button4");
+		JButton button1=new JButton("New Game");
+		JButton button2=new JButton("About");
+		JButton button3=new JButton("Options");
+		JButton button4=new JButton("Some Other Button");
 		
 		gameMenu.add(button1);
 		gameMenu.add(button2);
