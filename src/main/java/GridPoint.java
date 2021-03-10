@@ -13,6 +13,7 @@ public class GridPoint extends JPanel{
 	private boolean empty=true;
 	
 	private static final int SIZE=20;
+	private static final int PIECE_SIZE=15;
 	
 	private Color pieceColor;
 	
@@ -20,10 +21,11 @@ public class GridPoint extends JPanel{
 	public GridPoint(int id,int x,int y) {
 		
 		this.id=id;
-		this.setSize(GameGUI.PLACE_SIZE,GameGUI.PLACE_SIZE);
+		//this.setSize(GameGUI.PLACE_SIZE,GameGUI.PLACE_SIZE);
 		
 		this.x=x;
 		this.y=y;
+		this.setVisible(false);
 		
 		
 	}
@@ -58,30 +60,23 @@ public class GridPoint extends JPanel{
 			pieceColor=Color.BLACK;
 		}
 		
-		JLabel currPiece=new JLabel();
-		
-		currPiece.setBackground(pieceColor);
-		currPiece.setSize(SIZE, SIZE);
-		
-		this.add(currPiece);
 		
 		
-		//repaint();
 		
 	}
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		//g.setColor(Color.BLACK);
-		//g.drawRect(x-GameGUI.OFFSET, y-GameGUI.OFFSET,GameGUI.PLACE_SIZE,GameGUI.PLACE_SIZE);
+	public void drawPiece(Graphics g) {
 		
 		if(!empty) {
-			
+		
 			g.setColor(pieceColor);
 			
-			System.out.println(pieceColor);
-			g.fillOval(x,y,20,20);
+			
+			g.fillOval((x-PIECE_SIZE),(y-PIECE_SIZE),2*PIECE_SIZE,2*PIECE_SIZE);
+			
 		}
-	}
+	
+}
+
+	
 	
 }

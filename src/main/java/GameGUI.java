@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class GameGUI{
@@ -28,7 +29,7 @@ public class GameGUI{
 	
 	private JPanel gameMenu; //Menu and board are our only two panels so far
 	private GamePanel gameBoard;
-	private JTextField statusText;
+	private JTextArea statusText;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	
@@ -63,10 +64,10 @@ public class GameGUI{
 		
 		
 	
-		JButton button1=new JButton("button1");
-		JButton button2=new JButton("button2");
-		JButton button3=new JButton("button3");
-		JButton button4=new JButton("button4");
+		JButton button1=new JButton("New Game");
+		JButton button2=new JButton("About");
+		JButton button3=new JButton("Options");
+		JButton button4=new JButton("Some Other Button");
 		
 		gameMenu.add(button1);
 		gameMenu.add(button2);
@@ -83,24 +84,21 @@ public class GameGUI{
 		
 	}
 	private void makeStatusField() {
-		statusText=new JTextField("This is where status and stuff will go");
+		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
+		statusText.setWrapStyleWord(true);
 		
 		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
 	}
 	private void makeFrame() {
 		
-		gameWindow.setSize(800,600); //We can decide on size later. Will write code so that it does not matter
+		gameWindow.setSize(1100,600); //We can decide on size later. Will write code so that it does not matter
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setResizable(false); //We need to revisit this and see what we prefer
 		
 		
 		
 	}
-	private void refreshGUI() {
-		
-		gameWindow.setVisible(true);
-	}
-	private void clearBoard() {
+	private void clearBoard() { //Unused method but will later be used to clear the board and start new game
 		
 		gameBoard.removeAll();
 	}
@@ -127,36 +125,36 @@ public class GameGUI{
 		
 		/*^ These are the ratios between the distance between dots and the board size*/
 		
-		gridPoints[21]=new GridPoint(22,BORDER,BOARD_SIZE-BORDER);
-		gridPoints[22]=new GridPoint(23,BORDER+3*STEP,BOARD_SIZE-BORDER);
-		gridPoints[23]=new GridPoint(24,BORDER+6*STEP,BOARD_SIZE-BORDER);
+		gridPoints[21]=new GridPoint(21,BORDER,BOARD_SIZE-BORDER);
+		gridPoints[22]=new GridPoint(22,BORDER+3*STEP,BOARD_SIZE-BORDER);
+		gridPoints[23]=new GridPoint(23,BORDER+6*STEP,BOARD_SIZE-BORDER);
 		
-		gridPoints[18]=new GridPoint(19,BORDER+STEP,BOARD_SIZE-(BORDER+STEP));
-		gridPoints[19]=new GridPoint(20,BORDER+3*STEP,BOARD_SIZE-(BORDER+STEP));
-		gridPoints[20]=new GridPoint(21,BORDER+5*STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[18]=new GridPoint(18,BORDER+STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[19]=new GridPoint(19,BORDER+3*STEP,BOARD_SIZE-(BORDER+STEP));
+		gridPoints[20]=new GridPoint(20,BORDER+5*STEP,BOARD_SIZE-(BORDER+STEP));
 		
-		gridPoints[15]=new GridPoint(16,BORDER+2*STEP,BOARD_SIZE-(BORDER+2*STEP));
-		gridPoints[16]=new GridPoint(17,BORDER+3*STEP,BOARD_SIZE-(BORDER+2*STEP));
-		gridPoints[17]=new GridPoint(18,BORDER+4*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[15]=new GridPoint(15,BORDER+2*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[16]=new GridPoint(16,BORDER+3*STEP,BOARD_SIZE-(BORDER+2*STEP));
+		gridPoints[17]=new GridPoint(17,BORDER+4*STEP,BOARD_SIZE-(BORDER+2*STEP));
 		
-		gridPoints[9]=new GridPoint(10,BORDER,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[10]=new GridPoint(11,BORDER+STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[11]=new GridPoint(12,BORDER+2*STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[12]=new GridPoint(13,BORDER+4*STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[13]=new GridPoint(14,BORDER+5*STEP,BOARD_SIZE-(BORDER+3*STEP));
-		gridPoints[14]=new GridPoint(15,BORDER+6*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[9]=new GridPoint(9,BORDER,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[10]=new GridPoint(10,BORDER+STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[11]=new GridPoint(11,BORDER+2*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[12]=new GridPoint(12,BORDER+4*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[13]=new GridPoint(13,BORDER+5*STEP,BOARD_SIZE-(BORDER+3*STEP));
+		gridPoints[14]=new GridPoint(14,BORDER+6*STEP,BOARD_SIZE-(BORDER+3*STEP));
 		
-		gridPoints[6]=new GridPoint(7,BORDER+2*STEP,BORDER+2*STEP);
-		gridPoints[7]=new GridPoint(8,BORDER+3*STEP,BORDER+2*STEP);
-		gridPoints[8]=new GridPoint(9,BORDER+4*STEP,BORDER+2*STEP);
+		gridPoints[6]=new GridPoint(6,BORDER+2*STEP,BORDER+2*STEP);
+		gridPoints[7]=new GridPoint(7,BORDER+3*STEP,BORDER+2*STEP);
+		gridPoints[8]=new GridPoint(8,BORDER+4*STEP,BORDER+2*STEP);
 		
-		gridPoints[3]=new GridPoint(4,BORDER+STEP,BORDER+STEP);
-		gridPoints[4]=new GridPoint(5,BORDER+3*STEP,BORDER+STEP);
-		gridPoints[5]=new GridPoint(6,BORDER+5*STEP,BORDER+STEP);
+		gridPoints[3]=new GridPoint(3,BORDER+STEP,BORDER+STEP);
+		gridPoints[4]=new GridPoint(4,BORDER+3*STEP,BORDER+STEP);
+		gridPoints[5]=new GridPoint(5,BORDER+5*STEP,BORDER+STEP);
 		
-		gridPoints[0]=new GridPoint(1,BORDER,BORDER);
-		gridPoints[1]=new GridPoint(2,BORDER+3*STEP,BORDER);
-		gridPoints[2]=new GridPoint(3,BORDER+6*STEP,BORDER);
+		gridPoints[0]=new GridPoint(0,BORDER,BORDER);
+		gridPoints[1]=new GridPoint(1,BORDER+3*STEP,BORDER);
+		gridPoints[2]=new GridPoint(2,BORDER+6*STEP,BORDER);
 		
 		
 		
@@ -172,24 +170,30 @@ public class GameGUI{
 		
 		private static final long serialVersionUID = 1L;
 		private Image boardImage;
+		private boolean firstSetup=true;
 		
 		
 		public GamePanel() {
+			
+			
 			addBoardBackground();
 			addClickable();
+			
 			
 		}
 		private void addClickable() { //Adds mouse listener
 			addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					
-					System.out.println("X: "+e.getX()+" Y: "+e.getY()); //checks to see location of click
+					
 					GridPoint clickedPoint=getClickedPoint(e.getX(),e.getY());
 					if(clickedPoint != null) {
 						//System.out.println("You have clicked point number "+clickedPoint.getID());
 						
-						makeMove(clickedPoint);
+						makeMove(clickedPoint); //TODO: will switch to 
 					}
+					
+					repaint();
 				}
 			});
 		}
@@ -198,7 +202,7 @@ public class GameGUI{
 			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
 			
 			if(!clickedPoint.isEmpty()) {
-				System.out.println("Point number "+clickedPoint.getID()+" is currently occupied by a "+clickedPoint.getCurrentPiece()+" piece");
+				statusText.append("Point number "+clickedPoint.getID()+" already has a "+clickedPoint.getCurrentPiece()+" piece\n");
 				
 			}else {
 				if(whiteTurn) {
@@ -210,8 +214,8 @@ public class GameGUI{
 					
 				}
 				
-				System.out.println("A "+clickedPoint.getCurrentPiece()+" piece was moved "+
-				" point number "+clickedPoint.getID());
+				statusText.append("A "+clickedPoint.getCurrentPiece()+" piece was moved "+
+				" to point number"+clickedPoint.getID()+"\n");
 				
 				whiteTurn=!whiteTurn;
 			}
@@ -262,23 +266,36 @@ public class GameGUI{
 			super.paintComponent(g); 
 			
 			g.drawImage(boardImage,0,0,null); //Draws image at location 0,0
-			setGridPoints();
+		
 			
+			
+			for(int x=0;x<gridPoints.length;x++) { //Draws the current occupying piece for each of the grid points
+				gridPoints[x].drawPiece(g);
+			}
+			
+			if(firstSetup) {	
+				setGridPoints();
+				firstSetup=false;
+			}
 			
 			
 		}
 		
 		private void setGridPoints() { //Places the gridpoints on the board
 			
+			
+			
 			for(int x=0;x<gridPoints.length;x++) {
+				
+				
 				
 				GridPoint currPoint = gridPoints[x];
 				
-				gameBoard.add(currPoint);
+				
+				this.add(currPoint);
 				
 				
-				
-				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET);
+				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET); //Makes sure the gridpoints cover the space entirely
 				
 				
 				
