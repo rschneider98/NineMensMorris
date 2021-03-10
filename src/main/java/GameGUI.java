@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -32,7 +34,14 @@ public class GameGUI{
 	private JTextArea statusText;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
+	List<Piece> blackPieces=new ArrayList<Piece>();
+	List<Piece> whitePieces=new ArrayList<Piece>();
+	int blackRemainPieces=9;	
+	int whiteRemainPieces=9;
+
+	JPanel playerPanel = new JPanel(new BorderLayout()); 
 	
+	public static final int PLAYER_PIECES=9;
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
 	public static final int OFFSET=PLACE_SIZE/2;
@@ -45,9 +54,11 @@ public class GameGUI{
 		makeMenu();
 		makeNewBoard();
 		makeStatusField();
+		makePlayersPanel();
 		gameWindow.pack();
 		gameWindow.setVisible(true);
 	}
+	
 	private void makeMenu() {
 		
 		/*THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!!*/
@@ -107,7 +118,7 @@ public class GameGUI{
 		
 		makeClickablePoints();
 			
-		gameBoard=new GamePanel();	
+		gameBoard=new GamePanel();
 		gameBoard.setPreferredSize(new Dimension(450,450));	
 		
 		
@@ -115,6 +126,71 @@ public class GameGUI{
 		
 		//refreshGUI();
 		
+		
+	}
+	public class PlayersPanel extends JComponent {
+
+        private static final long serialVersionUID = 1L;
+    	private static final int SIZE=20;
+    	private static final int PIECE_SIZE=15;
+    	List<Piece> p1Pieces;
+    	List<Piece> p2Pieces;
+
+        PlayersPanel(List<Piece> p1Pieces,List<Piece> p2Pieces) {
+            setPreferredSize(new Dimension(500, 100));
+            this.p1Pieces=p1Pieces;
+            this.p2Pieces=p2Pieces;
+
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            for (Piece piece : p1Pieces) {
+		
+            	piece.drawPiece(g);
+            }
+            for (Piece piece : p2Pieces) {
+        		
+            	piece.drawPiece(g);
+            }
+            Font font = g.getFont().deriveFont( 30.0f );
+            g.setColor(Color.white);
+            g.setFont( font );
+
+            if(whiteTurn) {
+            	g.drawString("Player 1 Turn", 300, 80);
+            }else {
+            	g.drawString("Player 2 Turn", 300, 80);
+            }
+
+        }
+    }
+	
+	private void makePlayersPanel() {
+		// Player panel with white and black pieces
+        
+        
+    int x1=0;
+	for(int i=1; i<=PLAYER_PIECES;i++) {
+	   Piece piece=new Piece( 40+x1, 50);
+       piece.setPieceColor(Color.BLACK);		       
+       blackPieces.add(piece);
+       x1+=35;
+
+    }
+    x1=400;
+	for(int i=1; i<=PLAYER_PIECES;i++) {
+		   Piece piece=new Piece( 40+x1, 50);
+	       piece.setPieceColor(Color.WHITE);		       
+	       whitePieces.add(piece);
+	       x1+=35;
+
+	    }
+	playerPanel.setBackground(Color.DARK_GRAY);
+	playerPanel.add(new PlayersPanel(blackPieces,whitePieces));
+
+	gameWindow.getContentPane().add(playerPanel,BorderLayout.NORTH);
 		
 	}
 	
@@ -206,11 +282,31 @@ public class GameGUI{
 				
 			}else {
 				if(whiteTurn) {
-					clickedPoint.acceptPiece("White");
+					if(whiteRemainPieces>0) {
+						
+						clickedPoint.acceptPiece("White");
+						whitePieces.get(whiteRemainPieces-1).setUsed(true);
+						playerPanel.repaint();
+						whiteRemainPieces--;
+						
+					}else {
+						statusText.append("White doesn't have any more pieces left\n");
+						return;
+					}
 					
 					
 				}else {
-					clickedPoint.acceptPiece("Black");
+					if(blackRemainPieces>0) {
+											
+						clickedPoint.acceptPiece("Black");
+						blackPieces.get(blackRemainPieces-1).setUsed(true);
+						playerPanel.repaint();
+						blackRemainPieces--;
+						
+					}else {
+						statusText.append("Black doesn't have any more pieces left\n");
+						return;
+					}
 					
 				}
 				
