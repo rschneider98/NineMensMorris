@@ -210,10 +210,12 @@ public class Board {
 		return false;
 	}
 	
+	
 	public GameStates GetGameState() {
 		// gets the game state on board
 		return gameState;
 	}
+	
 	
 	public boolean IsEnd() {
 		// sees if it is the end of the game
@@ -256,6 +258,7 @@ public class Board {
 		return true;		
 	}
 	
+	
 	public boolean IsValidMovement(Integer playerNum, Integer locationTo, Integer locationFrom) {
 		/* Method to check if a particular movement is valid 
 		 * movement with two locations is adj. or flying */
@@ -293,6 +296,7 @@ public class Board {
 		}
 		return true;
 	}
+	
 	
 	public boolean IsValidRemoval(Integer playerNum, Integer location) {
 		// Checks if a removal is valid
@@ -344,6 +348,7 @@ public class Board {
 		return (formedMill);
 	}
 	
+	
 	public boolean MakeMove(Integer playerNum, Integer locationTo, Integer locationFrom) throws Exception{
 		/* Make the move (with two location arguments this will be movement) 
 		 * and return if a mill has formed
@@ -362,6 +367,7 @@ public class Board {
 		}
 		return (formedMill);
 	}
+	
 	
 	public void RemoveMan(Integer playerNum, Integer location) throws Exception {
 		/* Remove a piece
