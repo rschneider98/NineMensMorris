@@ -8,4 +8,4 @@ The numbering system corresponds to the following picture.
 
 NOTE: Arrays start at zero, for generality, this picture starts at one.
 
-![A Nine Men's Morris Board with the intersections numbered one through twenty-four from left-to-right and top-to-bottom](../Img/LabeledBoard.png)
+![A Nine Men's Morris Board with the intersections numbered one through twenty-four from left-to-right and top-to-bottom](../img/LabeledBoard.png)

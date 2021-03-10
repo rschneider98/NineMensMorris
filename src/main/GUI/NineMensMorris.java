@@ -1,3 +1,6 @@
+package main.GUI;
+
+import main.GUI.GameGUI;
 
 public class NineMensMorris{
 	
