@@ -122,16 +122,25 @@ public class GameGUI{
 	}
 	private void newGameClick() {
 		
+		
+		
 	}
 	private void aboutClick() {
 		String aboutMessage="Created by:\nMatt Miller\nPaula Salazar Castano\nWilliam Scheer\nRichard Scheider\nJashandeep Singh";
-		JOptionPane.showMessageDialog(null, aboutMessage);
+		/*^We can totally add more stuff to this, it is just a placeholder for now*/
+		
+		JOptionPane.showMessageDialog(gameWindow, aboutMessage);
 		
 	}
 	private void optionsClick() {
+		String[] values= {"Human","Computer"};
+		
+		JOptionPane.showInputDialog(gameWindow,"What kind of opponent will you face today? ","Selection", JOptionPane.DEFAULT_OPTION, null, values, "0");
+		
 		
 	}
 	private void quitClick() {
+		
 		
 	}
 	private void makeStatusField() {
