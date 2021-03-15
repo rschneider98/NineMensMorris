@@ -141,6 +141,14 @@ public class GameGUI{
 	}
 	private void quitClick() {
 		
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+		        "Are you sure you want to exit the program?", "Exit Program Message Box",
+		        JOptionPane.YES_NO_OPTION);
+
+		    if (confirmed == JOptionPane.YES_OPTION) {
+		    	gameWindow.dispose();
+		    }
+		      
 		
 	}
 	private void makeStatusField() {
