@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -23,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -77,15 +80,36 @@ public class GameGUI{
 		
 		
 	
-		JButton button1=new JButton("New Game");
-		JButton button2=new JButton("About");
-		JButton button3=new JButton("Options");
-		JButton button4=new JButton("Some Other Button");
+		JButton newGameButton=new JButton("New Game");		
+		JButton aboutButton=new JButton("About");
+		JButton optionsButton=new JButton("Options");
+		JButton quitButton=new JButton("Quit");
 		
-		gameMenu.add(button1);
-		gameMenu.add(button2);
-		gameMenu.add(button3);
-		gameMenu.add(button4);
+		gameMenu.add(newGameButton);
+		gameMenu.add(aboutButton);
+		gameMenu.add(optionsButton);
+		gameMenu.add(quitButton);
+		
+		newGameButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newGameClick();
+			}
+		});
+		aboutButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				aboutClick();
+			}
+		});
+		optionsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				optionsClick();
+			}
+		});
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				quitClick();
+			}
+		});
 		
 		
 		
@@ -94,6 +118,20 @@ public class GameGUI{
 		
 		/*THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!!*/
 		
+		
+	}
+	private void newGameClick() {
+		
+	}
+	private void aboutClick() {
+		String aboutMessage="Created by:\nMatt Miller\nPaula Salazar Castano\nWilliam Scheer\nRichard Scheider\nJashandeep Singh";
+		JOptionPane.showMessageDialog(null, aboutMessage);
+		
+	}
+	private void optionsClick() {
+		
+	}
+	private void quitClick() {
 		
 	}
 	private void makeStatusField() {
