@@ -16,13 +16,33 @@ public class Board {
 	private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
 	private GameStates gameState;
 	
+	// (immutable) array of possible mills
+	private static final Integer[][] possMills = {
+		{0, 1, 2}, 
+		{3, 4, 5},
+		{6, 7, 8},
+		{9, 10, 11},
+		{12, 13, 14},
+		{15, 16, 17},
+		{18, 19, 20},
+		{21, 22, 23},
+		{0, 9, 21},
+		{3, 10, 18},
+		{6, 11, 15},
+		{1, 4, 7},
+		{16, 19, 22},
+		{8, 12, 17},
+		{5, 13, 20},
+		{2, 14, 23}
+	};
+
 	// pieces for players
 	private Integer[] unplacedPieces = new Integer[] {9, 9};
 	private Integer[] livePieces = new Integer[] {9, 9};
 	
 	public Board() {
 		// mark all spots on the board as empty
-		Arrays.fill(boardLoc, 0, 23, 0);
+		Arrays.fill(boardLoc, 0, 24, 0);
 		
 		// adjacency list for each of the board locations
 		adj.put(0, new Integer[] {1, 9});
@@ -59,13 +79,13 @@ public class Board {
 	private void PlacePiece(Integer playerNum, Integer location) {
 		// places a piece at a location and decrements unplaced count
 		unplacedPieces[playerNum]--;
-		boardLoc[location] = playerNum;
+		boardLoc[location] = playerNum + 1;
 	}
 	
 	
 	private void MovePiece(Integer playerNum, Integer locationTo, Integer locationFrom) {
 		// moves a pieces from one location to another
-		boardLoc[locationTo] = playerNum;
+		boardLoc[locationTo] = playerNum + 1;
 		boardLoc[locationFrom] = 0;
 	}
 	
@@ -120,6 +140,25 @@ public class Board {
 	}
 	
 	
+	public Integer NumUnplacedPieces(Integer playerNum) {
+		// getter for number of unplaced pieces
+		return unplacedPieces[playerNum];
+	}
+
+
+	public Integer NumLivePieces(Integer playerNum) {
+		// getter for number of live pieces
+		return livePieces[playerNum];
+	}
+
+
+	public boolean IsPlacementStage() {
+		// getter for if it is the placement stage 
+		// if not, it is the movement stage
+		return (HasUnplacedPieces(0) || HasUnplacedPieces(1));
+	}
+
+	
 	public boolean CanFly(Integer playerNum) {
 		/* Checks if a player can fly, this means the player has 3 or less pieces */
 		return livePieces[playerNum] <= 3;
@@ -131,44 +170,48 @@ public class Board {
 		 * A mill is formed if a player has three pieces in a straight line
 		 * either vertical or horizontal */
 		
-		Integer numAdj = 0;
 		// get the value of the location
 		Integer playerNum = boardLoc[location];
 		// trivial case - is empty
 		if (playerNum == 0) {
 			return false;
 		}
-		numAdj++; // increment count of adjacent men
-		// get array of adjacent locations
-		Integer[] possibleMen1 = adj.get(location);
-		// create vector to store locations with same piece
-		Vector<Integer> possibleMen2 = new Vector<Integer>();
-		// for each adjacent location see if is the same piece
-		// then increment the counter and add this to the second round 
-		for (int i = 0; i < possibleMen1.length; i++) {
-			if (boardLoc[possibleMen1[i]] == playerNum) {
-				numAdj++;
-				possibleMen2.add(possibleMen1[i]);
-			}
-		}
-		// second round occurs if we have an adjacent piece 
-		// and there is not yet a mill
-		// check each of these candidates for a 
-		while (numAdj < 3 && possibleMen2.size() > 0) {
-			Integer adjLoc = possibleMen2.remove(0);
-			Integer[] possibleMen = adj.get(adjLoc);
-			for (int i = 0; i < possibleMen.length; i++) {
-				if (boardLoc[possibleMen[i]] == playerNum) {
-					numAdj++;
+		Integer[] first, second;
+		first = new Integer[3]; 
+		second = new Integer[3];
+		// search the array of possMills search for the two possiblities
+		// of this lcoation
+		boolean isFirst = true;
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (possMills[i][j] == location) {
+					// not this is just a reference
+					if (isFirst) {
+						first = possMills[i];
+						isFirst = false;
+					}
+					else {
+						second = possMills[i];
+					}
 				}
 			}
 		}
-		return (numAdj >= 3);		
+		if (boardLoc[first[0]] == playerNum && boardLoc[first[1]] == playerNum && boardLoc[first[2]] == playerNum) {
+				return true;
+		}
+		if (boardLoc[second[0]] == playerNum && boardLoc[second[1]] == playerNum && boardLoc[second[2]] == playerNum) {
+				return true;
+		}
+		return false;
 	}
 	
 	
 	public boolean HasLegalMoves(Integer playerNum) {
 		// checks if a player has a possible move
+		// if during placement
+		if (HasUnplacedPieces(playerNum)) {
+			return true;
+		}
 		// if looking for movement
 		if (gameState == GameStates.move) {
 			// if they can fly, there is a guaranteed move
@@ -180,7 +223,7 @@ public class Board {
 			// and there are open adjacent spot
 			int i = 0;
 			while (i < 24) {
-				if (boardLoc[i] == playerNum) {
+				if (boardLoc[i] == (playerNum + 1)) {
 					Integer[] possibleAdj = adj.get(i);
 					for (int j = 0; j < possibleAdj.length; j++) {
 						if (IsEmpty(possibleAdj[j])) {

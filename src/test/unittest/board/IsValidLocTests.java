@@ -17,10 +17,10 @@ private Board myBoard;
 	}
 	
 	public void testLargerLoc() {
-		assertTrue(myBoard.IsValidLoc(24));
+		assertFalse(myBoard.IsValidLoc(24));
 	}
 	
 	public void testNegaitiveLoc() {
-		assertTrue(myBoard.IsValidLoc(-1));
+		assertFalse(myBoard.IsValidLoc(-1));
 	}
 }
