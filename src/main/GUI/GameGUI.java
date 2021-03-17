@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -23,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -55,8 +58,7 @@ public class GameGUI{
 		makeFrame();
 		makeMenu();
 		makeNewBoard();
-		makeStatusField();
-		makePlayersPanel();
+		
 		gameWindow.pack();
 		gameWindow.setVisible(true);
 	}
@@ -77,15 +79,36 @@ public class GameGUI{
 		
 		
 	
-		JButton button1=new JButton("New Game");
-		JButton button2=new JButton("About");
-		JButton button3=new JButton("Options");
-		JButton button4=new JButton("Some Other Button");
+		JButton newGameButton=new JButton("New Game");		
+		JButton aboutButton=new JButton("About");
+		JButton optionsButton=new JButton("Options");
+		JButton quitButton=new JButton("Quit");
 		
-		gameMenu.add(button1);
-		gameMenu.add(button2);
-		gameMenu.add(button3);
-		gameMenu.add(button4);
+		gameMenu.add(newGameButton);
+		gameMenu.add(aboutButton);
+		gameMenu.add(optionsButton);
+		gameMenu.add(quitButton);
+		
+		newGameButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newGameClick();
+			}
+		});
+		aboutButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				aboutClick();
+			}
+		});
+		optionsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				optionsClick();
+			}
+		});
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				quitClick();
+			}
+		});
 		
 		
 		
@@ -94,6 +117,47 @@ public class GameGUI{
 		
 		/*THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!!*/
 		
+		
+	}
+	private void newGameClick() {
+		
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+		        "Are you sure you want to start a new game?", "Start New Game",
+		        JOptionPane.YES_NO_OPTION);
+
+		    if (confirmed == JOptionPane.YES_OPTION) {
+		    	clearBoard();
+		    	makeNewBoard();
+		    }
+		
+		
+		
+		
+	}
+	private void aboutClick() {
+		String aboutMessage="Created by:\nMatt Miller\nPaula Salazar Castano\nWilliam Scheer\nRichard Scheider\nJashandeep Singh";
+		/*^We can totally add more stuff to this, it is just a placeholder for now*/
+		
+		JOptionPane.showMessageDialog(gameWindow, aboutMessage);
+		
+	}
+	private void optionsClick() {
+		String[] values= {"Human","Computer"};
+		
+		JOptionPane.showInputDialog(gameWindow,"What kind of opponent will you face today? ","Selection", JOptionPane.DEFAULT_OPTION, null, values, "0");
+		
+		
+	}
+	private void quitClick() {
+		
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+		        "Are you sure you want to exit the Game?", "Exit Program Message Box",
+		        JOptionPane.YES_NO_OPTION);
+
+		    if (confirmed == JOptionPane.YES_OPTION) {
+		    	gameWindow.dispose();
+		    }
+		      
 		
 	}
 	private void makeStatusField() {
@@ -113,7 +177,11 @@ public class GameGUI{
 	}
 	private void clearBoard() { //Unused method but will later be used to clear the board and start new game
 		
-		gameBoard.removeAll();
+		
+		gameBoard.setVisible(false);
+		gameWindow.getContentPane().remove(gameBoard);
+		
+		
 	}
 	private void makeNewBoard() {
 		
@@ -125,6 +193,9 @@ public class GameGUI{
 		
 		
 		gameWindow.getContentPane().add(gameBoard,BorderLayout.CENTER); //Adds gameboard to EAST side of the frame
+		
+		makeStatusField();
+		makePlayersPanel();
 		
 		//refreshGUI();
 		
