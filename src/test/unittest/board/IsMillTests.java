@@ -75,7 +75,8 @@ public class IsMillTests extends TestCase {
 		}
 		
 		// test former mill for player 1: {3, 10, 18} (not a mill)
-		assertFalse(myBoard.IsMill(3));
+		// NOTE: 3 is part of a mill {3, 4, 5}
+		assertTrue(myBoard.IsMill(3));
 		assertFalse(myBoard.IsMill(10));
 		assertFalse(myBoard.IsMill(18));
 		
