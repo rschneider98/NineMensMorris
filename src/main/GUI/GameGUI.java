@@ -30,6 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import main.game.Board;
+import main.game.GameStates;
+
 public class GameGUI{
 	
 	private JFrame gameWindow=new JFrame("Cowboy Checkers");
@@ -41,8 +44,9 @@ public class GameGUI{
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	List<Piece> blackPieces=new ArrayList<Piece>();
 	List<Piece> whitePieces=new ArrayList<Piece>();
-	int blackRemainPieces=9;	
-	int whiteRemainPieces=9;
+
+	private Board currentBoard;
+	private Integer prevClickPoint = null;
 
 	JPanel playerPanel = new JPanel(new BorderLayout()); 
 	
@@ -50,8 +54,6 @@ public class GameGUI{
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
 	public static final int OFFSET=PLACE_SIZE/2;
-	
-	private boolean whiteTurn=true;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -64,19 +66,15 @@ public class GameGUI{
 	}
 	
 	private void makeMenu() {
-		
 		/*THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!!*/
 		
 		gameMenu=new JPanel();
 		
 		gameWindow.getContentPane().add(gameMenu,BorderLayout.WEST);
 		
-		
-		
 		//layout.setVgap(200);
 		
-		gameMenu.setLayout(new GridLayout(4,0,0,100));
-		
+		gameMenu.setLayout(new GridLayout(4,0,0,100));	
 		
 	
 		JButton newGameButton=new JButton("New Game");		
@@ -109,31 +107,20 @@ public class GameGUI{
 				quitClick();
 			}
 		});
-		
-		
-		
-		
-		
-		
-		/*THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!!*/
-		
-		
 	}
+
+
 	private void newGameClick() {
-		
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
 		        "Are you sure you want to start a new game?", "Start New Game",
 		        JOptionPane.YES_NO_OPTION);
 
-		    if (confirmed == JOptionPane.YES_OPTION) {
+		if (confirmed == JOptionPane.YES_OPTION) {
 		    	clearBoard();
 		    	makeNewBoard();
 		    }
-		
-		
-		
-		
 	}
+
 	private void aboutClick() {
 		String aboutMessage="Created by:\nMatt Miller\nPaula Salazar Castano\nWilliam Scheer\nRichard Scheider\nJashandeep Singh";
 		/*^We can totally add more stuff to this, it is just a placeholder for now*/
@@ -141,13 +128,17 @@ public class GameGUI{
 		JOptionPane.showMessageDialog(gameWindow, aboutMessage);
 		
 	}
+	
 	private void optionsClick() {
-		String[] values= {"Human","Computer"};
+		String[] values  = {  "Human",  "Computer"  };
+
+		//Maybe ask the user if they want to restart the gaem
 		
 		JOptionPane.showInputDialog(gameWindow,"What kind of opponent will you face today? ","Selection", JOptionPane.DEFAULT_OPTION, null, values, "0");
 		
 		
 	}
+
 	private void quitClick() {
 		
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
@@ -157,50 +148,56 @@ public class GameGUI{
 		    if (confirmed == JOptionPane.YES_OPTION) {
 		    	gameWindow.dispose();
 		    }
-		      
-		
 	}
+
 	private void makeStatusField() {
 		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
 		statusText.setWrapStyleWord(true);
 		
 		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
 	}
+
 	private void makeFrame() {
 		
 		gameWindow.setSize(1100,600); //We can decide on size later. Will write code so that it does not matter
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setResizable(false); //We need to revisit this and see what we prefer
-		
-		
-		
 	}
+	
 	private void clearBoard() { //Unused method but will later be used to clear the board and start new game
-		
-		
 		gameBoard.setVisible(false);
 		gameWindow.getContentPane().remove(gameBoard);
-		
-		
 	}
+	
 	private void makeNewBoard() {
-		
-		
+		currentBoard = new Board(); // Backend board logic
+
 		makeClickablePoints();
-			
-		gameBoard=new GamePanel();
-		gameBoard.setPreferredSize(new Dimension(450,450));	
-		
-		
-		gameWindow.getContentPane().add(gameBoard,BorderLayout.CENTER); //Adds gameboard to EAST side of the frame
-		
+
+		gameBoard = new GamePanel();
+		gameBoard.setPreferredSize(new Dimension(450, 450));
+
+		gameWindow.getContentPane().add(gameBoard, BorderLayout.CENTER); //Adds gameboard to EAST side of the frame
+
 		makeStatusField();
 		makePlayersPanel();
-		
-		//refreshGUI();
-		
-		
 	}
+
+	private void endGame(int winningPlayer) {
+
+		String winMessage = "Player " + winningPlayer + " has won the game!!!";
+
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+			winMessage, "New Game?", 
+			JOptionPane.YES_NO_OPTION);
+		if (confirmed == JOptionPane.YES_OPTION) {
+			clearBoard();
+			makeNewBoard();
+		} else {
+			gameWindow.dispose();
+		}
+	}
+
 	public class PlayersPanel extends JComponent {
 
         private static final long serialVersionUID = 1L;
@@ -213,27 +210,24 @@ public class GameGUI{
             setPreferredSize(new Dimension(500, 100));
             this.p1Pieces=p1Pieces;
             this.p2Pieces=p2Pieces;
-
         }
 
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             for (Piece piece : p1Pieces) {
-		
             	piece.drawPiece(g);
             }
             for (Piece piece : p2Pieces) {
-        		
             	piece.drawPiece(g);
             }
             Font font = g.getFont().deriveFont( 30.0f );
             g.setColor(Color.white);
             g.setFont( font );
 
-            if(whiteTurn) {
+            if(currentBoard.GetPlayersTurn() == 0) {
             	g.drawString("Player 1 Turn", 300, 80);
-            }else {
+            } else {
             	g.drawString("Player 2 Turn", 300, 80);
             }
 
@@ -242,29 +236,26 @@ public class GameGUI{
 	
 	private void makePlayersPanel() {
 		// Player panel with white and black pieces
-        
-        
-    int x1=0;
-	for(int i=1; i<=PLAYER_PIECES;i++) {
-	   Piece piece=new Piece( 40+x1, 50);
-       piece.setPieceColor(Color.BLACK);		       
-       blackPieces.add(piece);
-       x1+=35;
+		int x1=0;
+		for(int i=1; i<=PLAYER_PIECES;i++) {
+			Piece piece=new Piece( 40+x1, 50);
+			piece.setPieceColor(Color.BLACK);		       
+			blackPieces.add(piece);
+			x1 += 35;
+		}
+		x1=400;
+		for(int i=1; i<=PLAYER_PIECES;i++) {
+			Piece piece=new Piece( 40+x1, 50);
+			piece.setPieceColor(Color.WHITE);		       
+			whitePieces.add(piece);
+			x1+=35;
 
-    }
-    x1=400;
-	for(int i=1; i<=PLAYER_PIECES;i++) {
-		   Piece piece=new Piece( 40+x1, 50);
-	       piece.setPieceColor(Color.WHITE);		       
-	       whitePieces.add(piece);
-	       x1+=35;
+		}
 
-	    }
-	playerPanel.setBackground(Color.DARK_GRAY);
-	playerPanel.add(new PlayersPanel(blackPieces,whitePieces));
+		playerPanel.setBackground(Color.DARK_GRAY);
+		playerPanel.add(new PlayersPanel(blackPieces, whitePieces));
 
-	gameWindow.getContentPane().add(playerPanel,BorderLayout.NORTH);
-		
+		gameWindow.getContentPane().add(playerPanel,BorderLayout.NORTH);
 	}
 	
 	private void makeClickablePoints() { 
@@ -303,95 +294,116 @@ public class GameGUI{
 		
 		gridPoints[0]=new GridPoint(0,BORDER,BORDER);
 		gridPoints[1]=new GridPoint(1,BORDER+3*STEP,BORDER);
-		gridPoints[2]=new GridPoint(2,BORDER+6*STEP,BORDER);
-		
-		
-		
-		
-		/*Remember that since we started counted at 1, the array index is 1 less than id*/	
-		
-						
-		
+		gridPoints[2]=new GridPoint(2,BORDER+6*STEP,BORDER);		
 	}
 	
 	private class GamePanel extends JPanel{
-		
-		
+				
 		private static final long serialVersionUID = 1L;
 		private Image boardImage;
 		private boolean firstSetup=true;
-		
-		
+				
 		public GamePanel() {
-			
-			
 			addBoardBackground();
 			addClickable();
-			
-			
 		}
+
 		private void addClickable() { //Adds mouse listener
 			addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					
-					
 					GridPoint clickedPoint=getClickedPoint(e.getX(),e.getY());
 					if(clickedPoint != null) {
 						//System.out.println("You have clicked point number "+clickedPoint.getID());
 						
 						makeMove(clickedPoint); //TODO: will switch to 
-					}
-					
+					}					
 					repaint();
 				}
 			});
 		}
+
 		private void makeMove(GridPoint clickedPoint) {
-			
 			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
 			
-			if(!clickedPoint.isEmpty()) {
-				statusText.append("Point number "+clickedPoint.getID()+" already has a "+clickedPoint.getCurrentPiece()+" piece\n");
-				
-			}else {
-				if(whiteTurn) {
-					if(whiteRemainPieces>0) {
-						
-						clickedPoint.acceptPiece("White");
-						whitePieces.get(whiteRemainPieces-1).setUsed(true);
-						playerPanel.repaint();
-						whiteRemainPieces--;
-						
-					}else {
-						statusText.append("White doesn't have any more pieces left\n");
-						return;
+			int playerNum = currentBoard.GetPlayersTurn();
+			int pointID = clickedPoint.getID();
+
+			if (currentBoard.GetGameState() == GameStates.remove) {
+				// want to remove piece
+				if (currentBoard.IsValidRemoval(playerNum, pointID)) {
+					try {
+						currentBoard.RemoveMan(playerNum, pointID);
+						statusText.append(String.format("Player %d removed a piece \n", (playerNum + 1)));
+					} catch (Exception e) {
+						statusText.append("Invalid: Cannot remove piece \n");
 					}
-					
-					
-				}else {
-					if(blackRemainPieces>0) {
-											
-						clickedPoint.acceptPiece("Black");
-						blackPieces.get(blackRemainPieces-1).setUsed(true);
-						playerPanel.repaint();
-						blackRemainPieces--;
-						
-					}else {
-						statusText.append("Black doesn't have any more pieces left\n");
-						return;
-					}
-					
-				}
-				
-				statusText.append("A "+clickedPoint.getCurrentPiece()+" piece was moved "+
-				" to point number"+clickedPoint.getID()+"\n");
-				
-				whiteTurn=!whiteTurn;
+				} 
+				prevClickPoint = null;
 			}
-			
-			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
+			else if (currentBoard.IsPlacementStage()) {
+				// we are placing objects
+				if (currentBoard.IsValidMovement(playerNum, pointID)) {
+					try {
+						int numPieces = currentBoard.NumUnplacedPieces(playerNum);
+						
+						boolean formedMill = currentBoard.MakeMove(playerNum, pointID);
+						statusText.append(String.format("Player %d placed a piece \n", (playerNum + 1)));
+						
+						if (formedMill) {
+							statusText.append(String.format("A mill has been formed by player %d\n", (playerNum + 1)));
+						}
+
+						if (playerNum == 0) {						
+							if (numPieces > 0) {
+								whitePieces.get(numPieces - 1).setUsed(true);
+							} else {
+								statusText.append("White doesn't have any more pieces left\n");
+							}
+						} else {
+							if (numPieces > 0) {
+								blackPieces.get(numPieces - 1).setUsed(true);
+							} else {
+								statusText.append("Black doesn't have any more pieces left\n");
+							}
+						}
+					} catch (Exception e) {
+						statusText.append("Invalid: Cannot remove piece \n");
+					}
+				prevClickPoint = null;
+				}
+			}
+			else {
+				// Want to select a piece and then move it
+				if (prevClickPoint == null) {
+					prevClickPoint = pointID;
+				}
+				else {
+					if (currentBoard.IsValidMovement(playerNum, pointID, prevClickPoint)) {
+						try {
+							boolean formedMill = currentBoard.MakeMove(playerNum, pointID, prevClickPoint);
+							statusText.append(String.format("Player %d moved a piece \n", (playerNum + 1)));
+		
+							if (formedMill) {
+								statusText.append(String.format("A mill has been formed by player %d", (playerNum + 1)));
+							}
+						} catch (Exception e) {
+							statusText.append("Invalid: Cannot move that piece to this location \n");
+						}
+					}
+					prevClickPoint = null;
+				}
+			}
+
+			playerPanel.repaint();
+
+			// check if it is the end of the game
+			if (currentBoard.IsEnd()) {
+				endGame(playerNum);
+				statusText.append("The game is over");
+			}
 		}
-		private GridPoint getClickedPoint(int clickX, int clickY) {
+		
+		private GridPoint getClickedPoint(int clickX, int clickY) { //TODO: Make Automated testing for this method
 			/*Checks to see which grid point was clicked. Returns NULL if no valid grid point is clicked*/
 			
 			for(int x=0;x<gridPoints.length;x++) {
@@ -431,44 +443,29 @@ public class GameGUI{
 		}
 		
 		@Override
-		protected void paintComponent(Graphics g) { //Draws the background image of the board
+		protected void paintComponent(Graphics g) { 
+			//Draws the background image of the board
 			super.paintComponent(g); 
 			
 			g.drawImage(boardImage,0,0,null); //Draws image at location 0,0
-		
 			
-			
-			for(int x=0;x<gridPoints.length;x++) { //Draws the current occupying piece for each of the grid points
-				gridPoints[x].drawPiece(g);
+			for(int x=0;x<gridPoints.length;x++) { 
+				//Draws the current occupying piece for each of the grid points
+				gridPoints[x].drawPiece(g, currentBoard);
 			}
 			
 			if(firstSetup) {	
 				setGridPoints();
 				firstSetup=false;
 			}
-			
-			
 		}
 		
 		private void setGridPoints() { //Places the gridpoints on the board
-			
-			
-			
 			for(int x=0;x<gridPoints.length;x++) {
-				
-				
-				
 				GridPoint currPoint = gridPoints[x];
-				
-				
 				this.add(currPoint);
-				
-				
-				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET); //Makes sure the gridpoints cover the space entirely
-				
-				
-				
-				
+				//Makes sure the gridpoints cover the space entirely
+				currPoint.setLocation(currPoint.retX()-OFFSET,currPoint.retY()-OFFSET); 
 			}
 			
 		}
