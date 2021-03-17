@@ -58,8 +58,7 @@ public class GameGUI{
 		makeFrame();
 		makeMenu();
 		makeNewBoard();
-		makeStatusField();
-		makePlayersPanel();
+		
 		gameWindow.pack();
 		gameWindow.setVisible(true);
 	}
@@ -122,6 +121,16 @@ public class GameGUI{
 	}
 	private void newGameClick() {
 		
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+		        "Are you sure you want to start a new game?", "Start New Game",
+		        JOptionPane.YES_NO_OPTION);
+
+		    if (confirmed == JOptionPane.YES_OPTION) {
+		    	clearBoard();
+		    	makeNewBoard();
+		    }
+		
+		
 		
 		
 	}
@@ -142,7 +151,7 @@ public class GameGUI{
 	private void quitClick() {
 		
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
-		        "Are you sure you want to exit the program?", "Exit Program Message Box",
+		        "Are you sure you want to exit the Game?", "Exit Program Message Box",
 		        JOptionPane.YES_NO_OPTION);
 
 		    if (confirmed == JOptionPane.YES_OPTION) {
@@ -168,7 +177,11 @@ public class GameGUI{
 	}
 	private void clearBoard() { //Unused method but will later be used to clear the board and start new game
 		
-		gameBoard.removeAll();
+		
+		gameBoard.setVisible(false);
+		gameWindow.getContentPane().remove(gameBoard);
+		
+		
 	}
 	private void makeNewBoard() {
 		
@@ -180,6 +193,9 @@ public class GameGUI{
 		
 		
 		gameWindow.getContentPane().add(gameBoard,BorderLayout.CENTER); //Adds gameboard to EAST side of the frame
+		
+		makeStatusField();
+		makePlayersPanel();
 		
 		//refreshGUI();
 		
