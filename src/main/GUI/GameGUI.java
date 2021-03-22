@@ -236,11 +236,15 @@ public class GameGUI{
 	
 	private void makePlayersPanel() {
 		// Player panel with white and black pieces
+		blackPieces.clear();
+		whitePieces.clear();
+		
 		int x1=0;
 		for(int i=1; i<=PLAYER_PIECES;i++) {
 			Piece piece=new Piece( 40+x1, 50);
 			piece.setPieceColor(Color.BLACK);		       
 			blackPieces.add(piece);
+			piece.setUsed(false);
 			x1 += 35;
 		}
 		x1=400;
@@ -248,6 +252,7 @@ public class GameGUI{
 			Piece piece=new Piece( 40+x1, 50);
 			piece.setPieceColor(Color.WHITE);		       
 			whitePieces.add(piece);
+			piece.setUsed(false);
 			x1+=35;
 
 		}
@@ -402,7 +407,9 @@ public class GameGUI{
 				statusText.append("The game is over");
 			}
 		}
-		
+		private void updateStatusText() {
+			//TODO
+		}
 		private GridPoint getClickedPoint(int clickX, int clickY) { //TODO: Make Automated testing for this method
 			/*Checks to see which grid point was clicked. Returns NULL if no valid grid point is clicked*/
 			
