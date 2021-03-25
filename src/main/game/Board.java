@@ -41,6 +41,7 @@ public class Board {
 	private Integer[] livePieces = new Integer[] {9, 9};
 	
 	public Board() {
+		/* constructor */
 		// mark all spots on the board as empty
 		Arrays.fill(boardLoc, 0, 24, 0);
 		
@@ -77,21 +78,39 @@ public class Board {
 	
 	// setters and getters for dealing with the board
 	private void PlacePiece(Integer playerNum, Integer location) {
-		// places a piece at a location and decrements unplaced count
+		/* places a piece at a location and decrements unplaced count 
+		
+		:param playerNum: number of player making action (0 - player 1, 1 - player 2)
+		:type playerNum: Integer
+		
+		:param location: the id of the intersection to place the piece (0-23)
+		:type location: Integer */
 		unplacedPieces[playerNum]--;
 		boardLoc[location] = playerNum + 1;
 	}
 	
 	
 	private void MovePiece(Integer playerNum, Integer locationTo, Integer locationFrom) {
-		// moves a pieces from one location to another
+		/* moves a pieces from one location to another
+
+		:param playerNum: number of player making action (0 - player 1, 1 - player 2)
+		:type playerNum: Integer
+		
+		:param locationTo: the id of the intersection to place the piece (0-23)
+		:type locationTo: Integer
+		
+		:param locationFrom: the id of the intersection to take the piece (0-23)
+		:type locationFrom: Integer */
 		boardLoc[locationTo] = playerNum + 1;
 		boardLoc[locationFrom] = 0;
 	}
 	
 	
 	private void RemovePiece(Integer location) {
-		// removes a piece at location
+		/* removes a piece at location and updates board state
+		
+		:param location: the id of the intersection to remove the piece (0-23)
+		:type location: Integer */
 		Integer player = boardLoc[location] - 1;
 		livePieces[player]--;
 		boardLoc[location] = 0;		
@@ -99,77 +118,153 @@ public class Board {
 	
 	
 	public boolean IsPlayersTurn(Integer playerNum) {
-		// checks if it is a player's turn
+		/* checks if it is a player's turn
+
+		:param playerNum: number of player making action (0 - player 1, 1 - player 2)
+		:type playerNum: Integer
+		
+		:return: if it is the player's turn
+		:rtype: boolean */
 		return (playerTurn == playerNum);
 	}
 	
 	
 	public boolean IsValidLoc(Integer location) {
-		// checks if the location is valid for our data structure
+		/* Checks if the location is valid for our data structure. The location must 
+		be between 0 and 23, inclusive, in order to be a valid spot on the board.
+		
+		:param location: the id of the intersection
+		:type location: Integer 
+		
+		:return: if it is a valid location
+		:rtype: boolean */
 		return !(location < 0 || location > 23);
 	}
 	
 	
 	public boolean IsEmpty(Integer location) {
-		// checks if location is empty
+		/* Checks if location is empty
+		
+		:param location: the id of the intersection (0-23)
+		:type location: Integer
+		
+		:param return: if the location is empty
+		:rtype: boolean */
 		return (boardLoc[location] == 0);
 	}
 	
 	
 	public Integer GetPlayersTurn() {
-		// gets players turn
+		/* gets players turn
+		
+		:param return: number of player whose turn it is (0 - Player 1, 1 - Player 2)
+		:rtype: Integer */
 		return playerTurn;
 	}
 	
 	
 	public boolean IsPlayersPiece(Integer playerNum, Integer location) {
-		// checks if the location's piece is the player's
+		/* checks if the location's piece is the player's
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+
+		:param location: the id of the intersection (0-23)
+		:type location: Integer
+		
+		:param return: if the location contains this player's piece
+		:rtype: boolean */
 		return (boardLoc[location] == (playerNum + 1));
 	}
 	
 	
 	public boolean HasUnplacedPieces(Integer playerNum) {
-		// checks if a player has unplaced pieces
+		/* checks if a player has unplaced pieces
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param return: if the player has unplaced pieces
+		:rtype: boolean */
 		return (unplacedPieces[playerNum] > 0);
 	}
 	
 	
 	public boolean AreAdjacent(Integer loc1, Integer loc2) {
-		// checks if the location are adjacent
+		/* checks if the location are adjacent
+
+		:param loc1: location of the first intersection
+		:type loc1: Integer
+		
+		:param loc2: location of the second intersection
+		:type loc2: Integer
+		
+		:return: whether the two locations are adjacent
+		:rtype: boolean*/
 		return (Arrays.asList(adj.get(loc1)).contains(loc2));
 	}
 	
 	
 	public Integer NumUnplacedPieces(Integer playerNum) {
-		// getter for number of unplaced pieces
+		/* getter for number of unplaced pieces 
+		 
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:return: number of unplaced pieces
+		:rtype: Integer */
 		return unplacedPieces[playerNum];
 	}
 
 
 	public Integer NumLivePieces(Integer playerNum) {
-		// getter for number of live pieces
+		/* getter for number of live pieces
+
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+
+		:return: number of pieces a player has left
+		:rtype: Integer*/
 		return livePieces[playerNum];
 	}
 
 
 	public boolean IsPlacementStage() {
-		// getter for if it is the placement stage 
+		/* getter for if it is the placement stage 
+		the game is either in the placement stage, where the
+		players place pieces, or the movement stage, where the 
+		players move pieces already on the board
+
+		:return: whether the game is in the placement stage
+		:rtype: boolean */
 		// if not, it is the movement stage
 		return (HasUnplacedPieces(0) || HasUnplacedPieces(1));
 	}
 
 	
 	public boolean CanFly(Integer playerNum) {
-		/* Checks if a player can fly, this means the player has 3 or less pieces */
+		/* checks if a player can fly, this means the player has 3 pieces
+		and they can move them anywhere
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:return: whether the player can fly their pieces 
+		:rtype: boolean */
 		return livePieces[playerNum] <= 3;
 	}
 	
 	
 	public boolean IsMill(Integer location) {
-		/* checks if the location is part of a mill
-		 * A mill is formed if a player has three pieces in a straight line
-		 * either vertical or horizontal */
+		/* checks if the location is part of a mill, which is formed if
+		a player has three pieces in a straight line - 
+		either vertical or horizontal 
 		
+		:param location: the id of intersection on board (0-23)
+		:type location: Integer
+		
+		:return: whether this location is part of a mill
+		:rtype: boolean */
 		// get the value of the location
 		Integer playerNum = boardLoc[location];
 		// trivial case - is empty
@@ -207,7 +302,13 @@ public class Board {
 	
 	
 	public boolean HasLegalMoves(Integer playerNum) {
-		// checks if a player has a possible move
+		/* checks if a player has a possible move
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+
+		:return: whether the player can make any valid moves
+		:rtype: boolean: */
 		// if during placement
 		if (HasUnplacedPieces(playerNum)) {
 			return true;
@@ -255,13 +356,19 @@ public class Board {
 	
 	
 	public GameStates GetGameState() {
-		// gets the game state on board
+		/* gets the game state on board
+
+		:return: the game state (either move or remove)
+		:rtype: enum GameStates */
 		return gameState;
 	}
 	
 	
 	public boolean IsEnd() {
-		// sees if it is the end of the game
+		/* checks if it is the end of the game
+
+		:return: if the game is over
+		:rtype: boolean */
 		// if a player has two pieces
 		if (livePieces[0] <= 2 || livePieces[1] <= 2) {
 			return true;
@@ -277,7 +384,16 @@ public class Board {
 	// public checks for valid moves and end game
 	public boolean IsValidMovement(Integer playerNum, Integer location) {
 		/* Method to check if a particular movement is valid 
-		 * movement with only one location is placement */
+		movement with only one location is placement 
+		 
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param location: the id of the intersection (0-23)
+		:type location: Integer
+		
+		:return: whether the placement is valid
+		:rtype: boolean */
 		// check that the location exists
 		if (!IsValidLoc(location)) {
 			return false;
@@ -304,7 +420,18 @@ public class Board {
 	
 	public boolean IsValidMovement(Integer playerNum, Integer locationTo, Integer locationFrom) {
 		/* Method to check if a particular movement is valid 
-		 * movement with two locations is adj. or flying */
+		movement with two locations is adj. or flying 
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param locationTo: the id of the intersection to be moved to (0-23)
+		:type locationTo: Integer
+
+		:param locationFrom: the id of the intersection to move the piece from (0-23)
+		:type locationFrom: Integer
+		
+		:return: whether the movement is valid
+		:rtype: boolean */
 		// check that both locations exist
 		if (!IsValidLoc(locationTo)) {
 			return false;
@@ -342,7 +469,16 @@ public class Board {
 	
 	
 	public boolean IsValidRemoval(Integer playerNum, Integer location) {
-		// Checks if a removal is valid
+		/* Checks if a removal is valid
+
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param location: the id of the intersection (0-23)
+		:type location: Integer
+		
+		:return: whether the removal is valid
+		:rtype: boolean */
 		// check that the location exists
 		if (!IsValidLoc(location)) {
 			return false;
@@ -373,9 +509,18 @@ public class Board {
 	
 	// public functions for making moves
 	public boolean MakeMove(Integer playerNum, Integer location) throws Exception {
-		/* Make the move (with one location argument this will be placement) 
-		 * and return if a mill has formed
-		 * If the move is not valid, this will throw an error */
+		/* make the move (with one location argument this will be placement) 
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param location: the id of the intersection (0-23)
+		:type location: Integer
+		
+		:raises Exception: placement not valid
+
+		:return: whether the placement formed a mill
+		:rtype: boolean */
 		if (!IsValidMovement(playerNum, location)) {
 			throw new Exception("Invalid placement");
 		}
@@ -394,8 +539,20 @@ public class Board {
 	
 	public boolean MakeMove(Integer playerNum, Integer locationTo, Integer locationFrom) throws Exception{
 		/* Make the move (with two location arguments this will be movement) 
-		 * and return if a mill has formed
-		 * If the move is not valid, this will throw an error */
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param locationTo: the id of the intersection to move the piece to (0-23)
+		:type locationTo: Integer
+
+		:param locationFrom: the id of the intersection to move the piece from (0-23)
+		:type locationFrom: Integer
+		
+		:raises Exception: movement not valid
+
+		:return: whether the movement formed a mill
+		:rtype: boolean */
 		if (!IsValidMovement(playerNum, locationTo, locationFrom)) {
 			throw new Exception("Invalid movement");
 		}
@@ -413,8 +570,15 @@ public class Board {
 	
 	
 	public void RemoveMan(Integer playerNum, Integer location) throws Exception {
-		/* Remove a piece
-		 * If the move is not valid, this will throw an error */
+		/* remove a piece from the board
+		
+		:param playerNum: the player number (0 - Player 1, 1 - Player 2)
+		:type playerNum: Integer
+		
+		:param location: the id of the intersection to remove the piece from (0-23)
+		:type location: Integer 
+
+		:raises Exception: removal not valid */
 		if (!IsValidRemoval(playerNum, location)) {
 			throw new Exception("Invalid movement");
 		}
