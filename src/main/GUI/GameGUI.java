@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -40,6 +41,7 @@ public class GameGUI{
 	private JPanel gameMenu; //Menu and board are our only two panels so far
 	private GamePanel gameBoard;
 	private JTextArea statusText;
+	private JScrollPane scrollPane;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	List<Piece> blackPieces=new ArrayList<Piece>();
@@ -153,6 +155,11 @@ public class GameGUI{
 	private void makeStatusField() {
 		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
 		statusText.setWrapStyleWord(true);
+		
+		scrollPane=new JScrollPane(statusText);
+		
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
 	}
@@ -355,7 +362,7 @@ public class GameGUI{
 						statusText.append(String.format("Player %d placed a piece \n", (playerNum + 1)));
 						
 						if (formedMill) {
-							statusText.append(String.format("A mill has been formed by player %d\n", (playerNum + 1)));
+							statusText.append(String.format("A mill has been formed by player %d \n", (playerNum + 1)));
 						}
 
 						if (playerNum == 0) {						
@@ -389,7 +396,7 @@ public class GameGUI{
 							statusText.append(String.format("Player %d moved a piece \n", (playerNum + 1)));
 		
 							if (formedMill) {
-								statusText.append(String.format("A mill has been formed by player %d", (playerNum + 1)));
+								statusText.append(String.format("A mill has been formed by player %d \n", (playerNum + 1)));
 							}
 						} catch (Exception e) {
 							statusText.append("Invalid: Cannot move that piece to this location \n");
