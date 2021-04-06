@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -53,7 +54,8 @@ public class GameGUI{
 	public static final int PLAYER_PIECES=9;
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
-	public static final int OFFSET=PLACE_SIZE/2;
+	public static final int PIECE_SIZE=35;
+	public static final int OFFSET=PIECE_SIZE/2;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -153,8 +155,9 @@ public class GameGUI{
 	private void makeStatusField() {
 		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
 		statusText.setWrapStyleWord(true);
-		
-		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
+		JScrollPane scroll = new JScrollPane (statusText, 
+				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		gameWindow.getContentPane().add(scroll,BorderLayout.EAST);
 	}
 
 	private void makeFrame() {
@@ -351,6 +354,7 @@ public class GameGUI{
 						
 						if (formedMill) {
 							statusText.append(String.format("A mill has been formed by player %d\n", (playerNum + 1)));
+							
 						}
 
 						if (playerNum == 0) {						
@@ -384,7 +388,8 @@ public class GameGUI{
 							statusText.append(String.format("Player %d moved a piece \n", (playerNum + 1)));
 		
 							if (formedMill) {
-								statusText.append(String.format("A mill has been formed by player %d", (playerNum + 1)));
+								
+								statusText.append(String.format("A mill has been formed by player %d \n", (playerNum + 1)));
 							}
 						} catch (Exception e) {
 							statusText.append("Invalid: Cannot move that piece to this location \n");
