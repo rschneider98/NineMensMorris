@@ -41,6 +41,7 @@ public class GameGUI{
 	private JPanel gameMenu; //Menu and board are our only two panels so far
 	private GamePanel gameBoard;
 	private JTextArea statusText;
+	private JScrollPane scrollPane;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	List<Piece> blackPieces=new ArrayList<Piece>();
@@ -54,10 +55,8 @@ public class GameGUI{
 	public static final int PLAYER_PIECES=9;
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
-	public static final int PIECE_SIZE=35;
-	public static final int OFFSET=PIECE_SIZE/2;
-	
-	
+	public static final int PIECE_SIZE=35;		
+	public static final int OFFSET=25;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -205,6 +204,7 @@ public class GameGUI{
 			winMessage, "New Game?", 
 			JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.YES_OPTION) {
+			statusText.setText(null);
 			clearBoard();
 			makeNewBoard();
 		} else {
