@@ -27,8 +27,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultCaret;
 
 import main.game.Board;
 import main.game.GameStates;
@@ -40,6 +42,7 @@ public class GameGUI{
 	private JPanel gameMenu; //Menu and board are our only two panels so far
 	private GamePanel gameBoard;
 	private JTextArea statusText;
+	private JScrollPane scrollPane;
 	
 	private GridPoint [] gridPoints=new GridPoint[24]; //Will be the 24 labeled locations to place pieces
 	List<Piece> blackPieces=new ArrayList<Piece>();
@@ -53,7 +56,7 @@ public class GameGUI{
 	public static final int PLAYER_PIECES=9;
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
-	public static final int OFFSET=PLACE_SIZE/2;
+	public static final int OFFSET=25;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -151,10 +154,21 @@ public class GameGUI{
 	}
 
 	private void makeStatusField() {
+		
 		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
 		statusText.setWrapStyleWord(true);
+		statusText.setEditable(false);
 		
-		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
+		scrollPane=new JScrollPane(statusText);
+		
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		
+		
+		   
+		
+		gameWindow.getContentPane().add(scrollPane,BorderLayout.EAST);
 	}
 
 	private void makeFrame() {
@@ -191,6 +205,7 @@ public class GameGUI{
 			winMessage, "New Game?", 
 			JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.YES_OPTION) {
+			statusText.setText(null);
 			clearBoard();
 			makeNewBoard();
 		} else {
@@ -355,7 +370,7 @@ public class GameGUI{
 						statusText.append(String.format("Player %d placed a piece \n", (playerNum + 1)));
 						
 						if (formedMill) {
-							statusText.append(String.format("A mill has been formed by player %d\n", (playerNum + 1)));
+							statusText.append(String.format("A mill has been formed by player %d \n", (playerNum + 1)));
 						}
 
 						if (playerNum == 0) {						
@@ -389,7 +404,7 @@ public class GameGUI{
 							statusText.append(String.format("Player %d moved a piece \n", (playerNum + 1)));
 		
 							if (formedMill) {
-								statusText.append(String.format("A mill has been formed by player %d", (playerNum + 1)));
+								statusText.append(String.format("A mill has been formed by player %d \n", (playerNum + 1)));
 							}
 						} catch (Exception e) {
 							statusText.append("Invalid: Cannot move that piece to this location \n");
@@ -403,7 +418,7 @@ public class GameGUI{
 
 			// check if it is the end of the game
 			if (currentBoard.IsEnd()) {
-				endGame(playerNum);
+				endGame(playerNum+1);
 				statusText.append("The game is over");
 			}
 		}
