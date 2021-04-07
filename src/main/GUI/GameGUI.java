@@ -236,8 +236,8 @@ public class GameGUI {
 			}
 			Font font = g.getFont().deriveFont(30.0f);
 			
-			g.drawString(currentBoard.getPlayerOneName(), 100, 80);
-			g.drawString(currentBoard.getPlayerTwoName(), 600, 80);
+			g.drawString(currentBoard.getPlayerTwoName(), 100, 80);
+			g.drawString(currentBoard.getPlayerOneName(), 600, 80);
 			g.setColor(Color.white);
 			g.setFont(font);
 			g.drawString(currentBoard.GetPlayersNameTurn() + "'s Turn", 300, 80);
