@@ -56,7 +56,7 @@ public class GameGUI{
 	public static final int PLAYER_PIECES=9;
 	public static final int BOARD_SIZE=450;
 	public static final int PLACE_SIZE=20;
-	public static final int OFFSET=PLACE_SIZE/2;
+	public static final int OFFSET=25;
 	
 	public GameGUI(){ //creates the gui frame and containers
 		
@@ -164,8 +164,9 @@ public class GameGUI{
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		DefaultCaret caret = (DefaultCaret) statusText.getCaret(); 
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);       
+		
+		
+		   
 		
 		gameWindow.getContentPane().add(scrollPane,BorderLayout.EAST);
 	}
