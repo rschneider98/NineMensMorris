@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultCaret;
 
 import main.game.Board;
 import main.game.GameStates;
@@ -153,15 +154,20 @@ public class GameGUI{
 	}
 
 	private void makeStatusField() {
+		
 		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
 		statusText.setWrapStyleWord(true);
+		statusText.setEditable(false);
 		
 		scrollPane=new JScrollPane(statusText);
 		
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		gameWindow.getContentPane().add(statusText,BorderLayout.EAST);
+		DefaultCaret caret = (DefaultCaret) statusText.getCaret(); 
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);       
+		
+		gameWindow.getContentPane().add(scrollPane,BorderLayout.EAST);
 	}
 
 	private void makeFrame() {
@@ -198,6 +204,7 @@ public class GameGUI{
 			winMessage, "New Game?", 
 			JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.YES_OPTION) {
+			statusText.setText(null);
 			clearBoard();
 			makeNewBoard();
 		} else {
@@ -410,7 +417,7 @@ public class GameGUI{
 
 			// check if it is the end of the game
 			if (currentBoard.IsEnd()) {
-				endGame(playerNum);
+				endGame(playerNum+1);
 				statusText.append("The game is over");
 			}
 		}
