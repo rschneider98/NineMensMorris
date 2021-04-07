@@ -16,6 +16,9 @@ public class Board {
 	private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
 	private GameStates gameState;
 	
+	private String playerOneName;
+	private String playerTwoName;
+	
 	// (immutable) array of possible mills
 	private static final Integer[][] possMills = {
 		{0, 1, 2}, 
@@ -119,6 +122,17 @@ public class Board {
 	public Integer GetPlayersTurn() {
 		// gets players turn
 		return playerTurn;
+	}
+	
+	public String GetPlayersNameTurn() {
+		// gets players turn
+		switch (playerTurn) {
+			case 0:
+				return getPlayerOneName();
+			case 1:
+				return getPlayerTwoName();
+		}
+		return "NotFound";
 	}
 	
 	
@@ -422,5 +436,25 @@ public class Board {
 		RemovePiece(location);
 		gameState = GameStates.move;
 		playerTurn = (playerTurn + 1) % 2;
+	}
+
+
+	public String getPlayerOneName() {
+		return playerOneName;
+	}
+
+
+	public void setPlayerOneName(String playerOneName) {
+		this.playerOneName = playerOneName;
+	}
+
+
+	public String getPlayerTwoName() {
+		return playerTwoName;
+	}
+
+
+	public void setPlayerTwoName(String playerTwoName) {
+		this.playerTwoName = playerTwoName;
 	}	
 }

@@ -57,6 +57,8 @@ public class GameGUI{
 	public static final int PIECE_SIZE=35;
 	public static final int OFFSET=PIECE_SIZE/2;
 	
+	
+	
 	public GameGUI(){ //creates the gui frame and containers
 		
 		makeFrame();
@@ -130,7 +132,14 @@ public class GameGUI{
 		JOptionPane.showMessageDialog(gameWindow, aboutMessage);
 		
 	}
+	private void getPlayersName() {
 	
+		String p1=JOptionPane.showInputDialog("Player 1 Name ");
+		currentBoard.setPlayerOneName(p1);
+		String p2=JOptionPane.showInputDialog("Player 2 Name ");
+		currentBoard.setPlayerTwoName(p2);
+
+	}
 	private void optionsClick() {
 		String[] values  = {  "Human",  "Computer"  };
 
@@ -155,6 +164,7 @@ public class GameGUI{
 	private void makeStatusField() {
 		statusText=new JTextArea("Welcome to Cowboy Checkers!!\n",10,25);
 		statusText.setWrapStyleWord(true);
+		// scroll bar for the text area 
 		JScrollPane scroll = new JScrollPane (statusText, 
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		gameWindow.getContentPane().add(scroll,BorderLayout.EAST);
@@ -184,11 +194,12 @@ public class GameGUI{
 
 		makeStatusField();
 		makePlayersPanel();
+		getPlayersName();
 	}
 
-	private void endGame(int winningPlayer) {
+	private void endGame(int winningPlayer,String winningPlayerName) {
 
-		String winMessage = "Player " + winningPlayer + " has won the game!!!";
+		String winMessage = "Player " + winningPlayer + "("+winningPlayerName+") has won the game!!!";
 
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
 			winMessage, "New Game?", 
@@ -228,11 +239,7 @@ public class GameGUI{
             g.setColor(Color.white);
             g.setFont( font );
 
-            if(currentBoard.GetPlayersTurn() == 0) {
-            	g.drawString("Player 1 Turn", 300, 80);
-            } else {
-            	g.drawString("Player 2 Turn", 300, 80);
-            }
+            g.drawString(currentBoard.GetPlayersNameTurn()+"'s Turn", 300, 80);
 
         }
     }
@@ -334,6 +341,7 @@ public class GameGUI{
 			/*THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!*/
 			
 			int playerNum = currentBoard.GetPlayersTurn();
+			String playerName = currentBoard.GetPlayersNameTurn(); 
 			int pointID = clickedPoint.getID();
 
 			if (currentBoard.GetGameState() == GameStates.remove) {
@@ -341,7 +349,7 @@ public class GameGUI{
 				if (currentBoard.IsValidRemoval(playerNum, pointID)) {
 					try {
 						currentBoard.RemoveMan(playerNum, pointID);
-						statusText.append(String.format("Player %d removed a piece \n", (playerNum + 1)));
+						statusText.append(String.format("Player %d (%s) removed a piece \n", (playerNum + 1),playerName));
 					} catch (Exception e) {
 						statusText.append("Invalid: Cannot remove piece \n");
 					}
@@ -355,10 +363,10 @@ public class GameGUI{
 						int numPieces = currentBoard.NumUnplacedPieces(playerNum);
 						
 						boolean formedMill = currentBoard.MakeMove(playerNum, pointID);
-						statusText.append(String.format("Player %d placed a piece \n", (playerNum + 1)));
+						statusText.append(String.format("Player %d (%s)  placed a piece \n", (playerNum + 1),playerName));
 						
 						if (formedMill) {
-							statusText.append(String.format("A mill has been formed by player %d\n", (playerNum + 1)));
+							statusText.append(String.format("A mill has been formed by player %d (%s)\n", (playerNum + 1),playerName));
 							
 						}
 
@@ -390,11 +398,11 @@ public class GameGUI{
 					if (currentBoard.IsValidMovement(playerNum, pointID, prevClickPoint)) {
 						try {
 							boolean formedMill = currentBoard.MakeMove(playerNum, pointID, prevClickPoint);
-							statusText.append(String.format("Player %d moved a piece \n", (playerNum + 1)));
+							statusText.append(String.format("Player %d (%s) moved a piece \n", (playerNum + 1),playerName));
 		
 							if (formedMill) {
 								
-								statusText.append(String.format("A mill has been formed by player %d \n", (playerNum + 1)));
+								statusText.append(String.format("A mill has been formed by player %d (%s) \n", (playerNum + 1),playerName));
 							}
 						} catch (Exception e) {
 							statusText.append("Invalid: Cannot move that piece to this location \n");
@@ -408,7 +416,7 @@ public class GameGUI{
 
 			// check if it is the end of the game
 			if (currentBoard.IsEnd()) {
-				endGame(playerNum);
+				endGame(playerNum+1,playerName);
 				statusText.append("The game is over");
 			}
 		}
