@@ -255,7 +255,7 @@ public class Board {
 			int i = 0;
 			while (i < 24) {
 				if (boardLoc[i] == ((playerNum + 1) % 2)) {
-					if (!IsMill(i) || everyPieceAMill((playerNum+1)%2)) {
+					if (!IsMill(i) || everyPieceAMill((playerNum))) {
 						return true;
 					}
 				}
