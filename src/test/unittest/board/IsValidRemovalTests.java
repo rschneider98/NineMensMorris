@@ -66,5 +66,23 @@ public class IsValidRemovalTests extends TestCase {
 		}
 		assertFalse(myBoard.IsValidRemoval(0, 0));
 	}
+	
+	public void testEveryPieceAMill() {
+		try {
+			myBoard.MakeMove(0, 0);
+			myBoard.MakeMove(1, 3);
+			myBoard.MakeMove(0, 1);
+			myBoard.MakeMove(1, 10);
+			myBoard.MakeMove(0, 2);
+			
+			
+			
+		} catch (Exception e) {
+			
+			fail();
+		}
+		assertTrue(myBoard.everyPieceAMill(0));
+		assertFalse(myBoard.everyPieceAMill(1));
+	}
 }
 

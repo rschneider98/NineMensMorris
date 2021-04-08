@@ -223,7 +223,7 @@ public class Board {
 	public boolean HasLegalMoves(Integer playerNum) {
 		// checks if a player has a possible move
 		// if during placement
-		if (HasUnplacedPieces(playerNum)) {
+		if (HasUnplacedPieces(playerNum) || HasUnplacedPieces((playerNum+1)%2)) {
 			return true;
 		}
 		// if looking for movement
@@ -255,7 +255,7 @@ public class Board {
 			int i = 0;
 			while (i < 24) {
 				if (boardLoc[i] == ((playerNum + 1) % 2)) {
-					if (!IsMill(i)) {
+					if (!IsMill(i) || everyPieceAMill((playerNum+1)%2)) {
 						return true;
 					}
 				}
@@ -266,7 +266,16 @@ public class Board {
 		// if neither of those game states (impossible since enum)
 		return false;
 	}
-	
+	public boolean everyPieceAMill(int playerNum) {
+		
+		for(int x=0;x<24;x++) {
+			if(IsPlayersPiece(playerNum,x) && !IsMill(x)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
 	public GameStates GetGameState() {
 		// gets the game state on board
@@ -379,7 +388,15 @@ public class Board {
 		}
 		// check if the location is a part of a mill
 		if (IsMill(location)) {
-			return false;
+			
+			boolean allItemsInMill=true;
+			
+			for(int x=0;x<24;x++) {
+				if(IsPlayersPiece(((playerNum + 1) % 2), x) && !IsMill(x)) {
+					allItemsInMill=false;
+				}
+			}
+			return allItemsInMill;
 		}
 		return true;	
 	}
