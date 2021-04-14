@@ -78,21 +78,19 @@ public class Board {
 		gameState = GameStates.move;
 	}
 
-	public Board(Board copy) {	
+	public Board(Board prev) {	
 		createAdjList();
-		// mark initial game state
+		// copy data
 		gameState = GameStates.move;
-		private Integer[] boardLoc = new Integer[24];
+		this.boardLoc = prev.boardLoc;
+		this.playerTurn = prev.playerTurn;
+		this.gameState = prev.gameState;
 	
-		private Integer playerTurn = 0;
-		private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
-		private GameStates gameState;
+		this.playerOneName = prev.playerOneName;
+		this.playerTwoName = prev.playerTwoName;
 	
-		private String playerOneName;
-		private String playerTwoName;
-	
-		private Integer[] unplacedPieces = new Integer[] {9, 9};
-		private Integer[] livePieces = new Integer[] {9, 9};
+		this.unplacedPieces = prev.unplacedPieces;
+		this.livePieces=prev.livePieces;
 	}
 	
 	
@@ -111,6 +109,7 @@ public class Board {
 	}
 	
 	
+	
 	private void RemovePiece(Integer location) {
 		// removes a piece at location
 		Integer player = boardLoc[location] - 1;
@@ -118,7 +117,24 @@ public class Board {
 		boardLoc[location] = 0;		
 	}
 	
-	
+	public void TakeAction(Move currMove){
+
+		int currMoveTurn=currMove.getPlayerTurn();
+		int locationTo=currMove.getLocationTo();
+		//int locationFrom=currMove.getLocationFrom();
+
+		if(currMove.isRemove()){
+			RemovePiece(locationTo);
+		}else if(currMove.isPlacement()){
+
+			PlacePiece(currMoveTurn,locationTo);
+
+		}else{
+			MovePiece(currMoveTurn,locationTo,currMove.locationFrom);
+		}
+
+
+	}
 	public boolean IsPlayersTurn(Integer playerNum) {
 		// checks if it is a player's turn
 		return (playerTurn == playerNum);

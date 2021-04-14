@@ -42,13 +42,17 @@ public class CPUOpponent {
 
         for(Move m: possibleMoves){
             Board childBoard = new Board(root);
-            childBoard.MakeMove(m);
+            childBoard.TakeAction(m);
             ArrayList<Move> newPossibleMoves = childBoard.GetPossibleMoves();
             
+            if (childBoard.GetGameState() == GameStates.remove) {
+                
+            }
+
             ArrayList<moveValue> subEvalMoves;
             for (Move new_m: newPossibleMoves) {
                 Board subchildBoard = new Board(childBoard);
-                subchildBoard.MakeMove(new_m);  //TODO: override makeMove(Move currMove)
+                subchildBoard.TakeAction(new_m);  //TODO: override makeMove(Move currMove)
                 double rootScore=subchildBoard.getScore(); //TODO: make Board.getScore()
                 subEvalMoves.add(new moveValue(m, rootScore, subchildBoard));
             }   
