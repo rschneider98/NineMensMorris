@@ -1,10 +1,8 @@
 package main.game;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
-
-import main.game.GameStates;
 
 public class Board {
 	// board is stored as array of length 24
@@ -42,8 +40,8 @@ public class Board {
 	// pieces for players
 	private Integer[] unplacedPieces = new Integer[] {9, 9};
 	private Integer[] livePieces = new Integer[] {9, 9};
-	
-	public Board() {
+
+	private void createAdjList() {
 		// mark all spots on the board as empty
 		Arrays.fill(boardLoc, 0, 24, 0);
 		
@@ -72,9 +70,29 @@ public class Board {
 		adj.put(21, new Integer[] {9, 22});
 		adj.put(22, new Integer[] {19, 21, 23});
 		adj.put(23, new Integer[] {14, 22});
-		
+	}
+	
+	public Board() {	
+		createAdjList();
 		// mark initial game state
 		gameState = GameStates.move;
+	}
+
+	public Board(Board copy) {	
+		createAdjList();
+		// mark initial game state
+		gameState = GameStates.move;
+		private Integer[] boardLoc = new Integer[24];
+	
+		private Integer playerTurn = 0;
+		private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
+		private GameStates gameState;
+	
+		private String playerOneName;
+		private String playerTwoName;
+	
+		private Integer[] unplacedPieces = new Integer[] {9, 9};
+		private Integer[] livePieces = new Integer[] {9, 9};
 	}
 	
 	
@@ -294,6 +312,11 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+
+
+	public ArrayList<Move> GetPossibleMoves() {
+		//ToDo: find possible moves and return as list of move classes
 	}
 	
 	
