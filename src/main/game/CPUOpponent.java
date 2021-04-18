@@ -9,23 +9,66 @@ public class CPUOpponent {
         public Board possBoard;
 
         public moveValue(Move m, Double s, Board b) {
-            move=m;
-            score=s;
-            possBoard=b;
+            move = m;
+            score = s;
+            possBoard = b;
         }
 
        
     }
-    
-    public CPUOpponent(Board currBoard){
 
-        this.currBoard=currBoard;
+
+    private moveValue TakeTurn(Board root, Move m) {
+        Board childBoard = new Board(root);
+        childBoard.TakeAction(m);
+        ArrayList<Move> possibleMoves = childBoard.GetPossibleMoves();
+
+        // if we formed a mill, we need to expand our moves
+        // call this function on all possible moves      
+        if (childBoard.GetGameState() == GameStates.remove) {
+            // formed a mill, we need to consider more possibilities
+            ArrayList<moveValue> fullMoves = ArrayList<moveValue>();
+            for (Move new_m: possibleMoves) {
+                fullMoves.add(TakeTurn(childBoard, new_m));
+            }
+            return getBestMove(fullMoves);
+        }
+
+        // consider the adversary 
+        ArrayList<moveValue> subEvalMoves;
+        ArrayList<moveValue> fullSubEvalMoves;
+        for (Move new_m: possibleMoves) {
+            Board subchildBoard = new Board(childBoard);
+            subchildBoard.TakeAction(new_m);  
+            Board finalSubchildBoard;
+
+            // did they form a mill?
+            if (subchildBoard.GetGameState() == GameStates.remove) {
+                // find worst case senario for ranking
+                ArrayList<Move> newPossibleMoves = subchildBoard.GetPossibleMoves();
+                ArrayList<moveValue> tempEvalMoves = new ArrayList<moveValue>();
+                for (Move new_m_removal: newPossibleMoves) {
+                    Board subSubchildBoard = new Board(subchildBoard);
+                    subSubchildBoard.TakeAction(new_m_removal); 
+                    double rootScore = subSubchildBoard.getScore();
+                    subEvalMoves.add(new moveValue(m, rootScore, subSubchildBoard));
+                }                
+            }
+            else {
+                double rootScore = subchildBoard.getScore(); //TODO: make Board.getScore()
+                subEvalMoves.add(new moveValue(m, rootScore, subchildBoard));
+            }            
+        }   
         
+        // find lowest board score for this move (worst-case senario based on opp.)
+        moveValue worstCase = getWorstMove(subEvalMoves);
+        return worstCase;
     }
-    private ArrayList<moveValue> getChildren(Board root){
 
+
+    private ArrayList<moveValue> getChildren(Board root){
         /* calls Board.GetPossibleMoves() and receives a list of all possible moves that could be made by the current board position */
-        ArrayList<Move> possibleMoves = root.GetPossibleMoves(root);
+        ArrayList<Move> possibleMoves = root.GetPossibleMoves();
 
         /* for each move: 
             make a copy of the board object
@@ -38,32 +81,16 @@ public class CPUOpponent {
             output move, hueristic, and board of lowest heuristic score */
         
 
-        ArrayList<moveValue> evalMoves;       
-
-        for(Move m: possibleMoves){
-            Board childBoard = new Board(root);
-            childBoard.TakeAction(m);
-            ArrayList<Move> newPossibleMoves = childBoard.GetPossibleMoves();
-            
-            if (childBoard.GetGameState() == GameStates.remove) {
-                
-            }
-
-            ArrayList<moveValue> subEvalMoves;
-            for (Move new_m: newPossibleMoves) {
-                Board subchildBoard = new Board(childBoard);
-                subchildBoard.TakeAction(new_m);  //TODO: override makeMove(Move currMove)
-                double rootScore=subchildBoard.getScore(); //TODO: make Board.getScore()
-                subEvalMoves.add(new moveValue(m, rootScore, subchildBoard));
-            }   
-            
-            // find lowest board score for this move (worst-case senario based on opp.)
-            moveValue worstCase = getWorstMove(subEvalMoves);
-            evalMoves.add(worstCase);
+        ArrayList<moveValue> evalMoves = new ArrayList<moveValue>();       
+        for(Move m: possibleMoves){            
+            // find highest conservative board score for this move (worst-case senario based on opp.)
+            moveValue bestWorstCase = TakeTurn(root, m);
+            evalMoves.add(bestWorstCase);
         }
-
         return evalMoves;        
     }
+
+
     private moveValue getWorstMove(ArrayList<moveValue> possibleMoveValues){
         
         moveValue out = possibleMoveValues.get(0);
@@ -87,6 +114,8 @@ public class CPUOpponent {
             return selected.get(0);
         }
     }
+
+
     private moveValue getBestMove(ArrayList<moveValue> possibleMoveValues){
 
         moveValue out = possibleMoveValues.get(0);
