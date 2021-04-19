@@ -333,8 +333,36 @@ public class Board {
 
 	public ArrayList<Move> GetPossibleMoves() {
 		//ToDo: find possible moves and return as list of move classes
-	}
+		if(IsPlacementStage()) {
+			return getPossiblePlacements();
+		}else {
+			return getPossibleMovements();
+		}
 	
+	}
+	public ArrayList<Move> getPossiblePlacements(){
+		
+		ArrayList<Move> possiblePlacements=new ArrayList<Move>();
+		
+		for(int x=0;x<boardLoc.length;x++) {
+			if(IsValidMovement(playerTurn,x)) {
+				Move currMove=new Move(playerTurn,x);
+				possiblePlacements.add(currMove);
+				
+			}
+		}
+		
+		return possiblePlacements;
+	}
+	public ArrayList<Move> getPossibleMovements(){
+		
+		ArrayList<Move> possibleMovements=new ArrayList<Move>();
+		
+		
+		
+		return possibleMovements;
+		
+	}
 	
 	// public checks for valid moves and end game
 	public boolean IsValidMovement(Integer playerNum, Integer location) {
@@ -512,5 +540,15 @@ public class Board {
 
 	public void setPlayerTwoName(String playerTwoName) {
 		this.playerTwoName = playerTwoName;
-	}	
+	}
+	
+	public double getScore() {
+		
+		int ownPieces=NumLivePieces(playerTurn);
+		int otherPieces=NumLivePieces((playerTurn+1)%2);
+		
+		return (double) ownPieces-otherPieces;
+			
+	}
+	
 }

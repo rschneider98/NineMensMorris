@@ -3,7 +3,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CPUOpponent { 
-    private class moveValue {
+    
+	private class moveValue {
         public Move move;
         public Double score;
         public Board possBoard;
@@ -19,6 +20,7 @@ public class CPUOpponent {
 
 
     private moveValue TakeTurn(Board root, Move m) {
+    	
         Board childBoard = new Board(root);
         childBoard.TakeAction(m);
         ArrayList<Move> possibleMoves = childBoard.GetPossibleMoves();
@@ -27,7 +29,7 @@ public class CPUOpponent {
         // call this function on all possible moves      
         if (childBoard.GetGameState() == GameStates.remove) {
             // formed a mill, we need to consider more possibilities
-            ArrayList<moveValue> fullMoves = ArrayList<moveValue>();
+            ArrayList<moveValue> fullMoves = new ArrayList<moveValue>();
             for (Move new_m: possibleMoves) {
                 fullMoves.add(TakeTurn(childBoard, new_m));
             }
@@ -35,8 +37,8 @@ public class CPUOpponent {
         }
 
         // consider the adversary 
-        ArrayList<moveValue> subEvalMoves;
-        ArrayList<moveValue> fullSubEvalMoves;
+        ArrayList<moveValue> subEvalMoves=new ArrayList<moveValue>();
+        ArrayList<moveValue> fullSubEvalMoves=new ArrayList<moveValue>();;
         for (Move new_m: possibleMoves) {
             Board subchildBoard = new Board(childBoard);
             subchildBoard.TakeAction(new_m);  
