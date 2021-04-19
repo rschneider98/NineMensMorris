@@ -361,6 +361,19 @@ public class Board {
 		ArrayList<Move> possibleMovements=new ArrayList<Move>();		
 		ArrayList<Integer> playerLocs=getPlayerLocs(playerTurn);
 		
+		for(int locs:playerLocs) {
+			for(int x=0;x<24;x++) {
+				if(IsValidMovement(playerTurn,x,locs)) {
+					
+					if(x!=locs) {
+						Move currMove=new Move(playerTurn,x,locs);
+						possibleMovements.add(currMove);
+					}
+					
+				}
+			}
+		}
+		
 		
 		return possibleMovements;
 		
