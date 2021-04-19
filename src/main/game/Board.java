@@ -341,8 +341,10 @@ public class Board {
 	
 	}
 	public ArrayList<Move> getPossiblePlacements(){
-		
+		/*If we are in the placement stage, we simply create a new move based on a players piece and
+		 * every empty place*/
 		ArrayList<Move> possiblePlacements=new ArrayList<Move>();
+		
 		
 		for(int x=0;x<boardLoc.length;x++) {
 			if(IsValidMovement(playerTurn,x)) {
@@ -356,12 +358,23 @@ public class Board {
 	}
 	public ArrayList<Move> getPossibleMovements(){
 		
-		ArrayList<Move> possibleMovements=new ArrayList<Move>();
-		
+		ArrayList<Move> possibleMovements=new ArrayList<Move>();		
+		ArrayList<Integer> playerLocs=getPlayerLocs(playerTurn);
 		
 		
 		return possibleMovements;
 		
+	}
+	public ArrayList<Integer> getPlayerLocs(int player){
+		ArrayList<Integer> playerLocs=new ArrayList<Integer>();
+		
+		for(int x=0;x<boardLoc.length;x++) {
+			if(boardLoc[x]==player) {
+				playerLocs.add(x);
+			}			
+		}
+		
+		return playerLocs;
 	}
 	
 	// public checks for valid moves and end game
