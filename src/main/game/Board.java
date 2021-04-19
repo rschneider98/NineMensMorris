@@ -345,7 +345,8 @@ public class Board {
 		}
 	
 	}
-	public ArrayList<Move> getPossibleRemovals(){
+	public ArrayList<Move> getPossibleRemovals(){ 
+		/*Returns all possible moves for a removal*/
 		ArrayList<Move> possibleRemovals=new ArrayList<Move>();		
 		
 		for(int x=0;x<boardLoc.length;x++) {
@@ -381,15 +382,34 @@ public class Board {
 		ArrayList<Integer> playerLocs=getPlayerLocs(playerTurn);
 		
 		for(int locs:playerLocs) {
-			for(int x=0;x<24;x++) {
-				if(IsValidMovement(playerTurn,x,locs)) {
-					
-					if(x!=locs) {
-						Move currMove=new Move(playerTurn,x,locs);
+			if(CanFly(playerTurn)) {
+				
+				for(int x=0;x<24;x++) {
+					if(IsValidMovement(playerTurn,x,locs)) {
+						
+						if(x!=locs) {
+							Move currMove=new Move(playerTurn,x,locs);
+							possibleMovements.add(currMove);
+						}
+						
+					}
+				}
+				
+			}
+			else {
+				
+				Integer[] adjLocs=adj.get(locs);
+				
+				for(int i=0;i<adjLocs.length;i++) {
+					if(IsValidMovement(playerTurn,adjLocs[i],locs)) {
+						
+						Move currMove=new Move(playerTurn,adjLocs[i],locs);
 						possibleMovements.add(currMove);
+						
 					}
 					
 				}
+				
 			}
 		}
 		

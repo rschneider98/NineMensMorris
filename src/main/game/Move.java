@@ -8,21 +8,21 @@ public class Move {
     boolean isRemove;
     boolean isPlacement;
     
-    public Move(int playerTurn, int location){
+    public Move(int playerTurn, int location){ //placement
         this.playerTurn=playerTurn;
         this.locationTo=location;
         this.isRemove = false;
         this.isPlacement = true;
     }
 
-    public Move(int playerTurn, int location, boolean isRemoval){
+    public Move(int playerTurn, int location, boolean isRemoval){ //removal
         this.playerTurn=playerTurn;
         this.locationTo=location;
         this.isRemove = isRemoval;
         this.isPlacement = !(isRemoval);
     }
     
-    public Move(int playerTurn, int locationTo, int locationFrom){
+    public Move(int playerTurn, int locationTo, int locationFrom){ //movement
         this.playerTurn=playerTurn;
         this.locationFrom=locationFrom;
         this.locationTo=locationTo;
