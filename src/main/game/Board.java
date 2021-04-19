@@ -333,12 +333,31 @@ public class Board {
 
 	public ArrayList<Move> GetPossibleMoves() {
 		//ToDo: find possible moves and return as list of move classes
+		
+		if(gameState==GameStates.remove) {
+			return getPossibleRemovals();
+		}
+		
 		if(IsPlacementStage()) {
 			return getPossiblePlacements();
 		}else {
 			return getPossibleMovements();
 		}
 	
+	}
+	public ArrayList<Move> getPossibleRemovals(){
+		ArrayList<Move> possibleRemovals=new ArrayList<Move>();		
+		
+		for(int x=0;x<boardLoc.length;x++) {
+			if(IsValidRemoval(playerTurn,x)) {
+				
+				Move currMove=new Move(playerTurn,x,true); //if the location and turn is valid, create a new move
+				possibleRemovals.add(currMove);
+			}
+		}
+		
+		return possibleRemovals;
+		
 	}
 	public ArrayList<Move> getPossiblePlacements(){
 		/*If we are in the placement stage, we simply create a new move based on a players piece and
