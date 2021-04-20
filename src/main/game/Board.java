@@ -109,7 +109,6 @@ public class Board {
 	}
 	
 	
-	
 	private void RemovePiece(Integer location) {
 		// removes a piece at location
 		Integer player = boardLoc[location] - 1;

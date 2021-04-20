@@ -48,4 +48,16 @@ public class Move {
     public boolean isPlacement(){
         return isPlacement;
     }
+    public String toString() {
+    	
+    	if(isPlacement) {
+    		return "Player "+playerTurn+" placed a piece at "+locationTo; 
+    	}
+    	
+    	if(isRemove) {
+    		return "Player "+playerTurn+" removed a piece from "+locationTo; 
+    	}
+    	
+    	return "Player "+playerTurn+" moved from "+locationFrom+" to "+locationTo; 
+    }
 }
