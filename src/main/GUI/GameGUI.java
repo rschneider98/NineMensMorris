@@ -65,6 +65,7 @@ public class GameGUI {
 	}
 
 	private void makeMenu() {
+
 		/* THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!! */
 
 		gameMenu = new JPanel();
@@ -106,6 +107,7 @@ public class GameGUI {
 			}
 		});
 	}
+	
 
 	private void newGameClick() {
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, "Are you sure you want to start a new game?",
@@ -211,6 +213,7 @@ public class GameGUI {
 		}
 	}
 
+	
 	public class PlayersPanel extends JComponent {
 
 		private static final long serialVersionUID = 1L;
@@ -273,6 +276,26 @@ public class GameGUI {
 		playerPanel.add(new PlayersPanel(blackPieces, whitePieces));
 
 		gameWindow.getContentPane().add(playerPanel, BorderLayout.NORTH);
+	}
+	private void updatePieceList() {
+		
+		int blackUnplayed=currentBoard.NumUnplacedPieces(1);
+		int whiteUnplayed=currentBoard.NumUnplacedPieces(0);
+		
+		for(int x=0;x<9;x++) {
+			Piece currBlack=blackPieces.get(x);
+			Piece currWhite=whitePieces.get(x);			
+					
+			if(!currBlack.isUsed()&&(x+1)>blackUnplayed) {
+				currBlack.setUsed(true);
+			}
+			if(!currWhite.isUsed()&&(x+1)>whiteUnplayed) {
+				currWhite.setUsed(true);
+			}
+			
+			
+			
+		}
 	}
 
 	private void makeClickablePoints() {
@@ -342,6 +365,8 @@ public class GameGUI {
 		}
 
 		private void makeMove(GridPoint clickedPoint) {
+			
+
 			/*
 			 * THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY
 			 * THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!
@@ -381,13 +406,13 @@ public class GameGUI {
 
 						if (playerNum == 0) {
 							if (numPieces > 0) {
-								whitePieces.get(numPieces - 1).setUsed(true);
+								//whitePieces.get(numPieces - 1).setUsed(true);
 							} else {
 								statusText.append("White doesn't have any more pieces left\n");
 							}
 						} else {
 							if (numPieces > 0) {
-								blackPieces.get(numPieces - 1).setUsed(true);
+								//blackPieces.get(numPieces - 1).setUsed(true);
 							} else {
 								statusText.append("Black doesn't have any more pieces left\n");
 							}
@@ -420,7 +445,7 @@ public class GameGUI {
 					prevClickPoint = null;
 				}
 			}
-
+			updatePieceList();
 			playerPanel.repaint();
 
 			// check if it is the end of the game
