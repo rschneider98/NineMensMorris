@@ -366,85 +366,15 @@ public class GameGUI {
 
 		private void makeMove(GridPoint clickedPoint) {
 			
-
-			/*
-			 * THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY
-			 * THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!
-			 */
-
 			int playerNum = currentBoard.GetPlayersTurn();
 			String playerName = currentBoard.GetPlayersNameTurn();
 			int pointID = clickedPoint.getID();
+			
+			currentBoard.takeInput(pointID);
+			
+			statusText.append(currentBoard.getDispStatus());
 
-			if (currentBoard.GetGameState() == GameStates.remove) {
-				// want to remove piece
-				if (currentBoard.IsValidRemoval(playerNum, pointID)) {
-					try {
-						currentBoard.RemoveMan(playerNum, pointID);
-						statusText.append(
-								String.format("Player %d (%s) removed a piece \n", (playerNum + 1), playerName));
-					} catch (Exception e) {
-						statusText.append("Invalid: Cannot remove piece \n");
-					}
-				}
-				prevClickPoint = null;
-			} else if (currentBoard.IsPlacementStage()) {
-				// we are placing objects
-				if (currentBoard.IsValidMovement(playerNum, pointID)) {
-					try {
-						int numPieces = currentBoard.NumUnplacedPieces(playerNum);
-
-						boolean formedMill = currentBoard.MakeMove(playerNum, pointID);
-						statusText.append(
-								String.format("Player %d (%s)  placed a piece \n", (playerNum + 1), playerName));
-
-						if (formedMill) {
-							statusText.append(String.format("A mill has been formed by player %d (%s)\n",
-									(playerNum + 1), playerName));
-
-						}
-
-						if (playerNum == 0) {
-							if (numPieces > 0) {
-								//whitePieces.get(numPieces - 1).setUsed(true);
-							} else {
-								statusText.append("White doesn't have any more pieces left\n");
-							}
-						} else {
-							if (numPieces > 0) {
-								//blackPieces.get(numPieces - 1).setUsed(true);
-							} else {
-								statusText.append("Black doesn't have any more pieces left\n");
-							}
-						}
-					} catch (Exception e) {
-						statusText.append("Invalid: Cannot remove piece \n");
-					}
-					prevClickPoint = null;
-				}
-			} else {
-				// Want to select a piece and then move it
-				if (prevClickPoint == null) {
-					prevClickPoint = pointID;
-				} else {
-					if (currentBoard.IsValidMovement(playerNum, pointID, prevClickPoint)) {
-						try {
-							boolean formedMill = currentBoard.MakeMove(playerNum, pointID, prevClickPoint);
-							statusText.append(
-									String.format("Player %d (%s) moved a piece \n", (playerNum + 1), playerName));
-
-							if (formedMill) {
-
-								statusText.append(String.format("A mill has been formed by player %d (%s) \n",
-										(playerNum + 1), playerName));
-							}
-						} catch (Exception e) {
-							statusText.append("Invalid: Cannot move that piece to this location \n");
-						}
-					}
-					prevClickPoint = null;
-				}
-			}
+			
 			updatePieceList();
 			playerPanel.repaint();
 

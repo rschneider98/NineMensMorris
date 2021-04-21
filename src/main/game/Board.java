@@ -16,6 +16,10 @@ public class Board {
 	
 	private String playerOneName;
 	private String playerTwoName;
+	private String dispStatus;
+	
+	private int prevClick=0;
+	private boolean moveInProgress;
 	
 	// (immutable) array of possible mills
 	private static final Integer[][] possMills = {
@@ -115,7 +119,11 @@ public class Board {
 		livePieces[player]--;
 		boardLoc[location] = 0;		
 	}
-	
+	public void takeInput(int location) {
+		if(moveInProgress) {
+			Move currentMove=new Move(playerTurn,location,prevClick);
+		}
+	}
 	public void TakeAction(Move currMove){
 
 		int currMoveTurn=currMove.getPlayerTurn();
@@ -604,6 +612,10 @@ public class Board {
 
 	public void setPlayerTwoName(String playerTwoName) {
 		this.playerTwoName = playerTwoName;
+	}
+	
+	public String getDispStatus() {
+		return dispStatus;
 	}
 	
 	public double getScore() {
