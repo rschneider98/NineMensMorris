@@ -51,13 +51,13 @@ public class Move {
     public String toString() {
     	
     	if(isPlacement) {
-    		return "Player "+playerTurn+" placed a piece at "+locationTo; 
+    		return "Player "+playerTurn+" placed a piece at "+locationTo+"\n"; 
     	}
     	
     	if(isRemove) {
-    		return "Player "+playerTurn+" removed a piece from "+locationTo; 
+    		return "Player "+playerTurn+" removed a piece from "+locationTo+"\n"; 
     	}
     	
-    	return "Player "+playerTurn+" moved from "+locationFrom+" to "+locationTo; 
+    	return "Player "+playerTurn+" moved from "+locationFrom+" to "+locationTo+"\n"; 
     }
 }
