@@ -121,6 +121,7 @@ public class Board {
 	}
 	public void takeInput(int location) {
 		if(moveInProgress) {
+			System.out.println("MOVE IN PROGREESS "+prevClick+" "+location);
 			finishMovement(location);
 			
 		}else if(gameState==GameStates.remove) {
@@ -128,11 +129,20 @@ public class Board {
 		}else if(IsPlacementStage()) {
 			processPlacement(location);
 		}else {
-			prevClick=location;
-			moveInProgress=true;
+			if(validFirstClick(location,playerTurn)) {
+				prevClick=location;
+				moveInProgress=true;
+				dispStatus="";
+			}
 		}
 			
 	}
+	private boolean validFirstClick(int loc, int player) {
+		
+		return IsPlayersPiece(player,loc);
+		
+	}
+
 	private void processPlacement(int location) {
 		Move currentMove=new Move(playerTurn,location);
 		
@@ -177,14 +187,29 @@ public class Board {
 		//int locationFrom=currMove.getLocationFrom();
 
 		if(currMove.isRemove()){
-			RemovePiece(locationTo); //TODO: create a makeRemoval(Move)
+			try {
+				RemoveMan(currMove);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} //TODO: create a makeRemoval(Move)
 			
 		}else if(currMove.isPlacement()){
 
-			PlacePiece(currMoveTurn,locationTo); //TODO: switch to MakeMove(Move)
+			try {
+				MakeMove(currMove);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} //TODO: switch to MakeMove(Move)
 
 		}else{
-			MovePiece(currMoveTurn,locationTo,currMove.locationFrom); //TODO: switch to MakeMove(Move)
+			try {
+				MakeMove(currMove);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} //TODO: switch to MakeMove(Move)
 		}
 		//TODO: 
 		dispStatus=currMove.toString();
@@ -731,6 +756,20 @@ public class Board {
 	public void RemoveMan(Integer playerNum, Integer location) throws Exception {
 		/* Remove a piece
 		 * If the move is not valid, this will throw an error */
+		if (!IsValidRemoval(playerNum, location)) {
+			throw new Exception("Invalid movement");
+		}
+		// otherwise is valid move
+		RemovePiece(location);
+		gameState = GameStates.move;
+		playerTurn = (playerTurn + 1) % 2;
+	}
+	public void RemoveMan(Move currMove) throws Exception {
+		/* Remove a piece
+		 * If the move is not valid, this will throw an error */
+		
+		int playerNum=currMove.getPlayerTurn();
+		int location=currMove.getLocationTo();
 		if (!IsValidRemoval(playerNum, location)) {
 			throw new Exception("Invalid movement");
 		}
