@@ -14,11 +14,11 @@ public class IsMillTests extends TestCase {
 	
 	public void testValidMill() {
 		try {
-			myBoard.MakeMove(0, 0);
-			myBoard.MakeMove(1, 9);
-			myBoard.MakeMove(0, 1);
-			myBoard.MakeMove(1, 20);
-			myBoard.MakeMove(0, 2);
+			myBoard.MakeMove(new Move(0, 0));
+			myBoard.MakeMove(new Move(1, 9));
+			myBoard.MakeMove(new Move(0, 1));
+			myBoard.MakeMove(new Move(1, 20));
+			myBoard.MakeMove(new Move(0, 2));
 		} catch (Exception e) {
 			fail();
 		}
@@ -37,39 +37,39 @@ public class IsMillTests extends TestCase {
 		// form a mill for player 1
 		// move out of mill and test this mill
 		try {
-			myBoard.MakeMove(0, 3);
-			myBoard.MakeMove(1, 6);
+			myBoard.MakeMove(new Move(0, 3));
+			myBoard.MakeMove(new Move(1, 6));
 			
-			myBoard.MakeMove(0, 4);
-			myBoard.MakeMove(1, 16);
+			myBoard.MakeMove(new Move(0, 4));
+			myBoard.MakeMove(new Move(1, 16));
 			
-			myBoard.MakeMove(0, 5); // formed mill
-			myBoard.RemoveMan(0,  16); // remove piece
-			myBoard.MakeMove(1, 11);
+			myBoard.MakeMove(new Move(0, 5)); // formed mill
+			myBoard.RemoveMan(new Move(0,  16, true)); // remove piece
+			myBoard.MakeMove(new Move(1, 11));
 
-			myBoard.MakeMove(0, 10);
-			myBoard.MakeMove(1, 7);
+			myBoard.MakeMove(new Move(0, 10));
+			myBoard.MakeMove(new Move(1, 7));
 
-			myBoard.MakeMove(0, 18); // formed mill
-			myBoard.RemoveMan(0,  6); // remove piece
-			myBoard.MakeMove(1, 15);
+			myBoard.MakeMove(new Move(0, 18)); // formed mill
+			myBoard.RemoveMan(new Move(0,  6, true)); // remove piece
+			myBoard.MakeMove(new Move(1, 15));
 
-			myBoard.MakeMove(0, 6);
-			myBoard.MakeMove(1, 16);
+			myBoard.MakeMove(new Move(0, 6));
+			myBoard.MakeMove(new Move(1, 16));
 
-			myBoard.MakeMove(0, 0);
-			myBoard.MakeMove(1, 17); // formed mill
-			myBoard.RemoveMan(1,  6); // remove piece
+			myBoard.MakeMove(new Move(0, 0));
+			myBoard.MakeMove(new Move(1, 17)); // formed mill
+			myBoard.RemoveMan(new Move(1,  6, true)); // remove piece
 
-			myBoard.MakeMove(0, 9);
-			myBoard.MakeMove(1, 6); // formed mill
-			myBoard.RemoveMan(1,  9); // remove piece
+			myBoard.MakeMove(new Move(0, 9));
+			myBoard.MakeMove(new Move(1, 6)); // formed mill
+			myBoard.RemoveMan(new Move(1,  9, true)); // remove piece
 
-			myBoard.MakeMove(0, 21);
-			myBoard.MakeMove(1, 12);
+			myBoard.MakeMove(new Move(0, 21));
+			myBoard.MakeMove(new Move(1, 12));
 
-			myBoard.MakeMove(0, 9, 10); // formed mill
-			myBoard.RemoveMan(0,  7); // remove piece
+			myBoard.MakeMove(new Move(0, 9, 10)); // formed mill
+			myBoard.RemoveMan(new Move(0,  7, true)); // remove piece
 		} catch (Exception e) {
 			fail();
 		}
