@@ -132,8 +132,9 @@ public class Board {
 			if(validFirstClick(location,playerTurn)) {
 				prevClick=location;
 				moveInProgress=true;
-				dispStatus="";
+				
 			}
+			dispStatus="";
 		}
 			
 	}
@@ -149,7 +150,7 @@ public class Board {
 		if(IsValidMovement(currentMove)) {
 			TakeAction(currentMove);
 		}else {
-			dispStatus="Invalid Placement\n";
+			dispStatus="";
 		}
 		
 	}
@@ -161,7 +162,7 @@ public class Board {
 			prevClick=0;
 			moveInProgress=false;
 		}else {
-			dispStatus="Invalid Removal\n";
+			dispStatus="";
 		}
 	}
 	private void finishMovement(int location) {
@@ -175,6 +176,8 @@ public class Board {
 			
 		}else {
 			dispStatus="Invalid Movement\n";
+			prevClick=0;
+			moveInProgress=false;
 		}
 		
 		
@@ -190,28 +193,28 @@ public class Board {
 			try {
 				RemoveMan(currMove);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
-			} //TODO: create a makeRemoval(Move)
+			} 
 			
 		}else if(currMove.isPlacement()){
 
 			try {
 				MakeMove(currMove);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
-			} //TODO: switch to MakeMove(Move)
+			} 
 
 		}else{
 			try {
 				MakeMove(currMove);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
-			} //TODO: switch to MakeMove(Move)
+			} 
 		}
-		//TODO: 
+		
 		dispStatus=currMove.toString();
 
 	}
@@ -800,7 +803,6 @@ public class Board {
 	}
 	
 	public String getDispStatus() {
-		
 		
 		
 		return dispStatus;
