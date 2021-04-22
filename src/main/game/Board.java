@@ -121,7 +121,6 @@ public class Board {
 	}
 	public void takeInput(int location) {
 		if(moveInProgress) {
-			System.out.println("MOVE IN PROGREESS "+prevClick+" "+location);
 			finishMovement(location);
 			
 		}else if(gameState==GameStates.remove) {
@@ -185,16 +184,14 @@ public class Board {
 	}
 	public void TakeAction(Move currMove){
 
-		int currMoveTurn=currMove.getPlayerTurn();
-		int locationTo=currMove.getLocationTo();
-		//int locationFrom=currMove.getLocationFrom();
+		
 
 		if(currMove.isRemove()){
 			try {
 				RemoveMan(currMove);
 			} catch (Exception e) {
 				
-				e.printStackTrace();
+				dispStatus="Invalid Removal";
 			} 
 			
 		}else if(currMove.isPlacement()){
@@ -203,7 +200,7 @@ public class Board {
 				MakeMove(currMove);
 			} catch (Exception e) {
 				
-				e.printStackTrace();
+				dispStatus="Invalid Placement";
 			} 
 
 		}else{
@@ -211,7 +208,7 @@ public class Board {
 				MakeMove(currMove);
 			} catch (Exception e) {
 				
-				e.printStackTrace();
+				dispStatus="Invalid Movement";
 			} 
 		}
 		
@@ -737,7 +734,7 @@ public class Board {
 		}else { //Movement
 			int locationFrom=currMove.getLocationFrom();
 			
-			if (!IsValidMovement(playerNum, locationTo, locationFrom)) {
+			if (!IsValidMovement(currMove)) {
 				throw new Exception("Invalid movement");
 			}
 			// otherwise is valid move
