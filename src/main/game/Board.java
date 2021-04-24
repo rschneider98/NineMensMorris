@@ -89,10 +89,10 @@ public class Board {
 		this.playerOneName = prev.playerOneName;
 		this.playerTwoName = prev.playerTwoName;
 	
-		this.unplacedPieces = prev.unplacedPieces;
-		this.livePieces=prev.livePieces;
 		
 		System.arraycopy(prev.boardLoc, 0, this.boardLoc, 0, prev.boardLoc.length); //creates a copy of the boardLoc array
+		System.arraycopy(prev.unplacedPieces, 0, this.unplacedPieces, 0, prev.unplacedPieces.length); //creates a copy of the unplacedPieces array
+		System.arraycopy(prev.livePieces, 0, this.livePieces, 0, prev.livePieces.length); //creates a copy of the livePieces array
 	}
 
 	public Board(Integer[] grid, Integer playerTurn, GameStates gameState, Integer[] unplacedPieces, Integer[] livePieces) throws Exception {	
@@ -670,10 +670,10 @@ public class Board {
 		if(!(this.playerTurn==otherBoard.playerTurn)) {
 			return false;
 		}
-		if(!(this.unplacedPieces==otherBoard.unplacedPieces)) {
+		if(!(java.util.Arrays.deepEquals(this.unplacedPieces,otherBoard.unplacedPieces))) {
 			return false;
 		}
-		if(!(this.livePieces==otherBoard.livePieces)) {
+		if(!(java.util.Arrays.deepEquals(this.livePieces,otherBoard.livePieces))) {
 			return false;
 		}
 		

@@ -77,7 +77,7 @@ public class BoardCopyTests extends TestCase {
 			fail();
 		}
 		
-		//assertTrue(copyBoard.equals(myBoard));
+		assertTrue(copyBoard.equals(myBoard));
 		
 	}
 }
