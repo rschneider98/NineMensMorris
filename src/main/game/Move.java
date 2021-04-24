@@ -72,6 +72,7 @@ public class Move {
     	
     	return playerName+" moved from "+locationFrom+" to "+locationTo+"\n"; 
     }
+    
     public boolean equals(Move otherMove) {
     	if(!(otherMove.playerTurn==this.playerTurn)) {
     		return false;
