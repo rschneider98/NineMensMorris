@@ -13,7 +13,7 @@ public class GetBestMoveTests extends TestCase {
 		super.setUp();
 		
 	}
-	public void testGetBestMove() throws Exception {
+	public void testGetBestMoveSimplePlacement() throws Exception {
 		CPUOpponent cpu=new CPUOpponent();
 		
 		Integer[] grid=new Integer[] {1,1,0,
@@ -29,8 +29,9 @@ public class GetBestMoveTests extends TestCase {
 		
 		myBoard=new Board(grid,0,GameStates.move,unplacedPieces,livePieces);
 		
-		Move goalMove=new Move(0,7);
+		Move goalMove=new Move(0,2);
 		
 		assertTrue(goalMove.equals(cpu.GetMove(myBoard)));
 	}
+	
 }
