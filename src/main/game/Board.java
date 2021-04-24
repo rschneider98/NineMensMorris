@@ -212,7 +212,7 @@ public class Board {
 			} 
 		}
 		
-		dispStatus=currMove.toString();
+		dispStatus=currMove.toString(getPlayerName(playerTurn));
 
 	}
 	public boolean IsPlayersTurn(Integer playerNum) {
@@ -793,7 +793,16 @@ public class Board {
 	public String getPlayerTwoName() {
 		return playerTwoName;
 	}
-
+	public String getPlayerName(int playerNum) {
+		if(playerNum==0) {
+			return getPlayerOneName();
+		}
+		if(playerNum==1) {
+			return getPlayerTwoName();
+		}
+		
+		else return "invalid player";
+	}
 
 	public void setPlayerTwoName(String playerTwoName) {
 		this.playerTwoName = playerTwoName;

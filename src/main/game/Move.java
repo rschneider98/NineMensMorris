@@ -48,16 +48,16 @@ public class Move {
     public boolean isPlacement(){
         return isPlacement;
     }
-    public String toString() {
+    public String toString(String playerName) {
     	
     	if(isPlacement) {
-    		return "Player "+playerTurn+" placed a piece at "+locationTo+"\n"; 
+    		return playerName+" placed a piece at "+locationTo+"\n"; 
     	}
     	
     	if(isRemove) {
-    		return "Player "+playerTurn+" removed a piece from "+locationTo+"\n"; 
+    		return playerName+" removed a piece from "+locationTo+"\n"; 
     	}
     	
-    	return "Player "+playerTurn+" moved from "+locationFrom+" to "+locationTo+"\n"; 
+    	return playerName+" moved from "+locationFrom+" to "+locationTo+"\n"; 
     }
 }
