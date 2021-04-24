@@ -658,5 +658,25 @@ public class Board {
 		
 		return ((double) ownPieces) - otherPieces;
 	}
+	public boolean equals(Board otherBoard) {
+		if(!(this.gameState==otherBoard.GetGameState())) {
+			return false;
+		}
+		if(!(this.boardLoc==otherBoard.boardLoc)) {
+			return false;
+		}
+		if(!(this.playerTurn==otherBoard.playerTurn)) {
+			return false;
+		}
+		if(!(this.unplacedPieces==otherBoard.unplacedPieces)) {
+			return false;
+		}
+		if(!(this.livePieces==otherBoard.livePieces)) {
+			return false;
+		}
+		
+		return true;
+		
+	}
 	
 }
