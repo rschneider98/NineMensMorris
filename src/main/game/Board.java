@@ -82,7 +82,7 @@ public class Board {
 		createAdjList();
 		// copy data
 		gameState = GameStates.move;
-		this.boardLoc = prev.boardLoc;
+		
 		this.playerTurn = prev.playerTurn;
 		this.gameState = prev.gameState;
 	
@@ -91,6 +91,8 @@ public class Board {
 	
 		this.unplacedPieces = prev.unplacedPieces;
 		this.livePieces=prev.livePieces;
+		
+		System.arraycopy(prev.boardLoc, 0, this.boardLoc, 0, prev.boardLoc.length); //creates a copy of the boardLoc array
 	}
 
 	public Board(Integer[] grid, Integer playerTurn, GameStates gameState, Integer[] unplacedPieces, Integer[] livePieces) throws Exception {	
@@ -662,7 +664,7 @@ public class Board {
 		if(!(this.gameState==otherBoard.GetGameState())) {
 			return false;
 		}
-		if(!(this.boardLoc==otherBoard.boardLoc)) {
+		if(!(java.util.Arrays.deepEquals(this.boardLoc,otherBoard.boardLoc))) {
 			return false;
 		}
 		if(!(this.playerTurn==otherBoard.playerTurn)) {
