@@ -48,4 +48,50 @@ public class Move {
     public boolean isPlacement(){
         return isPlacement;
     }
+    public String toString() {
+    	
+    	if(isPlacement) {
+    		return playerTurn+" placed a piece at "+locationTo+"\n"; 
+    	}
+    	
+    	if(isRemove) {
+    		return playerTurn+" removed a piece from "+locationTo+"\n"; 
+    	}
+    	
+    	return playerTurn+" moved from "+locationFrom+" to "+locationTo+"\n"; 
+    }
+    public String toString(String playerName) {
+    	
+    	if(isPlacement) {
+    		return playerName+" placed a piece at "+locationTo+"\n"; 
+    	}
+    	
+    	if(isRemove) {
+    		return playerName+" removed a piece from "+locationTo+"\n"; 
+    	}
+    	
+    	return playerName+" moved from "+locationFrom+" to "+locationTo+"\n"; 
+    }
+    public boolean equals(Move otherMove) {
+    	if(!(otherMove.playerTurn==this.playerTurn)) {
+    		return false;
+    	}
+    	if(!(otherMove.isRemove==this.isRemove)) {
+    		return false;
+    	}
+    	if(!(otherMove.isPlacement==this.isPlacement)) {
+    		return false;
+    	}
+    	if(!(otherMove.locationTo==this.locationTo)) {
+    		return false;
+    	}
+    	if(!(otherMove.locationFrom==this.locationFrom)) {
+    		return false;
+    	}
+    	
+    	return true;
+    	
+    }
+    
+    
 }
