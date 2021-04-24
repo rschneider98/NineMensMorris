@@ -82,15 +82,17 @@ public class Board {
 		createAdjList();
 		// copy data
 		gameState = GameStates.move;
-		this.boardLoc = prev.boardLoc;
+		
 		this.playerTurn = prev.playerTurn;
 		this.gameState = prev.gameState;
 	
 		this.playerOneName = prev.playerOneName;
 		this.playerTwoName = prev.playerTwoName;
 	
-		this.unplacedPieces = prev.unplacedPieces;
-		this.livePieces=prev.livePieces;
+		
+		System.arraycopy(prev.boardLoc, 0, this.boardLoc, 0, prev.boardLoc.length); //creates a copy of the boardLoc array
+		System.arraycopy(prev.unplacedPieces, 0, this.unplacedPieces, 0, prev.unplacedPieces.length); //creates a copy of the unplacedPieces array
+		System.arraycopy(prev.livePieces, 0, this.livePieces, 0, prev.livePieces.length); //creates a copy of the livePieces array
 	}
 
 	public Board(Integer[] grid, Integer playerTurn, GameStates gameState, Integer[] unplacedPieces, Integer[] livePieces) throws Exception {	
@@ -657,6 +659,26 @@ public class Board {
 		int otherPieces=NumLivePieces((playerTurn+1)%2);
 		
 		return ((double) ownPieces) - otherPieces;
+	}
+	public boolean equals(Board otherBoard) {
+		if(!(this.gameState==otherBoard.GetGameState())) {
+			return false;
+		}
+		if(!(java.util.Arrays.deepEquals(this.boardLoc,otherBoard.boardLoc))) {
+			return false;
+		}
+		if(!(this.playerTurn==otherBoard.playerTurn)) {
+			return false;
+		}
+		if(!(java.util.Arrays.deepEquals(this.unplacedPieces,otherBoard.unplacedPieces))) {
+			return false;
+		}
+		if(!(java.util.Arrays.deepEquals(this.livePieces,otherBoard.livePieces))) {
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 }
