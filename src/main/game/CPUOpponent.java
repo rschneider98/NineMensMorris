@@ -152,8 +152,11 @@ public class CPUOpponent {
             // get children of all of our first moves
             // return best move in general
             ArrayList<moveValue> secondTurn = getChildren(mV.possBoard);
-            moveValue bestSecondMove = getBestMove(secondTurn);
-            mV.score = bestSecondMove.score;
+            if(!secondTurn.isEmpty()) {
+            	moveValue bestSecondMove = getBestMove(secondTurn);
+            	mV.score = bestSecondMove.score;
+            }
+            
         }
         moveValue bestMove = getBestMove(firstTurn);
         return bestMove.move;

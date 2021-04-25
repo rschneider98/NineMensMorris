@@ -263,7 +263,9 @@ public class Board {
 			} 
 		}
 		
-		dispStatus=currMove.toString(getPlayerName(playerTurn));
+		
+		dispStatus=currMove.toString(getPlayerName(currMove.getPlayerTurn()));
+		
   }
 
 	public boolean IsPlayersTurn(Integer playerNum) {

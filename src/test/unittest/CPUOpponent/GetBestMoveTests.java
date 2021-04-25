@@ -30,6 +30,8 @@ public class GetBestMoveTests extends TestCase {
 		myBoard=new Board(grid,0,GameStates.move,unplacedPieces,livePieces);
 		
 		Move goalMove=new Move(0,2);
+		System.out.println(goalMove.toString());
+		System.out.println(cpu.GetMove(myBoard));
 		
 		assertTrue(goalMove.equals(cpu.GetMove(myBoard)));
 	}
