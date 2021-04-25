@@ -86,15 +86,65 @@ public class Board {
 		createAdjList();
 		// copy data
 		gameState = GameStates.move;
-		this.boardLoc = prev.boardLoc;
+		
 		this.playerTurn = prev.playerTurn;
 		this.gameState = prev.gameState;
 	
 		this.playerOneName = prev.playerOneName;
 		this.playerTwoName = prev.playerTwoName;
 	
-		this.unplacedPieces = prev.unplacedPieces;
-		this.livePieces=prev.livePieces;
+		
+		System.arraycopy(prev.boardLoc, 0, this.boardLoc, 0, prev.boardLoc.length); //creates a copy of the boardLoc array
+		System.arraycopy(prev.unplacedPieces, 0, this.unplacedPieces, 0, prev.unplacedPieces.length); //creates a copy of the unplacedPieces array
+		System.arraycopy(prev.livePieces, 0, this.livePieces, 0, prev.livePieces.length); //creates a copy of the livePieces array
+	}
+
+	public Board(Integer[] grid, Integer playerTurn, GameStates gameState, Integer[] unplacedPieces, Integer[] livePieces) throws Exception {	
+		createAdjList();
+		// validate the data
+		// grid is of length 24
+		if(grid.length!=24){
+			throw new Exception("Wrong Length");
+		}
+
+		// playerturn is either 0 or 1
+		if(playerTurn != 0 && playerTurn != 1) {
+			throw new Exception("Invalid Turn");
+		}
+
+		// unplacedPieces is array of length two with elements 0 - 9 inclusive 
+		if(unplacedPieces.length!=2){
+			throw new Exception("Invalid unplacedPieces length");
+		}
+		if(!(unplacedPieces[0]>-1 && unplacedPieces[0]<10)||!(unplacedPieces[1]>-1 && unplacedPieces[1]<10)){
+			throw new Exception("Invalid range of unplacedPieces");
+		}
+		// live pieces is array of length two with elements 0 - 9 inclusive
+		if (livePieces.length != 2) {
+			throw new Exception("Invalid livePieces length");
+		}
+
+		if (!(livePieces[0] > -1 && livePieces[0] < 10) || !(livePieces[1] > -1 && livePieces[1] < 10)) {
+			throw new Exception("Invalid range of livePieces");
+		}
+
+		// unplaced + live pieces are within range 3 - 9
+		int p1 = unplacedPieces[0] + livePieces[0];
+		int p2 = unplacedPieces[1] + livePieces[1];
+		if (p1 < 3 || p1 > 9) {
+			throw new Exception("Cannot have more than nine (9) pieces");
+		}
+		if (p2 < 3 || p2 > 9) {
+			throw new Exception("Cannot have more than nine (9) pieces");
+		}
+
+		// copy data
+		this.gameState = gameState;
+		this.boardLoc = grid;
+		this.playerTurn = playerTurn;
+	
+		this.unplacedPieces = unplacedPieces;
+		this.livePieces = livePieces;
 	}
 	
 	
@@ -112,13 +162,14 @@ public class Board {
 		boardLoc[locationFrom] = 0;
 	}
 	
-	
+
 	private void RemovePiece(Integer location) {
 		// removes a piece at location
 		Integer player = boardLoc[location] - 1;
 		livePieces[player]--;
 		boardLoc[location] = 0;		
 	}
+
 	public void takeInput(int location) {
 		if(moveInProgress) {
 			finishMovement(location);
@@ -213,8 +264,8 @@ public class Board {
 		}
 		
 		dispStatus=currMove.toString(getPlayerName(playerTurn));
+  }
 
-	}
 	public boolean IsPlayersTurn(Integer playerNum) {
 		// checks if it is a player's turn
 		return (playerTurn == playerNum);
@@ -238,6 +289,7 @@ public class Board {
 		return playerTurn;
 	}
 	
+
 	public String GetPlayersNameTurn() {
 		// gets players turn
 		switch (playerTurn) {
@@ -380,10 +432,12 @@ public class Board {
 		// if neither of those game states (impossible since enum)
 		return false;
 	}
+
+
 	public boolean everyPieceAMill(int playerNum) {
 		
-		for(int x=0;x<24;x++) {
-			if(IsPlayersPiece(playerNum,x) && !IsMill(x)) {
+		for (int x=0;x<24;x++) {
+			if (IsPlayersPiece(playerNum,x) && !IsMill(x)) {
 				return false;
 			}
 		}
@@ -391,6 +445,7 @@ public class Board {
 		return true;
 	}
 	
+
 	public GameStates GetGameState() {
 		// gets the game state on board
 		return gameState;
@@ -414,23 +469,25 @@ public class Board {
 	public ArrayList<Move> GetPossibleMoves() {
 		//ToDo: find possible moves and return as list of move classes
 		
-		if(gameState==GameStates.remove) {
+		if (gameState==GameStates.remove) {
 			return getPossibleRemovals();
 		}
 		
-		if(IsPlacementStage()) {
+		if (IsPlacementStage()) {
 			return getPossiblePlacements();
-		}else {
+		} else {
 			return getPossibleMovements();
 		}
 	
 	}
+
+
 	public ArrayList<Move> getPossibleRemovals(){ 
 		/*Returns all possible moves for a removal*/
 		ArrayList<Move> possibleRemovals=new ArrayList<Move>();		
 		
-		for(int x=0;x<boardLoc.length;x++) {
-			if(IsValidRemoval(playerTurn,x)) {
+		for (int x=0;x<boardLoc.length;x++) {
+			if (IsValidRemoval(playerTurn,x)) {
 				
 				Move currMove=new Move(playerTurn,x,true); //if the location and turn is valid, create a new move
 				possibleRemovals.add(currMove);
@@ -440,6 +497,8 @@ public class Board {
 		return possibleRemovals;
 		
 	}
+
+
 	public ArrayList<Move> getPossiblePlacements(){
 		/*If we are in the placement stage, we simply create a new move based on a players piece and
 		 * every empty place*/
@@ -456,47 +515,37 @@ public class Board {
 		
 		return possiblePlacements;
 	}
+
+
 	public ArrayList<Move> getPossibleMovements(){
-		
 		ArrayList<Move> possibleMovements=new ArrayList<Move>();		
 		ArrayList<Integer> playerLocs=getPlayerLocs(playerTurn);
 		
 		for(int locs:playerLocs) {
 			if(CanFly(playerTurn)) {
-				
 				for(int x=0;x<24;x++) {
 					if(IsValidMovement(playerTurn,x,locs)) {
-						
 						if(x!=locs) {
 							Move currMove=new Move(playerTurn,x,locs);
 							possibleMovements.add(currMove);
 						}
-						
 					}
 				}
-				
 			}
-			else {
-				
+			else {	
 				Integer[] adjLocs=adj.get(locs);
-				
 				for(int i=0;i<adjLocs.length;i++) {
 					if(IsValidMovement(playerTurn,adjLocs[i],locs)) {
-						
 						Move currMove=new Move(playerTurn,adjLocs[i],locs);
 						possibleMovements.add(currMove);
-						
 					}
-					
 				}
-				
 			}
-		}
-		
-		
+		}		
 		return possibleMovements;
-		
 	}
+
+
 	public ArrayList<Integer> getPlayerLocs(int player){
 		ArrayList<Integer> playerLocs=new ArrayList<Integer>();
 		
@@ -509,6 +558,7 @@ public class Board {
 		return playerLocs;
 	}
 	
+
 	// public checks for valid moves and end game
 	public boolean IsValidMovement(Integer playerNum, Integer location) {
 		/* Method to check if a particular movement is valid 
@@ -819,8 +869,27 @@ public class Board {
 		int ownPieces=NumLivePieces(playerTurn);
 		int otherPieces=NumLivePieces((playerTurn+1)%2);
 		
-		return (double) ownPieces-otherPieces;
-			
+		return ((double) ownPieces) - otherPieces;
+	}
+	public boolean equals(Board otherBoard) {
+		if(!(this.gameState==otherBoard.GetGameState())) {
+			return false;
+		}
+		if(!(java.util.Arrays.deepEquals(this.boardLoc,otherBoard.boardLoc))) {
+			return false;
+		}
+		if(!(this.playerTurn==otherBoard.playerTurn)) {
+			return false;
+		}
+		if(!(java.util.Arrays.deepEquals(this.unplacedPieces,otherBoard.unplacedPieces))) {
+			return false;
+		}
+		if(!(java.util.Arrays.deepEquals(this.livePieces,otherBoard.livePieces))) {
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 }
