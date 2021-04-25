@@ -48,6 +48,7 @@ public class Move {
     public boolean isPlacement(){
         return isPlacement;
     }
+
     public String toString() {
     	
     	if(isPlacement) {
@@ -60,6 +61,7 @@ public class Move {
     	
     	return playerTurn+" moved from "+locationFrom+" to "+locationTo+"\n"; 
     }
+
     public String toString(String playerName) {
     	
     	if(isPlacement) {
@@ -72,6 +74,7 @@ public class Move {
     	
     	return playerName+" moved from "+locationFrom+" to "+locationTo+"\n"; 
     }
+
     
     public boolean equals(Move otherMove) {
     	if(!(otherMove.playerTurn==this.playerTurn)) {
@@ -94,5 +97,5 @@ public class Move {
     	
     }
     
-    
+
 }

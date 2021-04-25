@@ -16,6 +16,10 @@ public class Board {
 	
 	private String playerOneName;
 	private String playerTwoName;
+	private String dispStatus;
+	
+	private int prevClick=0;
+	private boolean moveInProgress;
 	
 	// (immutable) array of possible mills
 	private static final Integer[][] possMills = {
@@ -158,29 +162,109 @@ public class Board {
 		boardLoc[locationFrom] = 0;
 	}
 	
-		
+
 	private void RemovePiece(Integer location) {
 		// removes a piece at location
 		Integer player = boardLoc[location] - 1;
 		livePieces[player]--;
 		boardLoc[location] = 0;		
 	}
-	
 
-	public void TakeAction(Move currMove) {
-		int currMoveTurn=currMove.getPlayerTurn();
-		int locationTo=currMove.getLocationTo();
-		//int locationFrom=currMove.getLocationFrom();
-
-		if (currMove.isRemove()) {
-			RemovePiece(locationTo);
-		} else if(currMove.isPlacement()) {
-			PlacePiece(currMoveTurn,locationTo);
-		} else {
-			MovePiece(currMoveTurn,locationTo,currMove.locationFrom);
+	public void takeInput(int location) {
+		if(moveInProgress) {
+			finishMovement(location);
+			
+		}else if(gameState==GameStates.remove) {
+			processRemove(location);
+		}else if(IsPlacementStage()) {
+			processPlacement(location);
+		}else {
+			if(validFirstClick(location,playerTurn)) {
+				prevClick=location;
+				moveInProgress=true;
+				
+			}
+			dispStatus="";
 		}
+			
+	}
+	private boolean validFirstClick(int loc, int player) {
+		
+		return IsPlayersPiece(player,loc);
+		
 	}
 
+	private void processPlacement(int location) {
+		Move currentMove=new Move(playerTurn,location);
+		
+		if(IsValidMovement(currentMove)) {
+			TakeAction(currentMove);
+		}else {
+			dispStatus="";
+		}
+		
+	}
+	private void processRemove(int location) {
+		
+		if(IsValidRemoval(playerTurn,location)) {
+			Move currentMove=new Move(playerTurn,location,true);
+			TakeAction(currentMove);
+			prevClick=0;
+			moveInProgress=false;
+		}else {
+			dispStatus="";
+		}
+	}
+	private void finishMovement(int location) {
+		Move currentMove=new Move(playerTurn,location,prevClick);
+		
+		if(IsValidMovement(currentMove)) {
+			
+			TakeAction(currentMove);
+			prevClick=0;
+			moveInProgress=false;
+			
+		}else {
+			dispStatus="Invalid Movement\n";
+			prevClick=0;
+			moveInProgress=false;
+		}
+		
+		
+		
+	}
+	public void TakeAction(Move currMove){
+
+		
+
+		if(currMove.isRemove()){
+			try {
+				RemoveMan(currMove);
+			} catch (Exception e) {
+				
+				dispStatus="Invalid Removal";
+			} 
+			
+		}else if(currMove.isPlacement()){
+
+			try {
+				MakeMove(currMove);
+			} catch (Exception e) {
+				
+				dispStatus="Invalid Placement";
+			} 
+
+		}else{
+			try {
+				MakeMove(currMove);
+			} catch (Exception e) {
+				
+				dispStatus="Invalid Movement";
+			} 
+		}
+		
+		dispStatus=currMove.toString(getPlayerName(playerTurn));
+  }
 
 	public boolean IsPlayersTurn(Integer playerNum) {
 		// checks if it is a player's turn
@@ -540,6 +624,59 @@ public class Board {
 		}
 		return true;
 	}
+	public boolean IsValidMovement( Move currMove) {
+		/* Method to check if a particular movement is valid 
+		 * movement. Works with placement or movement */
+		// check that both locations exist
+						
+		boolean placement=currMove.isPlacement();
+		int playerNum=currMove.getPlayerTurn();
+		int locationTo=currMove.getLocationTo();
+		
+		if (!IsValidLoc(locationTo)) {
+			return false;
+		}
+		if (!IsPlayersTurn(playerNum)) {
+			return false;
+		}
+		// check that the location to is empty
+		if (!IsEmpty(locationTo)) {
+			return false;
+		}
+		
+		if(!placement) {
+			
+			int locationFrom=currMove.getLocationFrom();
+			
+			if (!IsValidLoc(locationFrom)) {
+				return false;
+			}
+			
+			// check that the player has no piece's left
+			if (HasUnplacedPieces(playerNum)) {
+				return false;
+			}
+			// check that the locationFrom is the correct player
+			if (!IsPlayersPiece(playerNum, locationFrom)) {
+				return false;
+			}		
+			// check if the two locations are adjacent or if flying is valid
+			// !Adj && !CanFly <==> !(Adj || CanFly)
+			if (!(AreAdjacent(locationTo, locationFrom) || CanFly(playerNum))) {
+				return false;
+			}
+			
+		}else {
+			if (!HasUnplacedPieces(playerNum)) {
+				return false;
+			}
+		}
+		// check game state
+		if (GetGameState() != GameStates.move) {
+			return false;
+		}
+		return true;
+	}
 	
 	
 	public boolean IsValidRemoval(Integer playerNum, Integer location) {
@@ -580,6 +717,7 @@ public class Board {
 	}
 	
 	
+	
 	// public functions for making moves
 	public boolean MakeMove(Integer playerNum, Integer location) throws Exception {
 		/* Make the move (with one location argument this will be placement) 
@@ -601,6 +739,7 @@ public class Board {
 	}
 	
 	
+	
 	public boolean MakeMove(Integer playerNum, Integer locationTo, Integer locationFrom) throws Exception{
 		/* Make the move (with two location arguments this will be movement) 
 		 * and return if a mill has formed
@@ -620,10 +759,67 @@ public class Board {
 		return (formedMill);
 	}
 	
+	public boolean MakeMove(Move currMove) throws Exception {
+		/* Make the move, check if it is placement or movement
+		 * and return if a mill has formed
+		 * If the move is not valid, this will throw an error */
+		int locationTo= currMove.getLocationTo();
+		int playerNum=currMove.getPlayerTurn();
+		boolean placement=currMove.isPlacement();
+		
+		if(placement) { //placement
+			if (!IsValidMovement(currMove)) {
+				throw new Exception("Invalid placement");
+			}
+			// otherwise is valid move
+			PlacePiece(playerNum, locationTo);
+			Boolean formedMill = IsMill(locationTo);
+			if (formedMill) {
+				gameState = GameStates.remove;
+			}
+			else {
+				playerTurn = (playerTurn + 1) % 2;
+			}
+			return (formedMill);
+		}else { //Movement
+			int locationFrom=currMove.getLocationFrom();
+			
+			if (!IsValidMovement(currMove)) {
+				throw new Exception("Invalid movement");
+			}
+			// otherwise is valid move
+			MovePiece(playerNum, locationTo, locationFrom);
+			Boolean formedMill = IsMill(locationTo);
+			if (formedMill) {
+				gameState = GameStates.remove;
+			}
+			else {
+				playerTurn = (playerTurn + 1) % 2;
+			}
+			return (formedMill);
+			
+		}
+	}
+	
+	
 	
 	public void RemoveMan(Integer playerNum, Integer location) throws Exception {
 		/* Remove a piece
 		 * If the move is not valid, this will throw an error */
+		if (!IsValidRemoval(playerNum, location)) {
+			throw new Exception("Invalid movement");
+		}
+		// otherwise is valid move
+		RemovePiece(location);
+		gameState = GameStates.move;
+		playerTurn = (playerTurn + 1) % 2;
+	}
+	public void RemoveMan(Move currMove) throws Exception {
+		/* Remove a piece
+		 * If the move is not valid, this will throw an error */
+		
+		int playerNum=currMove.getPlayerTurn();
+		int location=currMove.getLocationTo();
 		if (!IsValidRemoval(playerNum, location)) {
 			throw new Exception("Invalid movement");
 		}
@@ -647,10 +843,25 @@ public class Board {
 	public String getPlayerTwoName() {
 		return playerTwoName;
 	}
-
+	public String getPlayerName(int playerNum) {
+		if(playerNum==0) {
+			return getPlayerOneName();
+		}
+		if(playerNum==1) {
+			return getPlayerTwoName();
+		}
+		
+		else return "invalid player";
+	}
 
 	public void setPlayerTwoName(String playerTwoName) {
 		this.playerTwoName = playerTwoName;
+	}
+	
+	public String getDispStatus() {
+		
+		
+		return dispStatus;
 	}
 	
 	public double getScore() {

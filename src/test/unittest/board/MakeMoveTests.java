@@ -30,4 +30,22 @@ public class MakeMoveTests extends TestCase {
 			assertTrue(true);
 		}
 	}
+	public void testValidMoveNewMove() {
+		try {
+			myBoard.MakeMove(new Move(0, 0));
+			myBoard.MakeMove(new Move(1, 1));
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	
+	public void testInvalidMoveNewMove() {
+		try {
+			myBoard.MakeMove(new Move(0, 24));
+			fail();
+		} catch (Exception e) {
+			assertTrue(true);
+		}
+	}
 }
