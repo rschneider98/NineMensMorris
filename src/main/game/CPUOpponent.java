@@ -33,7 +33,8 @@ public class CPUOpponent {
             for (Move new_m: possibleMoves) {
                 fullMoves.add(TakeTurn(childBoard, new_m));
             }
-            return getBestMove(fullMoves);
+            moveValue bestFullMove= getBestMove(fullMoves);
+            return new moveValue(m,bestFullMove.score,childBoard);
         }
 
         // consider the adversary 
