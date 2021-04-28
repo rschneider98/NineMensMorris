@@ -4,6 +4,16 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class Board {
 	// board is stored as array of length 24
 	// see doc for enumeration of positions
@@ -143,6 +153,114 @@ public class Board {
 		this.boardLoc = grid;
 		this.playerTurn = playerTurn;
 	
+		this.unplacedPieces = unplacedPieces;
+		this.livePieces = livePieces;
+	}
+
+	// save/load class to file
+	public void toFile(String filename) {
+		// add data to json object
+		JSONObject boardObject = new JSONObject();
+		
+		boardObject.add("boardLoc", new JSONArray(boardLoc));
+		boardObject.add("playerTurn", playerTurn);
+		if (gameState == GameStates.move) {
+			boardObject.add("gameState", "move");
+		} else {
+			boardObject.add("gameState", "remove");
+		}
+
+		boardObject.add("unplacedPiecesP1", unplacedPieces[0]);
+		boardObject.add("unplacedPiecesP2", unplacedPieces[1]);
+		boardObject.add("livePiecesP1", livePieces[0]);
+		boardObject.add("livePiecesP2", livePieces[1]);
+		boardObject.add("playerOneName", playerOneName);
+		boardObject.add("playerTwoName", playerTwoName);
+		boardObject.add("dispStatus", dispStatus);
+
+		// write json object to file
+		FileWriter file = new FileWriter(filename);
+		file.write(boardObject.toJSONString());
+		file.flush();
+	}
+
+	public void fromFile(String filename) throws Exception {
+		// load data from file
+		JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(filename);
+		Object obj = jsonParser.parse(reader);
+
+		JSONObject jsonObj = (JSONObject) obj;
+
+		this.playerOneName = (String) jsonObj.get("playerOneName");
+		this.playerTwoName = (String) jsonObj.get("playerTwoName");
+		this.dispStatus = (String) jsonObj.get("dispStatus");
+		
+		String currState= (String) jsonObj.get("gameState");
+
+		switch(currState){
+			case "move":
+				this.gameState = GameStates.move;
+				break;
+			case "remove":
+				this.gameState = GameStates.remove;
+				break;
+			default:
+				throw new Exception("Invalid GameState");
+		}
+
+		int livePiecesP1 = (int) jsonObj.get("livePiecesP1");
+		int livePiecesP2 = (int) jsonObj.get("livePiecesP2");
+		Integer[] livePieces = new Integer[] {livePiecesP1, livePiecesP2};
+		
+		int unplacedPiecesP1 = (int) jsonObj.get("unplacedPiecesP1");
+		int unplacedPiecesP2 = (int) jsonObj.get("unplacedPiecesP2");
+		Integer[] unplacedPieces = new Integer[] {unplacedPiecesP1, unplacedPiecesP2};
+
+		int playerTurn = (int) jsonObj.get("playerTurn");
+		
+		Integer[] grid = (Integer[]) jsonObj.get("boardLoc");
+		
+		// validate the data
+		// grid is of length 24
+		if(grid.length!=24){
+			throw new Exception("Wrong Length");
+		}
+
+		// playerturn is either 0 or 1
+		if(playerTurn != 0 && playerTurn != 1) {
+			throw new Exception("Invalid Turn");
+		}
+
+		// unplacedPieces is array of length two with elements 0 - 9 inclusive 
+		if(unplacedPieces.length!=2){
+			throw new Exception("Invalid unplacedPieces length");
+		}
+		if(!(unplacedPieces[0]>-1 && unplacedPieces[0]<10)||!(unplacedPieces[1]>-1 && unplacedPieces[1]<10)){
+			throw new Exception("Invalid range of unplacedPieces");
+		}
+		// live pieces is array of length two with elements 0 - 9 inclusive
+		if (livePieces.length != 2) {
+			throw new Exception("Invalid livePieces length");
+		}
+
+		if (!(livePieces[0] > -1 && livePieces[0] < 10) || !(livePieces[1] > -1 && livePieces[1] < 10)) {
+			throw new Exception("Invalid range of livePieces");
+		}
+
+		// unplaced + live pieces are within range 3 - 9
+		int p1 = unplacedPieces[0] + livePieces[0];
+		int p2 = unplacedPieces[1] + livePieces[1];
+		if (p1 < 3 || p1 > 9) {
+			throw new Exception("Cannot have more than nine (9) pieces");
+		}
+		if (p2 < 3 || p2 > 9) {
+			throw new Exception("Cannot have more than nine (9) pieces");
+		}
+
+		// update data
+		this.boardLoc = grid;
+		this.playerTurn = playerTurn;
 		this.unplacedPieces = unplacedPieces;
 		this.livePieces = livePieces;
 	}
