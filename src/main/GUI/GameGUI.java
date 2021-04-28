@@ -385,9 +385,7 @@ public class GameGUI {
 			}
 		}
 
-		private void updateStatusText() {
-			// TODO
-		}
+		
 
 		private GridPoint getClickedPoint(int clickX, int clickY) { // TODO: Make Automated testing for this method
 			/*
