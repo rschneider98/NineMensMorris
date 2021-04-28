@@ -60,5 +60,28 @@ public class GetBestMoveTests extends TestCase {
 		
 		
 	}
+	public void testGetBestMoveFullMove() throws Exception{
+		CPUOpponent cpu=new CPUOpponent();
+		
+		Integer[] grid=new Integer[] {1,2,1,
+										2,1,0,
+										1,2,0,
+										1,2,0,2,1,2,
+										0,0,1,
+										1,1,2,
+										2,2,0,};
+		
+		Integer[] unplacedPieces=new Integer[] {0,0};
+		Integer[] livePieces=new Integer[] {9,9};
+		
+		myBoard=new Board(grid,0,GameStates.move,unplacedPieces,livePieces);
+		
+		Move nextMove=cpu.GetMove(myBoard);
+		assertTrue(nextMove!=null);
+		System.out.println(nextMove);
+		
+		
+		
+	}
 	
 }

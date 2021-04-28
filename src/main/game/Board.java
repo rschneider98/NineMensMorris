@@ -552,7 +552,7 @@ public class Board {
 		ArrayList<Integer> playerLocs=new ArrayList<Integer>();
 		
 		for(int x=0;x<boardLoc.length;x++) {
-			if(boardLoc[x]==player) {
+			if(boardLoc[x]==player+1) {
 				playerLocs.add(x);
 			}			
 		}
@@ -866,12 +866,12 @@ public class Board {
 		return dispStatus;
 	}
 	
-	public double getScore() {
+	public int getScore() {
 		
 		int ownPieces=NumLivePieces(playerTurn);
 		int otherPieces=NumLivePieces((playerTurn+1)%2);
 		
-		return ((double) ownPieces) - otherPieces;
+		return ownPieces - otherPieces;
 	}
 	public boolean equals(Board otherBoard) {
 		if(!(this.gameState==otherBoard.GetGameState())) {

@@ -6,10 +6,10 @@ public class CPUOpponent {
     
 	private class moveValue {
         public Move move;
-        public Double score;
+        public int score;
         public Board possBoard;
 
-        public moveValue(Move m, Double s, Board b) {
+        public moveValue(Move m, int s, Board b) {
             move = m;
             score = s;
             possBoard = b;
@@ -53,12 +53,12 @@ public class CPUOpponent {
                 for (Move new_m_removal: newPossibleMoves) {
                     Board subSubchildBoard = new Board(subchildBoard);
                     subSubchildBoard.TakeAction(new_m_removal); 
-                    double rootScore = subSubchildBoard.getScore();
+                    int rootScore = subSubchildBoard.getScore();
                     subEvalMoves.add(new moveValue(m, rootScore, subSubchildBoard));
                 }                
             }
             else {
-                double rootScore = subchildBoard.getScore(); //TODO: make Board.getScore()
+                int rootScore = subchildBoard.getScore(); //TODO: make Board.getScore()
                 subEvalMoves.add(new moveValue(m, rootScore, subchildBoard));
             }            
         }   
@@ -135,7 +135,7 @@ public class CPUOpponent {
         }
         if (selected.size() > 1) {
             // ToDo: Tiebreaker?
-            Random rand = new Random();
+            Random rand = new Random(System.currentTimeMillis());
             return selected.get(rand.nextInt(selected.size()));
         }
         else {
