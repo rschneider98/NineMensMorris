@@ -3,7 +3,7 @@ package main.game;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.json.simple.JSONArray;
@@ -158,30 +158,37 @@ public class Board {
 	}
 
 	// save/load class to file
-	public void toFile(String filename) {
-		// add data to json object
+	@SuppressWarnings("unchecked")
+	public void toFile(String filename) throws IOException {
+		// add data to JSON object
 		JSONObject boardObject = new JSONObject();
 		
-		boardObject.add("boardLoc", new JSONArray(boardLoc));
-		boardObject.add("playerTurn", playerTurn);
+		JSONArray grid = new JSONArray();
+		for (int i = 0; i < 24; i++) {
+			grid.add(boardLoc[i]);
+		}
+		
+		boardObject.put("boardLoc", grid);
+		boardObject.put("playerTurn", playerTurn);
 		if (gameState == GameStates.move) {
-			boardObject.add("gameState", "move");
+			boardObject.put("gameState", "move");
 		} else {
-			boardObject.add("gameState", "remove");
+			boardObject.put("gameState", "remove");
 		}
 
-		boardObject.add("unplacedPiecesP1", unplacedPieces[0]);
-		boardObject.add("unplacedPiecesP2", unplacedPieces[1]);
-		boardObject.add("livePiecesP1", livePieces[0]);
-		boardObject.add("livePiecesP2", livePieces[1]);
-		boardObject.add("playerOneName", playerOneName);
-		boardObject.add("playerTwoName", playerTwoName);
-		boardObject.add("dispStatus", dispStatus);
+		boardObject.put("unplacedPiecesP1", unplacedPieces[0]);
+		boardObject.put("unplacedPiecesP2", unplacedPieces[1]);
+		boardObject.put("livePiecesP1", livePieces[0]);
+		boardObject.put("livePiecesP2", livePieces[1]);
+		boardObject.put("playerOneName", playerOneName);
+		boardObject.put("playerTwoName", playerTwoName);
+		boardObject.put("dispStatus", dispStatus);
 
-		// write json object to file
+		// write JSON object to file
 		FileWriter file = new FileWriter(filename);
 		file.write(boardObject.toJSONString());
 		file.flush();
+		file.close();
 	}
 
 	public void fromFile(String filename) throws Exception {
@@ -227,7 +234,7 @@ public class Board {
 			throw new Exception("Wrong Length");
 		}
 
-		// playerturn is either 0 or 1
+		// playerTurn is either 0 or 1
 		if(playerTurn != 0 && playerTurn != 1) {
 			throw new Exception("Invalid Turn");
 		}
