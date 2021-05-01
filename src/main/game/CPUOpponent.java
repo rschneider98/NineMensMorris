@@ -13,9 +13,7 @@ public class CPUOpponent {
             move = m;
             score = s;
             possBoard = b;
-        }
-
-       
+        }       
     }
 
 
@@ -64,7 +62,7 @@ public class CPUOpponent {
         }   
         
         // find lowest board score for this move (worst-case senario based on opp.)
-        moveValue worstCase = getWorstMove(subEvalMoves);
+        moveValue worstCase = getBestMove(subEvalMoves);
         return worstCase;
     }
 
@@ -83,7 +81,6 @@ public class CPUOpponent {
                 find heureistic of each board 
             output move, hueristic, and board of lowest heuristic score */
         
-
         ArrayList<moveValue> evalMoves = new ArrayList<moveValue>();       
         for(Move m: possibleMoves){            
             // find highest conservative board score for this move (worst-case senario based on opp.)

@@ -124,7 +124,7 @@ public class Board {
 			throw new Exception("Wrong Length");
 		}
 
-		// playerturn is either 0 or 1
+		// playerTurn is either 0 or 1
 		if(playerTurn != 0 && playerTurn != 1) {
 			throw new Exception("Invalid Turn");
 		}
@@ -213,7 +213,7 @@ public class Board {
 		
 		String currState= (String) jsonObj.get("gameState");
 
-		switch(currState){
+		switch(currState) {
 			case "move":
 				this.gameState = GameStates.move;
 				break;

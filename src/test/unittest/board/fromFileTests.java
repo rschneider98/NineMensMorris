@@ -11,7 +11,7 @@ public class fromFileTests extends TestCase{
 		myBoard = new Board();
 		
 		try {
-			myBoard.fromFile("src/test/unittest/board/myFIrstBoard");
+			myBoard.fromFile("src/test/unittest/board/testBoard1.json");
 		} catch (Exception e) {
 			fail();
 		}
