@@ -409,9 +409,6 @@ public class GameGUI {
 		}
 
 		private void makeMove(GridPoint clickedPoint) {
-			if(isCPUOpponent && currentBoard.GetPlayersTurn()!=0) {
-				return;
-			}
 			
 		
 			int pointID = clickedPoint.getID();

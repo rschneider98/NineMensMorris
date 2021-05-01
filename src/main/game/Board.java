@@ -414,12 +414,7 @@ public class Board {
 		CPUOpponent myCPU = new CPUOpponent();
 		
 		Move ourMove = myCPU.GetMove(this);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
+		
 		TakeAction(ourMove);
 	}
 	public boolean IsPlayersTurn(Integer playerNum) {
