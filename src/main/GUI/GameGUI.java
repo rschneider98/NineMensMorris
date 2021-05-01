@@ -74,16 +74,18 @@ public class GameGUI {
 
 		// layout.setVgap(200);
 
-		gameMenu.setLayout(new GridLayout(4, 0, 0, 100));
+		gameMenu.setLayout(new GridLayout(5, 0, 0, 100));
 
 		JButton newGameButton = new JButton("New Game");
 		JButton aboutButton = new JButton("About");
 		JButton optionsButton = new JButton("Options");
+		JButton saveButton = new JButton("Save Board");
 		JButton quitButton = new JButton("Quit");
 
 		gameMenu.add(newGameButton);
 		gameMenu.add(aboutButton);
 		gameMenu.add(optionsButton);
+		gameMenu.add(saveButton);
 		gameMenu.add(quitButton);
 
 		newGameButton.addActionListener(new ActionListener() {
@@ -99,6 +101,16 @@ public class GameGUI {
 		optionsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				optionsClick();
+			}
+		});
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					saveClick();
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
 			}
 		});
 		quitButton.addActionListener(new ActionListener() {
@@ -143,6 +155,15 @@ public class GameGUI {
 		JOptionPane.showInputDialog(gameWindow, "What kind of opponent will you face today? ", "Selection",
 				JOptionPane.DEFAULT_OPTION, null, values, "0");
 
+	}
+	private void saveClick() throws Exception {
+		String fileName = JOptionPane.showInputDialog("Please enter a filename where you would like to save: ");
+		try {
+			currentBoard.toFile(fileName);
+		} catch (IOException e) {
+			
+			throw new Exception("Invalid File Name");
+		}
 	}
 
 	private void quitClick() {

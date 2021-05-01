@@ -3,6 +3,16 @@ package main.game;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class Board {
 	// board is stored as array of length 24
@@ -143,6 +153,128 @@ public class Board {
 		this.boardLoc = grid;
 		this.playerTurn = playerTurn;
 	
+		this.unplacedPieces = unplacedPieces;
+		this.livePieces = livePieces;
+	}
+
+	// save/load class to file
+	@SuppressWarnings("unchecked")
+	public void toFile(String filename) throws IOException {
+		// add data to JSON object
+		
+		JSONObject boardObject = new JSONObject();
+		
+		JSONArray grid = new JSONArray();
+		for (int i = 0; i < 24; i++) {
+			grid.add(boardLoc[i]);
+		}
+		
+		boardObject.put("boardLoc", grid);
+		boardObject.put("playerTurn", playerTurn);
+		if (gameState == GameStates.move) {
+			boardObject.put("gameState", "move");
+		} else {
+			boardObject.put("gameState", "remove");
+		}
+
+		boardObject.put("unplacedPiecesP1", unplacedPieces[0]);
+		boardObject.put("unplacedPiecesP2", unplacedPieces[1]);
+		boardObject.put("livePiecesP1", livePieces[0]);
+		boardObject.put("livePiecesP2", livePieces[1]);
+		boardObject.put("playerOneName", playerOneName);
+		boardObject.put("playerTwoName", playerTwoName);
+		boardObject.put("dispStatus", dispStatus);
+
+		// write JSON object to file
+		FileWriter file = new FileWriter(filename);
+		file.write(boardObject.toJSONString());
+		file.flush();
+		file.close();
+	}
+
+	public void fromFile(String filename) throws Exception {
+		// load data from file
+		JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(filename);
+		Object obj = jsonParser.parse(reader);
+
+		JSONObject jsonObj = (JSONObject) obj;
+
+		this.playerOneName = (String) jsonObj.get("playerOneName");
+		this.playerTwoName = (String) jsonObj.get("playerTwoName");
+		this.dispStatus = (String) jsonObj.get("dispStatus");
+		
+		String currState= (String) jsonObj.get("gameState");
+
+		switch(currState){
+			case "move":
+				this.gameState = GameStates.move;
+				break;
+			case "remove":
+				this.gameState = GameStates.remove;
+				break;
+			default:
+				throw new Exception("Invalid GameState");
+		}
+
+		int livePiecesP1 =  ((Long) jsonObj.get("livePiecesP1")).intValue();
+		int livePiecesP2 = ((Long) jsonObj.get("livePiecesP2")).intValue();
+		Integer[] livePieces = new Integer[] {livePiecesP1, livePiecesP2};
+		
+		int unplacedPiecesP1 = ((Long) jsonObj.get("unplacedPiecesP1")).intValue();
+		int unplacedPiecesP2 = ((Long) jsonObj.get("unplacedPiecesP2")).intValue();
+		Integer[] unplacedPieces = new Integer[] {unplacedPiecesP1, unplacedPiecesP2};
+
+		int playerTurn =  ((Long) jsonObj.get("playerTurn")).intValue();
+		
+		JSONArray rawGrid =(JSONArray) jsonObj.get("boardLoc");
+		
+		Integer[] grid= new Integer[24];
+		
+		for(int x = 0; x<24; x++) {
+			grid[x] = ((Long) rawGrid.get(x)).intValue();
+		}
+		
+		// validate the data
+		// grid is of length 24
+		if(grid.length!=24){
+			throw new Exception("Wrong Length");
+		}
+
+		// playerTurn is either 0 or 1
+		if(playerTurn != 0 && playerTurn != 1) {
+			throw new Exception("Invalid Turn");
+		}
+
+		// unplacedPieces is array of length two with elements 0 - 9 inclusive 
+		if(unplacedPieces.length!=2){
+			throw new Exception("Invalid unplacedPieces length");
+		}
+		if(!(unplacedPieces[0]>-1 && unplacedPieces[0]<10)||!(unplacedPieces[1]>-1 && unplacedPieces[1]<10)){
+			throw new Exception("Invalid range of unplacedPieces");
+		}
+		// live pieces is array of length two with elements 0 - 9 inclusive
+		if (livePieces.length != 2) {
+			throw new Exception("Invalid livePieces length");
+		}
+
+		if (!(livePieces[0] > -1 && livePieces[0] < 10) || !(livePieces[1] > -1 && livePieces[1] < 10)) {
+			throw new Exception("Invalid range of livePieces");
+		}
+
+		// unplaced + live pieces are within range 3 - 9
+		int p1 = unplacedPieces[0] + livePieces[0];
+		int p2 = unplacedPieces[1] + livePieces[1];
+		if (p1 < 3 || p1 > 9) {
+			throw new Exception("Cannot have more than nine (9) pieces");
+		}
+		if (p2 < 3 || p2 > 9) {
+			throw new Exception("Cannot have more than nine (9) pieces");
+		}
+
+		// update data
+		this.boardLoc = grid;
+		this.playerTurn = playerTurn;
 		this.unplacedPieces = unplacedPieces;
 		this.livePieces = livePieces;
 	}
