@@ -161,6 +161,7 @@ public class Board {
 	@SuppressWarnings("unchecked")
 	public void toFile(String filename) throws IOException {
 		// add data to JSON object
+		
 		JSONObject boardObject = new JSONObject();
 		
 		JSONArray grid = new JSONArray();
