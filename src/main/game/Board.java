@@ -216,17 +216,23 @@ public class Board {
 				throw new Exception("Invalid GameState");
 		}
 
-		int livePiecesP1 = (int) jsonObj.get("livePiecesP1");
-		int livePiecesP2 = (int) jsonObj.get("livePiecesP2");
+		int livePiecesP1 =  ((Long) jsonObj.get("livePiecesP1")).intValue();
+		int livePiecesP2 = ((Long) jsonObj.get("livePiecesP2")).intValue();
 		Integer[] livePieces = new Integer[] {livePiecesP1, livePiecesP2};
 		
-		int unplacedPiecesP1 = (int) jsonObj.get("unplacedPiecesP1");
-		int unplacedPiecesP2 = (int) jsonObj.get("unplacedPiecesP2");
+		int unplacedPiecesP1 = ((Long) jsonObj.get("unplacedPiecesP1")).intValue();
+		int unplacedPiecesP2 = ((Long) jsonObj.get("unplacedPiecesP2")).intValue();
 		Integer[] unplacedPieces = new Integer[] {unplacedPiecesP1, unplacedPiecesP2};
 
-		int playerTurn = (int) jsonObj.get("playerTurn");
+		int playerTurn =  ((Long) jsonObj.get("playerTurn")).intValue();
 		
-		Integer[] grid = (Integer[]) jsonObj.get("boardLoc");
+		JSONArray rawGrid =(JSONArray) jsonObj.get("boardLoc");
+		
+		Integer[] grid= new Integer[24];
+		
+		for(int x = 0; x<24; x++) {
+			grid[x] = ((Long) rawGrid.get(x)).intValue();
+		}
 		
 		// validate the data
 		// grid is of length 24
