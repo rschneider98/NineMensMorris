@@ -30,6 +30,7 @@ public class Board {
 	
 	private int prevClick=0;
 	private boolean moveInProgress;
+	private boolean isCPUOpponent=false;
 	
 	// (immutable) array of possible mills
 	private static final Integer[][] possMills = {
@@ -87,6 +88,12 @@ public class Board {
 	}
 	
 	public Board() {	
+		createAdjList();
+		// mark initial game state
+		gameState = GameStates.move;
+	}
+	public Board(boolean opponent) {
+		isCPUOpponent=opponent;
 		createAdjList();
 		// mark initial game state
 		gameState = GameStates.move;
@@ -316,7 +323,7 @@ public class Board {
 				moveInProgress=true;
 				
 			}
-			dispStatus="";
+			dispStatus+="";
 		}
 			
 	}
@@ -332,7 +339,7 @@ public class Board {
 		if(IsValidMovement(currentMove)) {
 			TakeAction(currentMove);
 		}else {
-			dispStatus="";
+			dispStatus+="";
 		}
 		
 	}
@@ -344,7 +351,7 @@ public class Board {
 			prevClick=0;
 			moveInProgress=false;
 		}else {
-			dispStatus="";
+			dispStatus+="";
 		}
 	}
 	private void finishMovement(int location) {
@@ -357,7 +364,7 @@ public class Board {
 			moveInProgress=false;
 			
 		}else {
-			dispStatus="Invalid Movement\n";
+			dispStatus+="Invalid Movement\n";
 			prevClick=0;
 			moveInProgress=false;
 		}
@@ -374,7 +381,7 @@ public class Board {
 				RemoveMan(currMove);
 			} catch (Exception e) {
 				
-				dispStatus="Invalid Removal";
+				dispStatus+="Invalid Removal\n";
 			} 
 			
 		}else if(currMove.isPlacement()){
@@ -383,7 +390,7 @@ public class Board {
 				MakeMove(currMove);
 			} catch (Exception e) {
 				
-				dispStatus="Invalid Placement";
+				dispStatus+="Invalid Placement\n";
 			} 
 
 		}else{
@@ -391,15 +398,30 @@ public class Board {
 				MakeMove(currMove);
 			} catch (Exception e) {
 				
-				dispStatus="Invalid Movement";
+				dispStatus+="Invalid Movement\n";
 			} 
 		}
 		
 		
-		dispStatus=currMove.toString(getPlayerName(currMove.getPlayerTurn()));
+		dispStatus+=currMove.toString(getPlayerName(currMove.getPlayerTurn()));
+		
+		if((playerTurn==1) && (isCPUOpponent)) {
+			makeCPUMove();
+		}
 		
   }
-
+	private void makeCPUMove() {
+		CPUOpponent myCPU = new CPUOpponent();
+		
+		Move ourMove = myCPU.GetMove(this);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		}
+		TakeAction(ourMove);
+	}
 	public boolean IsPlayersTurn(Integer playerNum) {
 		// checks if it is a player's turn
 		return (playerTurn == playerNum);
@@ -598,7 +620,23 @@ public class Board {
 		}
 		return false;
 	}
-
+	public int isWinner() {
+		
+		if(livePieces[0] <=2) {
+			return 2;
+		}
+		if(livePieces[1] <=2) {
+			return 1;
+		}
+		if(!HasLegalMoves(0)) {
+			return 2;
+		}
+		if(!HasLegalMoves(1)) {
+			return 1;
+		}
+		
+		return -1;
+	}
 
 	public ArrayList<Move> GetPossibleMoves() {
 		//ToDo: find possible moves and return as list of move classes
@@ -994,8 +1032,10 @@ public class Board {
 	
 	public String getDispStatus() {
 		
+		String status = dispStatus;
+		dispStatus="";	
 		
-		return dispStatus;
+		return status;
 	}
 	
 	public int getScore() {
