@@ -1,10 +1,11 @@
 package main.game;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class CPUOpponent { 
     
-	private class moveValue {
+	private class moveValue implements Comparable<moveValue> {
         public Move move;
         public int score;
         public Board possBoard;
@@ -13,7 +14,26 @@ public class CPUOpponent {
             move = m;
             score = s;
             possBoard = b;
-        }       
+        }
+
+		@Override
+		public int compareTo(moveValue other) {
+			if (this.score > other.score) {
+				return 1;
+			}
+			return 0;
+		}
+
+		public boolean FormsMill() {
+			// check if a movement forms a mill for us
+			if (possBoard.GetGameState() == GameStates.remove) {
+				return false;
+			} else if (possBoard.IsMill(move.getLocationTo())) {
+				return true;
+			} else {
+				return false;
+			}
+		}       
     }
 
 
@@ -78,9 +98,9 @@ public class CPUOpponent {
             for each new move:
                 make a copy of the board
                 make new move
-                find heureistic of each board 
-            output move, hueristic, and board of lowest heuristic score */
-        
+                find heuristic of each board 
+            output move, heuristic, and board of lowest heuristic score */
+                
         ArrayList<moveValue> evalMoves = new ArrayList<moveValue>();       
         for(Move m: possibleMoves){            
             // find highest conservative board score for this move (worst-case senario based on opp.)
@@ -146,6 +166,7 @@ public class CPUOpponent {
         /* take current game board and return computer opponent's move */
         ArrayList<moveValue> firstTurn = getChildren(newBoard);
         
+        // normal execution to find the best move
         for(moveValue mV:firstTurn){
             // get children of all of our first moves
             // return best move in general
@@ -153,10 +174,19 @@ public class CPUOpponent {
             if(!secondTurn.isEmpty()) {
             	moveValue bestSecondMove = getBestMove(secondTurn);
             	mV.score = bestSecondMove.score;
-            }
-            
+            }            
         }
-        moveValue bestMove = getBestMove(firstTurn);
-        return bestMove.move;
+        Collections.sort(firstTurn);
+        
+        // for better end game performance, we use a mill-first metric
+        if ((newBoard.NumLivePieces(0) + newBoard.NumUnplacedPieces(0) < 5) || (newBoard.NumLivePieces(1) + newBoard.NumUnplacedPieces(1) < 5)) {
+        	// evaluate moves for a mill formation
+        	for (int i = 0; i < firstTurn.size(); i++) {
+        		if (firstTurn.get(i).FormsMill()) {
+        			return firstTurn.get(i).move;
+        		}
+        	}
+        }
+        return firstTurn.get(0).move;
     }
 }
