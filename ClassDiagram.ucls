@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="main.game.CPUOpponent.moveValue" project="NineMensMorris" 
     file="/NineMensMorris/src/main/game/CPUOpponent.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="922" y="207"/>    
+    <position height="-1" width="-1" x="938" y="245"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="main.game.CPUOpponent" project="NineMensMorris" 
     file="/NineMensMorris/src/main/game/CPUOpponent.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="919" y="361"/>    
+    <position height="-1" width="-1" x="931" y="444"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

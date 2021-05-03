@@ -19,9 +19,12 @@ public class CPUOpponent {
 		@Override
 		public int compareTo(moveValue other) {
 			if (this.score > other.score) {
-				return 1;
+				return this.score - other.score;
 			}
-			return 0;
+			else if (this.score == other.score) {
+				return 0;
+			}
+			return -1;
 		}
 
 		public boolean FormsMill() {
