@@ -9,18 +9,17 @@ public class IsEndTests extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		myBoard = new Board();
-	}
-	
+	}	
 	
 	public void testInitialState() {
 		assertFalse(myBoard.IsEnd());
-	}
-	
+	}	
 	
 	public void testTwoPiecesLeft() {
 		assertTrue(myBoard.HasLegalMoves(0));
 		assertTrue(myBoard.HasLegalMoves(1));
 	}
+	
 	public void testNoLegalMoves() {
 		try {
 			myBoard.MakeMove(0, 10);

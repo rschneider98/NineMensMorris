@@ -45,6 +45,7 @@ public class GameGUI {
 
 	private Board currentBoard;
 	private Integer prevClickPoint = null;
+	private boolean isCPUOpponent;
 
 	JPanel playerPanel = new JPanel(new BorderLayout());
 
@@ -143,7 +144,13 @@ public class GameGUI {
 
 		String p1 = JOptionPane.showInputDialog("Player 1 Name ");
 		currentBoard.setPlayerOneName(p1);
-		String p2 = JOptionPane.showInputDialog("Player 2 Name ");
+		
+		String p2;
+		if(!isCPUOpponent) {
+			p2 = JOptionPane.showInputDialog("Player 2 Name ");
+		}else {
+			p2 = "HAL";
+		}
 		currentBoard.setPlayerTwoName(p2);
 	}
 
@@ -205,7 +212,6 @@ public class GameGUI {
 	}
 
 	private void makeNewBoard() {
-		currentBoard = new Board(); // Backend board logic
 
 		makeClickablePoints();
 
@@ -215,11 +221,28 @@ public class GameGUI {
 		gameWindow.getContentPane().add(gameBoard, BorderLayout.CENTER); // Adds gameboard to EAST side of the frame
 
 		makeStatusField();
+		isCPUOpponent = getPreferredOpponent();
+		currentBoard = new Board(isCPUOpponent); // Backend board logic
 		getPlayersName();
-
 		makePlayersPanel();
+		
+		
+		
+		
+		
+		
 	}
-
+	private boolean getPreferredOpponent() {
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+				"Do you want to play against a CPU?",
+				"Choose Opponent", JOptionPane.YES_NO_OPTION);
+		
+		if(confirmed==0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	private void endGame(int winningPlayer, String winningPlayerName) {
 
 		String winMessage = "Player " + winningPlayer + "(" + winningPlayerName + ") has won the game!!!";
@@ -387,8 +410,7 @@ public class GameGUI {
 
 		private void makeMove(GridPoint clickedPoint) {
 			
-			int playerNum = currentBoard.GetPlayersTurn();
-			String playerName = currentBoard.GetPlayersNameTurn();
+		
 			int pointID = clickedPoint.getID();
 			
 			currentBoard.takeInput(pointID);
@@ -399,9 +421,11 @@ public class GameGUI {
 			updatePieceList();
 			playerPanel.repaint();
 
-			// check if it is the end of the game
-			if (currentBoard.IsEnd()) {
-				endGame(playerNum + 1, playerName);
+			
+			int end = currentBoard.isWinner();
+			if (end>-1) {
+				
+				endGame(end, currentBoard.getPlayerName(end-1));
 				statusText.append("The game is over");
 			}
 		}
