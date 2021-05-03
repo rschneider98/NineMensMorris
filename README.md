@@ -20,3 +20,5 @@ There is a seven-by-seven board with lines on it as below. The intersections of 
 - Once all pieces are placed, the men on the board are allowed to move. Movement is restricted to one ``step" along the paths between locations. Men are not allows to jump over each other.
 - When one of the player's is reduced to three pieces, both players are allowed to move their men to any available location. This is called ``flying."
 - The game ends when either a player is reduced to two pieces or they are incapiable of making a valid move.
+
+test
