@@ -37,14 +37,14 @@ public class GameGUI {
 	private JPanel gameMenu; // Menu and board are our only two panels so far
 	private GamePanel gameBoard;
 	private JTextArea statusText;
-	private JScrollPane scrollPane;
+	
 
 	private GridPoint[] gridPoints = new GridPoint[24]; // Will be the 24 labeled locations to place pieces
 	List<Piece> blackPieces = new ArrayList<Piece>();
 	List<Piece> whitePieces = new ArrayList<Piece>();
 
 	private Board currentBoard;
-	private Integer prevClickPoint = null;
+	
 	private boolean isCPUOpponent;
 
 	JPanel playerPanel = new JPanel(new BorderLayout());
