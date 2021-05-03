@@ -24,9 +24,9 @@ public class Board {
 	private HashMap<Integer, Integer[]> adj = new HashMap<Integer, Integer[]>();
 	private GameStates gameState;
 	
-	private String playerOneName;
-	private String playerTwoName;
-	private String dispStatus;
+	private String playerOneName="";
+	private String playerTwoName="";
+	private String dispStatus="";
 	
 	private int prevClick=0;
 	private boolean moveInProgress;

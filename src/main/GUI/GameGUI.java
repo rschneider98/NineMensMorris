@@ -75,17 +75,15 @@ public class GameGUI {
 
 		// layout.setVgap(200);
 
-		gameMenu.setLayout(new GridLayout(5, 0, 0, 100));
+		gameMenu.setLayout(new GridLayout(4, 0, 0, 100));
 
 		JButton newGameButton = new JButton("New Game");
 		JButton aboutButton = new JButton("About");
-		JButton optionsButton = new JButton("Options");
 		JButton saveButton = new JButton("Save Board");
 		JButton quitButton = new JButton("Quit");
 
 		gameMenu.add(newGameButton);
 		gameMenu.add(aboutButton);
-		gameMenu.add(optionsButton);
 		gameMenu.add(saveButton);
 		gameMenu.add(quitButton);
 
@@ -99,11 +97,7 @@ public class GameGUI {
 				aboutClick();
 			}
 		});
-		optionsButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				optionsClick();
-			}
-		});
+		
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -154,15 +148,7 @@ public class GameGUI {
 		currentBoard.setPlayerTwoName(p2);
 	}
 
-	private void optionsClick() {
-		String[] values = { "Human", "Computer" };
 
-		// Maybe ask the user if they want to restart the gaem
-
-		JOptionPane.showInputDialog(gameWindow, "What kind of opponent will you face today? ", "Selection",
-				JOptionPane.DEFAULT_OPTION, null, values, "0");
-
-	}
 	private void saveClick() throws Exception {
 		String fileName = JOptionPane.showInputDialog("Please enter a filename where you would like to save: ");
 		try {
