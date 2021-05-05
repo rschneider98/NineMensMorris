@@ -37,14 +37,15 @@ public class GameGUI {
 	private JPanel gameMenu; // Menu and board are our only two panels so far
 	private GamePanel gameBoard;
 	private JTextArea statusText;
-	private JScrollPane scrollPane;
+	
 
 	private GridPoint[] gridPoints = new GridPoint[24]; // Will be the 24 labeled locations to place pieces
 	List<Piece> blackPieces = new ArrayList<Piece>();
 	List<Piece> whitePieces = new ArrayList<Piece>();
 
 	private Board currentBoard;
-	private Integer prevClickPoint = null;
+	
+	private boolean isCPUOpponent;
 
 	JPanel playerPanel = new JPanel(new BorderLayout());
 
@@ -65,6 +66,7 @@ public class GameGUI {
 	}
 
 	private void makeMenu() {
+
 		/* THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!! */
 
 		gameMenu = new JPanel();
@@ -77,12 +79,12 @@ public class GameGUI {
 
 		JButton newGameButton = new JButton("New Game");
 		JButton aboutButton = new JButton("About");
-		JButton optionsButton = new JButton("Options");
+		JButton saveButton = new JButton("Save Board");
 		JButton quitButton = new JButton("Quit");
 
 		gameMenu.add(newGameButton);
 		gameMenu.add(aboutButton);
-		gameMenu.add(optionsButton);
+		gameMenu.add(saveButton);
 		gameMenu.add(quitButton);
 
 		newGameButton.addActionListener(new ActionListener() {
@@ -95,9 +97,15 @@ public class GameGUI {
 				aboutClick();
 			}
 		});
-		optionsButton.addActionListener(new ActionListener() {
+		
+		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				optionsClick();
+				try {
+					saveClick();
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
 			}
 		});
 		quitButton.addActionListener(new ActionListener() {
@@ -106,6 +114,7 @@ public class GameGUI {
 			}
 		});
 	}
+	
 
 	private void newGameClick() {
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, "Are you sure you want to start a new game?",
@@ -129,18 +138,25 @@ public class GameGUI {
 
 		String p1 = JOptionPane.showInputDialog("Player 1 Name ");
 		currentBoard.setPlayerOneName(p1);
-		String p2 = JOptionPane.showInputDialog("Player 2 Name ");
+		
+		String p2;
+		if(!isCPUOpponent) {
+			p2 = JOptionPane.showInputDialog("Player 2 Name ");
+		}else {
+			p2 = "HAL";
+		}
 		currentBoard.setPlayerTwoName(p2);
 	}
 
-	private void optionsClick() {
-		String[] values = { "Human", "Computer" };
 
-		// Maybe ask the user if they want to restart the gaem
-
-		JOptionPane.showInputDialog(gameWindow, "What kind of opponent will you face today? ", "Selection",
-				JOptionPane.DEFAULT_OPTION, null, values, "0");
-
+	private void saveClick() throws Exception {
+		String fileName = JOptionPane.showInputDialog("Please enter a filename where you would like to save: ");
+		try {
+			currentBoard.toFile(fileName);
+		} catch (IOException e) {
+			
+			throw new Exception("Invalid File Name");
+		}
 	}
 
 	private void quitClick() {
@@ -182,7 +198,6 @@ public class GameGUI {
 	}
 
 	private void makeNewBoard() {
-		currentBoard = new Board(); // Backend board logic
 
 		makeClickablePoints();
 
@@ -192,11 +207,28 @@ public class GameGUI {
 		gameWindow.getContentPane().add(gameBoard, BorderLayout.CENTER); // Adds gameboard to EAST side of the frame
 
 		makeStatusField();
+		isCPUOpponent = getPreferredOpponent();
+		currentBoard = new Board(isCPUOpponent); // Backend board logic
 		getPlayersName();
-
 		makePlayersPanel();
+		
+		
+		
+		
+		
+		
 	}
-
+	private boolean getPreferredOpponent() {
+		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
+				"Do you want to play against a CPU?",
+				"Choose Opponent", JOptionPane.YES_NO_OPTION);
+		
+		if(confirmed==0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	private void endGame(int winningPlayer, String winningPlayerName) {
 
 		String winMessage = "Player " + winningPlayer + "(" + winningPlayerName + ") has won the game!!!";
@@ -211,6 +243,7 @@ public class GameGUI {
 		}
 	}
 
+	
 	public class PlayersPanel extends JComponent {
 
 		private static final long serialVersionUID = 1L;
@@ -273,6 +306,26 @@ public class GameGUI {
 		playerPanel.add(new PlayersPanel(blackPieces, whitePieces));
 
 		gameWindow.getContentPane().add(playerPanel, BorderLayout.NORTH);
+	}
+	private void updatePieceList() {
+		
+		int blackUnplayed=currentBoard.NumUnplacedPieces(1);
+		int whiteUnplayed=currentBoard.NumUnplacedPieces(0);
+		
+		for(int x=0;x<9;x++) {
+			Piece currBlack=blackPieces.get(x);
+			Piece currWhite=whitePieces.get(x);			
+					
+			if(!currBlack.isUsed()&&(x+1)>blackUnplayed) {
+				currBlack.setUsed(true);
+			}
+			if(!currWhite.isUsed()&&(x+1)>whiteUnplayed) {
+				currWhite.setUsed(true);
+			}
+			
+			
+			
+		}
 	}
 
 	private void makeClickablePoints() {
@@ -342,97 +395,28 @@ public class GameGUI {
 		}
 
 		private void makeMove(GridPoint clickedPoint) {
-			/*
-			 * THIS IS A TEMPORARY PLACE HOLDER FOR DETERMINING A VALID MOVE, EVENTUALLY
-			 * THIS WILL BE MOVED UP TO THE GAME BOARD CLASS!!
-			 */
-
-			int playerNum = currentBoard.GetPlayersTurn();
-			String playerName = currentBoard.GetPlayersNameTurn();
+			
+		
 			int pointID = clickedPoint.getID();
+			
+			currentBoard.takeInput(pointID);
+			
+			statusText.append(currentBoard.getDispStatus());
 
-			if (currentBoard.GetGameState() == GameStates.remove) {
-				// want to remove piece
-				if (currentBoard.IsValidRemoval(playerNum, pointID)) {
-					try {
-						currentBoard.RemoveMan(playerNum, pointID);
-						statusText.append(
-								String.format("Player %d (%s) removed a piece \n", (playerNum + 1), playerName));
-					} catch (Exception e) {
-						statusText.append("Invalid: Cannot remove piece \n");
-					}
-				}
-				prevClickPoint = null;
-			} else if (currentBoard.IsPlacementStage()) {
-				// we are placing objects
-				if (currentBoard.IsValidMovement(playerNum, pointID)) {
-					try {
-						int numPieces = currentBoard.NumUnplacedPieces(playerNum);
-
-						boolean formedMill = currentBoard.MakeMove(playerNum, pointID);
-						statusText.append(
-								String.format("Player %d (%s)  placed a piece \n", (playerNum + 1), playerName));
-
-						if (formedMill) {
-							statusText.append(String.format("A mill has been formed by player %d (%s)\n",
-									(playerNum + 1), playerName));
-
-						}
-
-						if (playerNum == 0) {
-							if (numPieces > 0) {
-								whitePieces.get(numPieces - 1).setUsed(true);
-							} else {
-								statusText.append("White doesn't have any more pieces left\n");
-							}
-						} else {
-							if (numPieces > 0) {
-								blackPieces.get(numPieces - 1).setUsed(true);
-							} else {
-								statusText.append("Black doesn't have any more pieces left\n");
-							}
-						}
-					} catch (Exception e) {
-						statusText.append("Invalid: Cannot remove piece \n");
-					}
-					prevClickPoint = null;
-				}
-			} else {
-				// Want to select a piece and then move it
-				if (prevClickPoint == null) {
-					prevClickPoint = pointID;
-				} else {
-					if (currentBoard.IsValidMovement(playerNum, pointID, prevClickPoint)) {
-						try {
-							boolean formedMill = currentBoard.MakeMove(playerNum, pointID, prevClickPoint);
-							statusText.append(
-									String.format("Player %d (%s) moved a piece \n", (playerNum + 1), playerName));
-
-							if (formedMill) {
-
-								statusText.append(String.format("A mill has been formed by player %d (%s) \n",
-										(playerNum + 1), playerName));
-							}
-						} catch (Exception e) {
-							statusText.append("Invalid: Cannot move that piece to this location \n");
-						}
-					}
-					prevClickPoint = null;
-				}
-			}
-
+			
+			updatePieceList();
 			playerPanel.repaint();
 
-			// check if it is the end of the game
-			if (currentBoard.IsEnd()) {
-				endGame(playerNum + 1, playerName);
+			
+			int end = currentBoard.isWinner();
+			if (end>-1) {
+				
+				endGame(end, currentBoard.getPlayerName(end-1));
 				statusText.append("The game is over");
 			}
 		}
 
-		private void updateStatusText() {
-			// TODO
-		}
+		
 
 		private GridPoint getClickedPoint(int clickX, int clickY) { // TODO: Make Automated testing for this method
 			/*
