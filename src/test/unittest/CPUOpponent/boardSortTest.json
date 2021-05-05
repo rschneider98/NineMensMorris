@@ -1,0 +1,10 @@
+{"dispStatus":"","playerTurn":1,"unplacedPiecesP2":4,"livePiecesP2":5,"unplacedPiecesP1":3,"livePiecesP1":5,"playerTwoName":"HAL",
+"boardLoc":
+[2,2,2,
+2,2,0,
+0,0,0,
+0,0,0,0,0,0,
+1,0,0,
+1,0,1,
+0,1,1],
+"gameState":"move","playerOneName":"matt"}

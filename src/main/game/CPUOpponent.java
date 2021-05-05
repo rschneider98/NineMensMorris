@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class CPUOpponent { 
     
-	private class moveValue implements Comparable<moveValue> {
+	private class moveValue  {
         public Move move;
         public int score;
         public Board possBoard;
@@ -16,27 +16,7 @@ public class CPUOpponent {
             possBoard = b;
         }
 
-		@Override
-		public int compareTo(moveValue other) {
-			if (this.score > other.score) {
-				return this.score - other.score;
-			}
-			else if (this.score == other.score) {
-				return 0;
-			}
-			return -1;
-		}
-
-		public boolean FormsMill() {
-			// check if a movement forms a mill for us
-			if (possBoard.GetGameState() == GameStates.remove) {
-				return false;
-			} else if (possBoard.IsMill(move.getLocationTo())) {
-				return true;
-			} else {
-				return false;
-			}
-		}       
+		      
     }
 
 
@@ -179,17 +159,8 @@ public class CPUOpponent {
             	mV.score = bestSecondMove.score;
             }            
         }
-        Collections.sort(firstTurn);
-        
-        // for better end game performance, we use a mill-first metric
-        if ((newBoard.NumLivePieces(0) + newBoard.NumUnplacedPieces(0) < 5) || (newBoard.NumLivePieces(1) + newBoard.NumUnplacedPieces(1) < 5)) {
-        	// evaluate moves for a mill formation
-        	for (int i = 0; i < firstTurn.size(); i++) {
-        		if (firstTurn.get(i).FormsMill()) {
-        			return firstTurn.get(i).move;
-        		}
-        	}
-        }
-        return firstTurn.get(0).move;
+        moveValue bestMove = getBestMove(firstTurn);
+        return bestMove.move;
+       
     }
 }
