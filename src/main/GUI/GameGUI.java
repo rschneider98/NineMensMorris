@@ -19,13 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import main.game.Board;
 import main.game.GameStates;
@@ -33,6 +38,8 @@ import main.game.GameStates;
 public class GameGUI {
 
 	private JFrame gameWindow = new JFrame("Cowboy Checkers");
+	private JFrame welcomeWindow = new JFrame("Welcome to Cowboy Checkers");
+
 
 	private JPanel gameMenu; // Menu and board are our only two panels so far
 	private GamePanel gameBoard;
@@ -56,13 +63,110 @@ public class GameGUI {
 	public static final int OFFSET = 25;
 
 	public GameGUI() { // creates the gui frame and containers
-
+		
+		makeWelcomeFrame();
+		
+	}
+	private void startGame() {
+		
 		makeFrame();
 		makeMenu();
-		makeNewBoard();
+		
+	}
+	private void makeWelcomeFrame() {
 
-		gameWindow.pack();
-		gameWindow.setVisible(true);
+		JPanel welcomePanel = new JPanel();
+		try {
+			welcomeWindow.setIconImage(ImageIO.read(new File("img\\blackPiece.png")));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		
+		welcomePanel.setLayout(new GridLayout(0,1));
+
+		JLabel welcomeText = new JLabel("Welcome to Cowboy Checkers!!\n");
+		JLabel optionsText = new JLabel("Choose your options:\n");
+		JRadioButton radioButtonOption = new JRadioButton("1 Player");
+		
+
+		JRadioButton radioButtonOption2 = new JRadioButton("2 Players");
+		radioButtonOption2.setSelected(true);
+		ButtonGroup group = new ButtonGroup();
+	    group.add(radioButtonOption);
+	    group.add(radioButtonOption2);
+		JTextField player1Name = new JTextField();
+		JTextField player2Name = new JTextField();
+		JLabel player1Text = new JLabel("Player 1 name: ");
+		JLabel player2Text = new JLabel("Player 2 name: ");
+		JButton acceptButton = new JButton("Accept");
+		JButton cancelButton = new JButton("Cancel");
+
+
+		
+		//add allow listener
+		radioButtonOption.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	player2Text.setVisible(false);
+	        	player2Name.setVisible(false);
+	        	isCPUOpponent=true;
+	        }
+	    });
+		//add allow listener
+		radioButtonOption2.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	player2Text.setVisible(true);
+	        	player2Name.setVisible(true);
+	        	isCPUOpponent=false;
+	        }
+	    });
+		
+		acceptButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startGame();
+				makeNewBoard();
+				currentBoard.setPlayerOneName(player1Name.getText());
+				if(isCPUOpponent) {
+					currentBoard.setPlayerTwoName("HAL");
+				}else {
+					currentBoard.setPlayerTwoName(player2Name.getText());
+				}
+				gameWindow.pack();
+				gameWindow.setVisible(true);
+				welcomeWindow.setVisible(false); //you can't see me!
+				welcomeWindow.dispose(); //Destroy the JFrame object
+
+			}
+		});
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		
+			}
+		});
+		welcomePanel.add(welcomeText);
+		welcomePanel.add(optionsText);
+		welcomePanel.add(radioButtonOption);
+		welcomePanel.add(radioButtonOption2);
+		welcomePanel.setPreferredSize(new Dimension(600,300));
+		welcomePanel.add(player1Text);		
+		welcomePanel.add(player1Name);
+		
+		welcomePanel.add(player2Text);
+		welcomePanel.add(player2Name);
+		welcomePanel.add(new JSeparator());
+		welcomePanel.add(acceptButton);
+		welcomePanel.add(cancelButton);
+		
+		JScrollPane panelPane = new JScrollPane(welcomePanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		welcomeWindow.getContentPane().add(panelPane);
+		welcomeWindow.pack();
+		welcomeWindow.setLocationRelativeTo(null);
+		
+
+		welcomeWindow.setVisible(true);
 	}
 
 	private void makeMenu() {
@@ -70,9 +174,14 @@ public class GameGUI {
 		/* THIS METHOD IS JUST A PLACEHOLDER TO TEST PANEL PLACEMENT!!! */
 
 		gameMenu = new JPanel();
-
-		gameWindow.getContentPane().add(gameMenu, BorderLayout.WEST);
-
+		
+		gameWindow.getContentPane().add(gameMenu, BorderLayout.WEST); // Application icon 
+		try {
+			gameWindow.setIconImage(ImageIO.read(new File("img\\blackPiece.png")));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		// layout.setVgap(200);
 
 		gameMenu.setLayout(new GridLayout(4, 0, 0, 100));
@@ -122,7 +231,10 @@ public class GameGUI {
 
 		if (confirmed == JOptionPane.YES_OPTION) {
 			clearBoard();
-			makeNewBoard();
+			//makeNewBoard();
+			gameWindow.setVisible(false);
+			gameWindow.dispose();
+			makeWelcomeFrame();
 		}
 	}
 
@@ -207,16 +319,8 @@ public class GameGUI {
 		gameWindow.getContentPane().add(gameBoard, BorderLayout.CENTER); // Adds gameboard to EAST side of the frame
 
 		makeStatusField();
-		isCPUOpponent = getPreferredOpponent();
 		currentBoard = new Board(isCPUOpponent); // Backend board logic
-		getPlayersName();
 		makePlayersPanel();
-		
-		
-		
-		
-		
-		
 	}
 	private boolean getPreferredOpponent() {
 		int confirmed = JOptionPane.showConfirmDialog(gameWindow, 
