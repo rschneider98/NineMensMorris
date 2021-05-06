@@ -136,7 +136,7 @@ public class CPUOpponent {
         if (selected.size() > 1) {
             // tie breaker
 	    for (moveValue mV: selected) {
-		if (mV.possBoard.IsMill(mv.move.getLocationTo())) {
+		if (mV.possBoard.IsMill(mV.move.getLocationTo())) {
 		    return mV;
 		}
 	    }
