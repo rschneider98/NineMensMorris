@@ -134,7 +134,13 @@ public class CPUOpponent {
             }
         }
         if (selected.size() > 1) {
-            // ToDo: Tiebreaker?
+            // tie breaker
+	    for (moveValue mV: selected) {
+		if (mV.possBoard.IsMill(mv.move.getLocationTo())) {
+		    return mV;
+		}
+	    }
+	    // else: choose tied scores at random
             Random rand = new Random(System.currentTimeMillis());
             return selected.get(rand.nextInt(selected.size()));
         }
